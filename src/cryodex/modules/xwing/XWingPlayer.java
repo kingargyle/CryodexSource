@@ -111,6 +111,31 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return score;
 	}
 
+	public double getAverageScore(XWingTournament t) {
+		return getScore(t) * 1.0 / getMatches(t).size();
+	}
+
+	public double getAverageSoS(XWingTournament t) {
+		double sos = 0.0;
+		List<XWingMatch> matches = getMatches(t);
+
+		for (XWingMatch m : matches) {
+			if (m.isBye() == false && (m.getWinner() != null || m.isDraw())) {
+				if (m.getPlayer1() == this) {
+					sos += m.getPlayer2().getAverageScore(t);
+				} else {
+					sos += m.getPlayer1().getAverageScore(t);
+				}
+			}
+
+			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
+				sos += (getMatches(t).size() - 1) * 5;
+			}
+		}
+
+		return sos / matches.size();
+	}
+
 	public int getWins(XWingTournament t) {
 		int score = 0;
 		for (XWingMatch match : getMatches(t)) {
@@ -151,26 +176,26 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return byes;
 	}
 
-	public int getStrengthOfSchedule(XWingTournament t) {
-		Integer sos = 0;
-		List<XWingMatch> matches = getMatches(t);
-
-		for (XWingMatch m : matches) {
-			if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
-				if (m.getPlayer1() == this) {
-					sos += m.getPlayer2().getScore(t);
-				} else {
-					sos += m.getPlayer1().getScore(t);
-				}
-			}
-
-			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-				sos += (getMatches(t).size() - 1) * 5;
-			}
-		}
-
-		return sos;
-	}
+	// public int getStrengthOfSchedule(XWingTournament t) {
+	// Integer sos = 0;
+	// List<XWingMatch> matches = getMatches(t);
+	//
+	// for (XWingMatch m : matches) {
+	// if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
+	// if (m.getPlayer1() == this) {
+	// sos += m.getPlayer2().getScore(t);
+	// } else {
+	// sos += m.getPlayer1().getScore(t);
+	// }
+	// }
+	//
+	// if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
+	// sos += (getMatches(t).size() - 1) * 5;
+	// }
+	// }
+	//
+	// return sos;
+	// }
 
 	public int getRank(XWingTournament t) {
 		List<XWingPlayer> players = new ArrayList<XWingPlayer>();
@@ -333,8 +358,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (result == 0) {
-				result = compareInt(o1.getStrengthOfSchedule(t),
-						o2.getStrengthOfSchedule(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
@@ -355,6 +379,16 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		}
 
 		private int compareInt(int a, int b) {
+			if (a == b) {
+				return 0;
+			} else if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+
+		private int compareDouble(double a, double b) {
 			if (a == b) {
 				return 0;
 			} else if (a > b) {
@@ -384,8 +418,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (result == 0) {
-				result = compareInt(o1.getStrengthOfSchedule(t),
-						o2.getStrengthOfSchedule(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
@@ -406,6 +439,16 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		}
 
 		private int compareInt(int a, int b) {
+			if (a == b) {
+				return 0;
+			} else if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+
+		private int compareDouble(double a, double b) {
 			if (a == b) {
 				return 0;
 			} else if (a > b) {

@@ -158,6 +158,31 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return score;
 	}
 
+	public double getAverageScore(ArmadaTournament t) {
+		return getScore(t) * 1.0 / getMatches(t).size();
+	}
+
+	public double getAverageSoS(ArmadaTournament t) {
+		double sos = 0.0;
+		List<ArmadaMatch> matches = getMatches(t);
+
+		for (ArmadaMatch m : matches) {
+			if (m.isBye() == false && (m.getWinner() != null)) {
+				if (m.getPlayer1() == this) {
+					sos += m.getPlayer2().getAverageScore(t);
+				} else {
+					sos += m.getPlayer1().getAverageScore(t);
+				}
+			}
+
+			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
+				sos += (getMatches(t).size() - 1) * 5;
+			}
+		}
+
+		return sos / matches.size();
+	}
+
 	public int getWins(ArmadaTournament t) {
 		int score = 0;
 		for (ArmadaMatch match : getMatches(t)) {
@@ -188,26 +213,26 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return byes;
 	}
 
-	public int getStrengthOfSchedule(ArmadaTournament t) {
-		Integer sos = 0;
-		List<ArmadaMatch> matches = getMatches(t);
-
-		for (ArmadaMatch m : matches) {
-			if (m.isBye() == false & (m.getWinner() != null)) {
-				if (m.getPlayer1() == this) {
-					sos += m.getPlayer2().getScore(t);
-				} else {
-					sos += m.getPlayer1().getScore(t);
-				}
-			}
-
-			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-				sos += (getMatches(t).size() - 1) * 5;
-			}
-		}
-
-		return sos;
-	}
+	// public int getStrengthOfSchedule(ArmadaTournament t) {
+	// Integer sos = 0;
+	// List<ArmadaMatch> matches = getMatches(t);
+	//
+	// for (ArmadaMatch m : matches) {
+	// if (m.isBye() == false & (m.getWinner() != null)) {
+	// if (m.getPlayer1() == this) {
+	// sos += m.getPlayer2().getScore(t);
+	// } else {
+	// sos += m.getPlayer1().getScore(t);
+	// }
+	// }
+	//
+	// if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
+	// sos += (getMatches(t).size() - 1) * 5;
+	// }
+	// }
+	//
+	// return sos;
+	// }
 
 	public int getRank(ArmadaTournament t) {
 		List<ArmadaPlayer> players = new ArrayList<ArmadaPlayer>();
@@ -373,8 +398,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (result == 0) {
-				result = compareInt(o1.getStrengthOfSchedule(t),
-						o2.getStrengthOfSchedule(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
@@ -395,6 +419,16 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		}
 
 		private int compareInt(int a, int b) {
+			if (a == b) {
+				return 0;
+			} else if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+
+		private int compareDouble(double a, double b) {
 			if (a == b) {
 				return 0;
 			} else if (a > b) {
@@ -424,8 +458,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (result == 0) {
-				result = compareInt(o1.getStrengthOfSchedule(t),
-						o2.getStrengthOfSchedule(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
@@ -446,6 +479,16 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		}
 
 		private int compareInt(int a, int b) {
+			if (a == b) {
+				return 0;
+			} else if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+
+		private int compareDouble(double a, double b) {
 			if (a == b) {
 				return 0;
 			} else if (a > b) {

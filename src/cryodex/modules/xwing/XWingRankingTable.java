@@ -212,7 +212,7 @@ public class XWingRankingTable extends JPanel {
 				value = user.getMarginOfVictory(tournament);
 				break;
 			case 3:
-				value = user.getStrengthOfSchedule(tournament);
+				value = user.getAverageSoS(tournament);
 				break;
 			case 4:
 				value = user.getWins(tournament) + " / "

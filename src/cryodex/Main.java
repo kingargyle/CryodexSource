@@ -8,9 +8,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import cryodex.widget.TournamentTabbedPane;
 import cryodex.widget.RegisterPanel;
 import cryodex.widget.SplashPanel;
+import cryodex.widget.TournamentTabbedPane;
 
 /**
  * Main class that creates a singleton of the GUI which everything else is built
@@ -53,7 +53,7 @@ public class Main extends JFrame {
 
 	private Main() {
 
-		super("Cryodex - Version 4.0");
+		super("Cryodex - Version 4.0.1");
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {

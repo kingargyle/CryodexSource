@@ -110,6 +110,31 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return score;
 	}
 
+	public double getAverageScore(IATournament t) {
+		return getScore(t) * 1.0 / getMatches(t).size();
+	}
+
+	public double getAverageSoS(IATournament t) {
+		double sos = 0.0;
+		List<IAMatch> matches = getMatches(t);
+
+		for (IAMatch m : matches) {
+			if (m.isBye() == false && (m.getWinner() != null || m.isDraw())) {
+				if (m.getPlayer1() == this) {
+					sos += m.getPlayer2().getAverageScore(t);
+				} else {
+					sos += m.getPlayer1().getAverageScore(t);
+				}
+			}
+
+			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
+				sos += (getMatches(t).size() - 1) * 5;
+			}
+		}
+
+		return sos / matches.size();
+	}
+
 	public int getWins(IATournament t) {
 		int score = 0;
 		for (IAMatch match : getMatches(t)) {
@@ -150,42 +175,42 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return byes;
 	}
 
-	public int getStrengthOfSchedule(IATournament t) {
-		Integer sos = 0;
+	// public int getStrengthOfSchedule(IATournament t) {
+	// Integer sos = 0;
+	// List<IAMatch> matches = getMatches(t);
+	//
+	// for (IAMatch m : matches) {
+	// if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
+	// if (m.getPlayer1() == this) {
+	// sos += m.getPlayer2().getScore(t);
+	// } else {
+	// sos += m.getPlayer1().getScore(t);
+	// }
+	// }
+	//
+	// if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
+	// sos += (getMatches(t).size() - 1) * 5;
+	// }
+	// }
+	//
+	// return sos;
+	// }
+
+	public double getExtendedStrengthOfSchedule(IATournament t) {
+		double sos = 0;
 		List<IAMatch> matches = getMatches(t);
 
 		for (IAMatch m : matches) {
 			if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
 				if (m.getPlayer1() == this) {
-					sos += m.getPlayer2().getScore(t);
+					sos += m.getPlayer2().getAverageSoS(t);
 				} else {
-					sos += m.getPlayer1().getScore(t);
-				}
-			}
-
-			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-				sos += (getMatches(t).size() - 1) * 5;
-			}
-		}
-
-		return sos;
-	}
-
-	public int getExtendedStrengthOfSchedule(IATournament t) {
-		Integer sos = 0;
-		List<IAMatch> matches = getMatches(t);
-
-		for (IAMatch m : matches) {
-			if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
-				if (m.getPlayer1() == this) {
-					sos += m.getPlayer2().getStrengthOfSchedule(t);
-				} else {
-					sos += m.getPlayer1().getStrengthOfSchedule(t);
+					sos += m.getPlayer1().getAverageSoS(t);
 				}
 			}
 		}
 
-		return sos;
+		return sos / matches.size();
 	}
 
 	public int getRank(IATournament t) {
@@ -294,12 +319,11 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 			int result = compareInt(o1.getScore(t), o2.getScore(t));
 
 			if (result == 0) {
-				result = compareInt(o1.getStrengthOfSchedule(t),
-						o2.getStrengthOfSchedule(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
-				result = compareInt(o1.getExtendedStrengthOfSchedule(t),
+				result = compareDouble(o1.getExtendedStrengthOfSchedule(t),
 						o2.getExtendedStrengthOfSchedule(t));
 			}
 
@@ -329,6 +353,16 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 				return 1;
 			}
 		}
+
+		private int compareDouble(double a, double b) {
+			if (a == b) {
+				return 0;
+			} else if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
 	}
 
 	public static class PairingComparator implements Comparator<IAPlayer> {
@@ -345,12 +379,11 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 			int result = compareInt(o1.getScore(t), o2.getScore(t));
 
 			if (result == 0) {
-				result = compareInt(o1.getStrengthOfSchedule(t),
-						o2.getStrengthOfSchedule(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
-				result = compareInt(o1.getExtendedStrengthOfSchedule(t),
+				result = compareDouble(o1.getExtendedStrengthOfSchedule(t),
 						o2.getExtendedStrengthOfSchedule(t));
 			}
 
@@ -372,6 +405,16 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		}
 
 		private int compareInt(int a, int b) {
+			if (a == b) {
+				return 0;
+			} else if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+
+		private int compareDouble(double a, double b) {
 			if (a == b) {
 				return 0;
 			} else if (a > b) {

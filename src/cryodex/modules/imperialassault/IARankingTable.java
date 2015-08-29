@@ -207,7 +207,7 @@ public class IARankingTable extends JPanel {
 				value = user.getScore(tournament);
 				break;
 			case 2:
-				value = user.getStrengthOfSchedule(tournament);
+				value = user.getAverageSoS(tournament);
 				break;
 			case 3:
 				value = user.getExtendedStrengthOfSchedule(tournament);

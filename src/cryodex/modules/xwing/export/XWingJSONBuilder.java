@@ -181,7 +181,7 @@ public class XWingJSONBuilder {
 		sb.append(COMMA_NEWLINE);
 		addValue(sb, "score", player.getScore(tournament));
 		sb.append(COMMA_NEWLINE);
-		addValue(sb, "sos", player.getStrengthOfSchedule(tournament));
+		addValue(sb, "sos", player.getAverageSoS(tournament));
 		sb.append(COMMA_NEWLINE);
 		if (tournament.getXWingPlayers().contains(player) == false) {
 			addValue(sb, "dropped", player.getRoundDropped(tournament));
@@ -201,6 +201,10 @@ public class XWingJSONBuilder {
 	}
 
 	private static void addValue(StringBuilder sb, String key, int value) {
+		addStringValue(sb, key, String.valueOf(value), true);
+	}
+
+	private static void addValue(StringBuilder sb, String key, double value) {
 		addStringValue(sb, key, String.valueOf(value), true);
 	}
 

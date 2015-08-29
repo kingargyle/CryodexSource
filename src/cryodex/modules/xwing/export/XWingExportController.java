@@ -39,7 +39,7 @@ public class XWingExportController {
 
 			content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name
 					+ "</td><td>" + p.getScore(tournament) + "</td><td>"
-					+ p.getStrengthOfSchedule(tournament) + "</td><td>"
+					+ p.getAverageSoS(tournament) + "</td><td>"
 					+ p.getMarginOfVictory(tournament) + "</td></tr>";
 		}
 
@@ -155,7 +155,7 @@ public class XWingExportController {
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer1().getScore(tournament)
 						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer1().getStrengthOfSchedule(tournament)
+						+ m.getPlayer1().getAverageSoS(tournament)
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer1().getMarginOfVictory(tournament)
 						+ "</td></tr><tr><td class=\"smallFont\">"
@@ -167,7 +167,7 @@ public class XWingExportController {
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer2().getMarginOfVictory(tournament)
 						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer2().getStrengthOfSchedule(tournament)
+						+ m.getPlayer2().getAverageSoS(tournament)
 						+ "</td></tr></table>"
 						+ "</td><td class=\"smallFont\">"
 						+ "<div style=\"vertical-align: bottom; height: 100%;\">Points Killed ____________</div>"

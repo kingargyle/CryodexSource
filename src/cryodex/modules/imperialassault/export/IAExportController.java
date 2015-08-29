@@ -39,7 +39,7 @@ public class IAExportController {
 
 			content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name
 					+ "</td><td>" + p.getScore(tournament) + "</td><td>"
-					+ p.getStrengthOfSchedule(tournament) + "</td><td>"
+					+ p.getAverageSoS(tournament) + "</td><td>"
 					+ p.getExtendedStrengthOfSchedule(tournament)
 					+ "</td></tr>";
 		}
@@ -149,7 +149,7 @@ public class IAExportController {
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer1().getScore(tournament)
 						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer1().getStrengthOfSchedule(tournament)
+						+ m.getPlayer1().getAverageSoS(tournament)
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer1().getExtendedStrengthOfSchedule(
 								tournament)
@@ -160,7 +160,7 @@ public class IAExportController {
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer2().getScore(tournament)
 						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer2().getStrengthOfSchedule(tournament)
+						+ m.getPlayer2().getAverageSoS(tournament)
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer2().getExtendedStrengthOfSchedule(
 								tournament)
