@@ -2,12 +2,12 @@ package cryodex.modules.imperialassault;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import cryodex.CryodexController.Modules;
 import cryodex.Player;
 import cryodex.modules.ModulePlayer;
+import cryodex.modules.TournamentComparator;
 import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
@@ -305,7 +305,8 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return getPlayer().getName();
 	}
 
-	public static class RankingComparator implements Comparator<IAPlayer> {
+	public static class RankingComparator extends
+			TournamentComparator<IAPlayer> {
 
 		private final IATournament t;
 
@@ -343,29 +344,10 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 			return result;
 		}
-
-		private int compareInt(int a, int b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
-
-		private int compareDouble(double a, double b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
 	}
 
-	public static class PairingComparator implements Comparator<IAPlayer> {
+	public static class PairingComparator extends
+			TournamentComparator<IAPlayer> {
 
 		private final IATournament t;
 
@@ -402,26 +384,6 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			return result;
-		}
-
-		private int compareInt(int a, int b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
-
-		private int compareDouble(double a, double b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
 		}
 	}
 

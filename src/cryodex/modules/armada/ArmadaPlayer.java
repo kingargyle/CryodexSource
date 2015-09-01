@@ -2,12 +2,12 @@ package cryodex.modules.armada;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import cryodex.CryodexController.Modules;
 import cryodex.Player;
 import cryodex.modules.ModulePlayer;
+import cryodex.modules.TournamentComparator;
 import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
@@ -379,7 +379,8 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return getPlayer().getName();
 	}
 
-	public static class RankingComparator implements Comparator<ArmadaPlayer> {
+	public static class RankingComparator extends
+			TournamentComparator<ArmadaPlayer> {
 
 		private final ArmadaTournament t;
 
@@ -393,12 +394,12 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			int result = compareInt(o1.getScore(t), o2.getScore(t));
 
 			if (result == 0) {
-				result = compareInt(o1.getMarginOfVictory(t),
-						o2.getMarginOfVictory(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
-				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
+				result = compareInt(o1.getMarginOfVictory(t),
+						o2.getMarginOfVictory(t));
 			}
 
 			if (result == 0) {
@@ -417,29 +418,10 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 			return result;
 		}
-
-		private int compareInt(int a, int b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
-
-		private int compareDouble(double a, double b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
 	}
 
-	public static class PairingComparator implements Comparator<ArmadaPlayer> {
+	public static class PairingComparator extends
+			TournamentComparator<ArmadaPlayer> {
 
 		private final ArmadaTournament t;
 
@@ -453,12 +435,12 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			int result = compareInt(o1.getScore(t), o2.getScore(t));
 
 			if (result == 0) {
-				result = compareInt(o1.getMarginOfVictory(t),
-						o2.getMarginOfVictory(t));
+				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
 			}
 
 			if (result == 0) {
-				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
+				result = compareInt(o1.getMarginOfVictory(t),
+						o2.getMarginOfVictory(t));
 			}
 
 			if (result == 0) {
@@ -476,26 +458,6 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			return result;
-		}
-
-		private int compareInt(int a, int b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
-
-		private int compareDouble(double a, double b) {
-			if (a == b) {
-				return 0;
-			} else if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
 		}
 	}
 

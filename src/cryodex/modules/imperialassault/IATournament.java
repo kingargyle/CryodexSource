@@ -504,8 +504,9 @@ public class IATournament implements XMLObject, Tournament {
 			matchesCorrected = matches;
 		} else {
 			List<IAPlayer> tempList = new ArrayList<>();
-			Collections.sort(tempList, new IAPlayer.PairingComparator(this));
-			tempList.addAll(getIAPlayers().subList(0, cutSize));
+			tempList.addAll(getIAPlayers());
+			Collections.sort(tempList, new IAPlayer.RankingComparator(this));
+			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {
 				IAPlayer player1 = tempList.get(0);

@@ -533,9 +533,10 @@ public class ArmadaTournament implements XMLObject, Tournament {
 			matchesCorrected = matches;
 		} else {
 			List<ArmadaPlayer> tempList = new ArrayList<>();
+			tempList.addAll(getArmadaPlayers());
 			Collections
-					.sort(tempList, new ArmadaPlayer.PairingComparator(this));
-			tempList.addAll(getArmadaPlayers().subList(0, cutSize));
+					.sort(tempList, new ArmadaPlayer.RankingComparator(this));
+			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {
 				ArmadaPlayer player1 = tempList.get(0);

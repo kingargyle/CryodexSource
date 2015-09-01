@@ -541,8 +541,9 @@ public class XWingTournament implements XMLObject, Tournament {
 			matchesCorrected = matches;
 		} else {
 			List<XWingPlayer> tempList = new ArrayList<>();
-			Collections.sort(tempList, new XWingPlayer.PairingComparator(this));
-			tempList.addAll(getXWingPlayers().subList(0, cutSize));
+			tempList.addAll(getXWingPlayers());
+			Collections.sort(tempList, new XWingPlayer.RankingComparator(this));
+			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {
 				XWingPlayer player1 = tempList.get(0);
