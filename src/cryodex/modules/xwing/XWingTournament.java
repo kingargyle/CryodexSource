@@ -406,10 +406,6 @@ public class XWingTournament implements XMLObject, Tournament {
 					Collections.shuffle(list);
 				}
 
-				// /////////////
-				// Add new algorythm here
-				// /////////////
-
 				XWingPlayer p1 = null;
 				XWingPlayer p2 = null;
 				while (seedValues.isEmpty() == false) {

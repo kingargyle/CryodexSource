@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import cryodex.CryodexController;
+import cryodex.CryodexController.Modules;
 import cryodex.Main;
 import cryodex.Player;
 import cryodex.modules.Tournament;
@@ -389,7 +390,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 		public void onNext() {
 			List<XWingPlayer> xwingPlayerList = new ArrayList<>();
 			for (Player p : playerList.getList2Values()) {
-				xwingPlayerList.add(new XWingPlayer(p));
+				xwingPlayerList.add((XWingPlayer) p
+						.getModuleInfoByModule(Modules.XWING.getModule()));
 			}
 			wizardOptions.setPlayerList(xwingPlayerList);
 			setCurrentPage(new AdditionalOptionsPage());

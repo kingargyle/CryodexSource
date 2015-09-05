@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import cryodex.CryodexController;
+import cryodex.CryodexController.Modules;
 import cryodex.Main;
 import cryodex.Player;
 import cryodex.modules.Tournament;
@@ -387,11 +388,12 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 
 		@Override
 		public void onNext() {
-			List<ArmadaPlayer> ArmadaPlayerList = new ArrayList<>();
+			List<ArmadaPlayer> armadaPlayerList = new ArrayList<>();
 			for (Player p : playerList.getList2Values()) {
-				ArmadaPlayerList.add(new ArmadaPlayer(p));
+				armadaPlayerList.add((ArmadaPlayer) p
+						.getModuleInfoByModule(Modules.ARMADA.getModule()));
 			}
-			wizardOptions.setPlayerList(ArmadaPlayerList);
+			wizardOptions.setPlayerList(armadaPlayerList);
 			setCurrentPage(new AdditionalOptionsPage());
 		}
 

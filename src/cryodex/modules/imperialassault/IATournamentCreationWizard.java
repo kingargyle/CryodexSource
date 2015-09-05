@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import cryodex.CryodexController;
+import cryodex.CryodexController.Modules;
 import cryodex.Main;
 import cryodex.Player;
 import cryodex.modules.Tournament;
@@ -387,11 +388,12 @@ public class IATournamentCreationWizard extends JDialog {
 
 		@Override
 		public void onNext() {
-			List<IAPlayer> IAPlayerList = new ArrayList<>();
+			List<IAPlayer> iaPlayerList = new ArrayList<>();
 			for (Player p : playerList.getList2Values()) {
-				IAPlayerList.add(new IAPlayer(p));
+				iaPlayerList.add((IAPlayer) p.getModuleInfoByModule(Modules.IA
+						.getModule()));
 			}
-			wizardOptions.setPlayerList(IAPlayerList);
+			wizardOptions.setPlayerList(iaPlayerList);
 			setCurrentPage(new AdditionalOptionsPage());
 		}
 
