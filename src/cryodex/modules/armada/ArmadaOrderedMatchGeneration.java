@@ -37,8 +37,8 @@ public class ArmadaOrderedMatchGeneration {
 
 		List<ArmadaPlayer> tempList = new ArrayList<>();
 		tempList.addAll(players);
-		Collections.sort(tempList,
-				new ArmadaPlayer.PairingComparator(tournament));
+		Collections.sort(tempList, new ArmadaComparator(tournament,
+				ArmadaComparator.pairingCompare));
 
 		generateMatch(new ArrayList<ArmadaMatch>(), tempList);
 
@@ -133,8 +133,8 @@ public class ArmadaOrderedMatchGeneration {
 	private int getScore(List<ArmadaMatch> matches) {
 
 		// order players
-		Collections
-				.sort(players, new ArmadaPlayer.PairingComparator(tournament));
+		Collections.sort(players, new ArmadaComparator(tournament,
+				ArmadaComparator.pairingCompare));
 
 		// get list of players in order of matches
 		List<ArmadaPlayer> playerByMatchOrder = new ArrayList<ArmadaPlayer>();

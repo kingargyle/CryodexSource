@@ -116,8 +116,8 @@ public class XWingRankingTable extends JPanel {
 		List<XWingPlayer> playerList = new ArrayList<XWingPlayer>();
 		playerList.addAll(players);
 
-		Collections.sort(playerList, new XWingPlayer.RankingComparator(
-				tournament));
+		Collections.sort(playerList, new XWingComparator(tournament,
+				XWingComparator.rankingCompare));
 
 		if (this.isVisible() == false) {
 			this.setVisible(true);
@@ -144,16 +144,16 @@ public class XWingRankingTable extends JPanel {
 		}
 
 		public void resetData() {
-			Collections.sort(data,
-					new XWingPlayer.RankingComparator(tournament));
+			Collections.sort(data, new XWingComparator(tournament,
+					XWingComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
 
 		public void setData(List<XWingPlayer> data) {
 			this.data = data;
 
-			Collections.sort(data,
-					new XWingPlayer.RankingComparator(tournament));
+			Collections.sort(data, new XWingComparator(tournament,
+					XWingComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
 

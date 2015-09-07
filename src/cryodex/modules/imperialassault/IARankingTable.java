@@ -116,8 +116,8 @@ public class IARankingTable extends JPanel {
 		List<IAPlayer> playerList = new ArrayList<IAPlayer>();
 		playerList.addAll(players);
 
-		Collections
-				.sort(playerList, new IAPlayer.RankingComparator(tournament));
+		Collections.sort(playerList, new IAComparator(tournament,
+				IAComparator.rankingCompare));
 
 		if (this.isVisible() == false) {
 			this.setVisible(true);
@@ -144,14 +144,16 @@ public class IARankingTable extends JPanel {
 		}
 
 		public void resetData() {
-			Collections.sort(data, new IAPlayer.RankingComparator(tournament));
+			Collections.sort(data, new IAComparator(tournament,
+					IAComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
 
 		public void setData(List<IAPlayer> data) {
 			this.data = data;
 
-			Collections.sort(data, new IAPlayer.RankingComparator(tournament));
+			Collections.sort(data, new IAComparator(tournament,
+					IAComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
 

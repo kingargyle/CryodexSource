@@ -177,8 +177,8 @@ public class IATournament implements XMLObject, Tournament {
 	}
 
 	public Set<IAPlayer> getAllIAPlayers() {
-		Set<IAPlayer> allPlayers = new TreeSet<IAPlayer>(
-				new IAPlayer.RankingComparator(this));
+		Set<IAPlayer> allPlayers = new TreeSet<IAPlayer>(new IAComparator(this,
+				IAComparator.rankingCompare));
 
 		for (IARound r : getAllRounds()) {
 			for (IAMatch m : r.getMatches()) {
@@ -435,7 +435,8 @@ public class IATournament implements XMLObject, Tournament {
 
 		List<IAPlayer> tempList = new ArrayList<IAPlayer>();
 		tempList.addAll(userList);
-		Collections.sort(tempList, new IAPlayer.PairingComparator(this));
+		Collections.sort(tempList, new IAComparator(this,
+				IAComparator.pairingCompare));
 
 		IAMatch byeMatch = null;
 		// Setup the bye match if necessary
@@ -505,7 +506,8 @@ public class IATournament implements XMLObject, Tournament {
 		} else {
 			List<IAPlayer> tempList = new ArrayList<>();
 			tempList.addAll(getIAPlayers());
-			Collections.sort(tempList, new IAPlayer.RankingComparator(this));
+			Collections.sort(tempList, new IAComparator(this,
+					IAComparator.rankingCompare));
 			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {

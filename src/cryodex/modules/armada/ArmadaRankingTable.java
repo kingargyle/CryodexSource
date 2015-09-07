@@ -116,8 +116,8 @@ public class ArmadaRankingTable extends JPanel {
 		List<ArmadaPlayer> playerList = new ArrayList<ArmadaPlayer>();
 		playerList.addAll(players);
 
-		Collections.sort(playerList, new ArmadaPlayer.RankingComparator(
-				tournament));
+		Collections.sort(playerList, new ArmadaComparator(tournament,
+				ArmadaComparator.rankingCompare));
 
 		if (this.isVisible() == false) {
 			this.setVisible(true);
@@ -144,16 +144,16 @@ public class ArmadaRankingTable extends JPanel {
 		}
 
 		public void resetData() {
-			Collections.sort(data, new ArmadaPlayer.RankingComparator(
-					tournament));
+			Collections.sort(data, new ArmadaComparator(tournament,
+					ArmadaComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
 
 		public void setData(List<ArmadaPlayer> data) {
 			this.data = data;
 
-			Collections.sort(data, new ArmadaPlayer.RankingComparator(
-					tournament));
+			Collections.sort(data, new ArmadaComparator(tournament,
+					ArmadaComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
 
@@ -168,10 +168,10 @@ public class ArmadaRankingTable extends JPanel {
 				value = "Score";
 				break;
 			case 2:
-				value = "SoS";
+				value = "MoV";
 				break;
 			case 3:
-				value = "MoV";
+				value = "SoS";
 				break;
 			case 4:
 				value = "Record";
@@ -209,10 +209,10 @@ public class ArmadaRankingTable extends JPanel {
 				value = user.getScore(tournament);
 				break;
 			case 2:
-				value = user.getAverageSoS(tournament);
+				value = user.getMarginOfVictory(tournament);
 				break;
 			case 3:
-				value = user.getMarginOfVictory(tournament);
+				value = user.getAverageSoS(tournament);
 				break;
 			case 4:
 				value = user.getWins(tournament) + " / "

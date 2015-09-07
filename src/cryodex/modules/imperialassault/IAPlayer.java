@@ -7,7 +7,6 @@ import java.util.List;
 import cryodex.CryodexController.Modules;
 import cryodex.Player;
 import cryodex.modules.ModulePlayer;
-import cryodex.modules.TournamentComparator;
 import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
@@ -216,7 +215,8 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 	public int getRank(IATournament t) {
 		List<IAPlayer> players = new ArrayList<IAPlayer>();
 		players.addAll(t.getIAPlayers());
-		Collections.sort(players, new RankingComparator(t));
+		Collections.sort(players, new IAComparator(t,
+				IAComparator.rankingCompare));
 
 		for (int i = 0; i < players.size(); i++) {
 			if (players.get(i) == this) {
@@ -305,87 +305,87 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return getPlayer().getName();
 	}
 
-	public static class RankingComparator extends
-			TournamentComparator<IAPlayer> {
+	// public static class RankingComparator extends
+	// TournamentComparator<IAPlayer> {
+	//
+	// private final IATournament t;
+	//
+	// public RankingComparator(IATournament t) {
+	// this.t = t;
+	// }
+	//
+	// @Override
+	// public int compare(IAPlayer o1, IAPlayer o2) {
+	//
+	// int result = compareInt(o1.getScore(t), o2.getScore(t));
+	//
+	// if (result == 0) {
+	// result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
+	// }
+	//
+	// if (result == 0) {
+	// result = compareDouble(o1.getExtendedStrengthOfSchedule(t),
+	// o2.getExtendedStrengthOfSchedule(t));
+	// }
+	//
+	// if (result == 0) {
+	// String seedValue1 = o1.getSeedValue();
+	// String seedValue2 = o2.getSeedValue();
+	//
+	// try {
+	// Double d1 = Double.valueOf(seedValue1);
+	// Double d2 = Double.valueOf(seedValue2);
+	//
+	// result = d1.compareTo(d2);
+	// } catch (NumberFormatException e) {
+	// result = seedValue1.compareTo(seedValue2);
+	// }
+	// }
+	//
+	// return result;
+	// }
+	// }
 
-		private final IATournament t;
-
-		public RankingComparator(IATournament t) {
-			this.t = t;
-		}
-
-		@Override
-		public int compare(IAPlayer o1, IAPlayer o2) {
-
-			int result = compareInt(o1.getScore(t), o2.getScore(t));
-
-			if (result == 0) {
-				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
-			}
-
-			if (result == 0) {
-				result = compareDouble(o1.getExtendedStrengthOfSchedule(t),
-						o2.getExtendedStrengthOfSchedule(t));
-			}
-
-			if (result == 0) {
-				String seedValue1 = o1.getSeedValue();
-				String seedValue2 = o2.getSeedValue();
-
-				try {
-					Double d1 = Double.valueOf(seedValue1);
-					Double d2 = Double.valueOf(seedValue2);
-
-					result = d1.compareTo(d2);
-				} catch (NumberFormatException e) {
-					result = seedValue1.compareTo(seedValue2);
-				}
-			}
-
-			return result;
-		}
-	}
-
-	public static class PairingComparator extends
-			TournamentComparator<IAPlayer> {
-
-		private final IATournament t;
-
-		public PairingComparator(IATournament t) {
-			this.t = t;
-		}
-
-		@Override
-		public int compare(IAPlayer o1, IAPlayer o2) {
-
-			int result = compareInt(o1.getScore(t), o2.getScore(t));
-
-			if (result == 0) {
-				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
-			}
-
-			if (result == 0) {
-				result = compareDouble(o1.getExtendedStrengthOfSchedule(t),
-						o2.getExtendedStrengthOfSchedule(t));
-			}
-
-			if (result == 0) {
-				String seedValue1 = o1.getSeedValue();
-				String seedValue2 = o2.getSeedValue();
-
-				try {
-					Double d1 = Double.valueOf(seedValue1);
-					Double d2 = Double.valueOf(seedValue2);
-
-					result = d1.compareTo(d2);
-				} catch (NumberFormatException e) {
-					result = seedValue1.compareTo(seedValue2);
-				}
-			}
-
-			return result;
-		}
-	}
+	// public static class PairingComparator extends
+	// TournamentComparator<IAPlayer> {
+	//
+	// private final IATournament t;
+	//
+	// public PairingComparator(IATournament t) {
+	// this.t = t;
+	// }
+	//
+	// @Override
+	// public int compare(IAPlayer o1, IAPlayer o2) {
+	//
+	// int result = compareInt(o1.getScore(t), o2.getScore(t));
+	//
+	// if (result == 0) {
+	// result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
+	// }
+	//
+	// if (result == 0) {
+	// result = compareDouble(o1.getExtendedStrengthOfSchedule(t),
+	// o2.getExtendedStrengthOfSchedule(t));
+	// }
+	//
+	// if (result == 0) {
+	// String seedValue1 = o1.getSeedValue();
+	// String seedValue2 = o2.getSeedValue();
+	//
+	// try {
+	// Double d1 = Double.valueOf(seedValue1);
+	// Double d2 = Double.valueOf(seedValue2);
+	//
+	// result = d1.compareTo(d2);
+	// } catch (NumberFormatException e) {
+	// result = seedValue1.compareTo(seedValue2);
+	// }
+	// }
+	//
+	// return result;
+	// }
+	// }
 
 	@Override
 	public String getModuleName() {

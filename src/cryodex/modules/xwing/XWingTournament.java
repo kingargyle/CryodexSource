@@ -203,7 +203,7 @@ public class XWingTournament implements XMLObject, Tournament {
 	 */
 	public Set<XWingPlayer> getAllXWingPlayers() {
 		Set<XWingPlayer> allPlayers = new TreeSet<XWingPlayer>(
-				new XWingPlayer.RankingComparator(this));
+				new XWingComparator(this, XWingComparator.rankingCompare));
 
 		for (XWingRound r : getAllRounds()) {
 			for (XWingMatch m : r.getMatches()) {
@@ -467,7 +467,8 @@ public class XWingTournament implements XMLObject, Tournament {
 
 		List<XWingPlayer> tempList = new ArrayList<XWingPlayer>();
 		tempList.addAll(userList);
-		Collections.sort(tempList, new XWingPlayer.PairingComparator(this));
+		Collections.sort(tempList, new XWingComparator(this,
+				XWingComparator.pairingCompare));
 
 		XWingMatch byeMatch = null;
 		// Setup the bye match if necessary
@@ -538,7 +539,8 @@ public class XWingTournament implements XMLObject, Tournament {
 		} else {
 			List<XWingPlayer> tempList = new ArrayList<>();
 			tempList.addAll(getXWingPlayers());
-			Collections.sort(tempList, new XWingPlayer.RankingComparator(this));
+			Collections.sort(tempList, new XWingComparator(this,
+					XWingComparator.pairingCompare));
 			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {

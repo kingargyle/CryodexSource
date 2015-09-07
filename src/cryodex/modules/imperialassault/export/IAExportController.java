@@ -12,9 +12,9 @@ import java.util.TreeSet;
 
 import cryodex.CryodexController;
 import cryodex.Player;
+import cryodex.modules.imperialassault.IAComparator;
 import cryodex.modules.imperialassault.IAMatch;
 import cryodex.modules.imperialassault.IAPlayer;
-import cryodex.modules.imperialassault.IAPlayer.RankingComparator;
 import cryodex.modules.imperialassault.IARound;
 import cryodex.modules.imperialassault.IATournament;
 
@@ -25,7 +25,8 @@ public class IAExportController {
 		List<IAPlayer> activePlayers = tournament.getIAPlayers();
 
 		playerList.addAll(tournament.getAllIAPlayers());
-		Collections.sort(playerList, new RankingComparator(tournament));
+		Collections.sort(playerList, new IAComparator(tournament,
+				IAComparator.rankingCompare));
 
 		String content = "<table border=\"1\"><tr><td>Rank</td><td>Name</td><td>Score</td><td>SoS</td><td>Ext SoS</td></tr>";
 

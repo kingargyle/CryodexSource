@@ -7,7 +7,6 @@ import java.util.List;
 import cryodex.CryodexController.Modules;
 import cryodex.Player;
 import cryodex.modules.ModulePlayer;
-import cryodex.modules.TournamentComparator;
 import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
@@ -200,7 +199,8 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 	public int getRank(XWingTournament t) {
 		List<XWingPlayer> players = new ArrayList<XWingPlayer>();
 		players.addAll(t.getXWingPlayers());
-		Collections.sort(players, new RankingComparator(t));
+		Collections.sort(players, new XWingComparator(t,
+				XWingComparator.rankingCompare));
 
 		for (int i = 0; i < players.size(); i++) {
 			if (players.get(i) == this) {
@@ -284,6 +284,13 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return movPoints;
 	}
 
+	/**
+	 * Returns true if the player has defeated every other person in their score
+	 * group.
+	 * 
+	 * @param t
+	 * @return
+	 */
 	public boolean isHeadToHeadWinner(XWingTournament t) {
 
 		if (t != null) {
@@ -297,13 +304,16 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 			playerLoop: for (XWingPlayer p : players) {
 				for (XWingMatch m : p.getMatches(t)) {
-					if (m.getPlayer1() == p && m.getPlayer2() == this
-							&& m.getWinner() == this) {
-						continue playerLoop;
-					} else if (m.getPlayer2() == p && m.getPlayer1() == this
-							&& m.getWinner() == p) {
+					if (m.getWinner() != null && m.getWinner() == this) {
 						continue playerLoop;
 					}
+					// if (m.getPlayer1() == p && m.getPlayer2() == this
+					// && m.getWinner() == this) {
+					// continue playerLoop;
+					// } else if (m.getPlayer2() == p && m.getPlayer1() == this
+					// && m.getWinner() == p) {
+					// continue playerLoop;
+					// }
 				}
 				return false;
 			}
@@ -337,88 +347,6 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 	public String getName() {
 		return getPlayer().getName();
-	}
-
-	public static class RankingComparator extends
-			TournamentComparator<XWingPlayer> {
-
-		private final XWingTournament t;
-
-		public RankingComparator(XWingTournament t) {
-			this.t = t;
-		}
-
-		@Override
-		public int compare(XWingPlayer o1, XWingPlayer o2) {
-
-			int result = compareInt(o1.getScore(t), o2.getScore(t));
-
-			if (result == 0) {
-				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
-			}
-
-			if (result == 0) {
-				result = compareInt(o1.getMarginOfVictory(t),
-						o2.getMarginOfVictory(t));
-			}
-
-			if (result == 0) {
-				String seedValue1 = o1.getSeedValue();
-				String seedValue2 = o2.getSeedValue();
-
-				try {
-					Double d1 = Double.valueOf(seedValue1);
-					Double d2 = Double.valueOf(seedValue2);
-
-					result = d1.compareTo(d2);
-				} catch (NumberFormatException e) {
-					result = seedValue1.compareTo(seedValue2);
-				}
-			}
-
-			return result;
-		}
-	}
-
-	public static class PairingComparator extends
-			TournamentComparator<XWingPlayer> {
-
-		private final XWingTournament t;
-
-		public PairingComparator(XWingTournament t) {
-			this.t = t;
-		}
-
-		@Override
-		public int compare(XWingPlayer o1, XWingPlayer o2) {
-
-			int result = compareInt(o1.getScore(t), o2.getScore(t));
-
-			if (result == 0) {
-				result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
-			}
-
-			if (result == 0) {
-				result = compareInt(o1.getMarginOfVictory(t),
-						o2.getMarginOfVictory(t));
-			}
-
-			if (result == 0) {
-				String seedValue1 = o1.getSeedValue();
-				String seedValue2 = o2.getSeedValue();
-
-				try {
-					Double d1 = Double.valueOf(seedValue1);
-					Double d2 = Double.valueOf(seedValue2);
-
-					result = d1.compareTo(d2);
-				} catch (NumberFormatException e) {
-					result = seedValue1.compareTo(seedValue2);
-				}
-			}
-
-			return result;
-		}
 	}
 
 	@Override

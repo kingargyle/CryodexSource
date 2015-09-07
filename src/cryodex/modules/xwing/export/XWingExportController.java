@@ -12,9 +12,9 @@ import java.util.TreeSet;
 
 import cryodex.CryodexController;
 import cryodex.Player;
+import cryodex.modules.xwing.XWingComparator;
 import cryodex.modules.xwing.XWingMatch;
 import cryodex.modules.xwing.XWingPlayer;
-import cryodex.modules.xwing.XWingPlayer.RankingComparator;
 import cryodex.modules.xwing.XWingRound;
 import cryodex.modules.xwing.XWingTournament;
 
@@ -25,9 +25,10 @@ public class XWingExportController {
 		List<XWingPlayer> activePlayers = tournament.getXWingPlayers();
 
 		playerList.addAll(tournament.getAllXWingPlayers());
-		Collections.sort(playerList, new RankingComparator(tournament));
+		Collections.sort(playerList, new XWingComparator(tournament,
+				XWingComparator.rankingCompare));
 
-		String content = "<table border=\"1\"><tr><td>Rank</td><td>Name</td><td>Score</td><td>SoS</td><td>MoV</td></tr>";
+		String content = "<table border=\"1\"><tr><td>Rank</td><td>Name</td><td>Score</td><td>MoV</td><td>SoS</td></tr>";
 
 		for (XWingPlayer p : playerList) {
 
@@ -39,8 +40,8 @@ public class XWingExportController {
 
 			content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name
 					+ "</td><td>" + p.getScore(tournament) + "</td><td>"
-					+ p.getAverageSoS(tournament) + "</td><td>"
-					+ p.getMarginOfVictory(tournament) + "</td></tr>";
+					+ p.getMarginOfVictory(tournament) + "</td><td>"
+					+ p.getAverageSoS(tournament) + "</td></tr>";
 		}
 
 		content += "</table>";
@@ -147,7 +148,7 @@ public class XWingExportController {
 						+ m.getPlayer1().getName()
 						+ "</h4></td><td vAlign=bottom align=left><h4>"
 						+ m.getPlayer2().getName()
-						+ "</h4></td></tr><tr><td><table border=\"1\"><tr><td>Name</td><td>Rank</td><td>Score</td><td>SoS</td><td>MoV</td></tr><tr>"
+						+ "</h4></td></tr><tr><td><table border=\"1\"><tr><td>Name</td><td>Rank</td><td>Score</td><td>MoV</td><td>SoS</td></tr><tr>"
 						+ "<td class=\"smallFont\">"
 						+ m.getPlayer1().getName()
 						+ "</td><td class=\"smallFont\">"
@@ -155,9 +156,9 @@ public class XWingExportController {
 						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer1().getScore(tournament)
 						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer1().getAverageSoS(tournament)
-						+ "</td><td class=\"smallFont\">"
 						+ m.getPlayer1().getMarginOfVictory(tournament)
+						+ "</td><td class=\"smallFont\">"
+						+ m.getPlayer1().getAverageSoS(tournament)
 						+ "</td></tr><tr><td class=\"smallFont\">"
 						+ m.getPlayer2().getName()
 						+ "</td><td class=\"smallFont\">"

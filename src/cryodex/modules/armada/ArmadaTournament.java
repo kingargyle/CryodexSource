@@ -197,7 +197,7 @@ public class ArmadaTournament implements XMLObject, Tournament {
 
 	public Set<ArmadaPlayer> getAllArmadaPlayers() {
 		Set<ArmadaPlayer> allPlayers = new TreeSet<ArmadaPlayer>(
-				new ArmadaPlayer.RankingComparator(this));
+				new ArmadaComparator(this, ArmadaComparator.rankingCompare));
 
 		for (ArmadaRound r : getAllRounds()) {
 			for (ArmadaMatch m : r.getMatches()) {
@@ -463,7 +463,8 @@ public class ArmadaTournament implements XMLObject, Tournament {
 
 		List<ArmadaPlayer> tempList = new ArrayList<ArmadaPlayer>();
 		tempList.addAll(userList);
-		Collections.sort(tempList, new ArmadaPlayer.PairingComparator(this));
+		Collections.sort(tempList, new ArmadaComparator(this,
+				ArmadaComparator.pairingCompare));
 
 		ArmadaMatch byeMatch = null;
 		// Setup the bye match if necessary
@@ -534,8 +535,8 @@ public class ArmadaTournament implements XMLObject, Tournament {
 		} else {
 			List<ArmadaPlayer> tempList = new ArrayList<>();
 			tempList.addAll(getArmadaPlayers());
-			Collections
-					.sort(tempList, new ArmadaPlayer.RankingComparator(this));
+			Collections.sort(tempList, new ArmadaComparator(this,
+					ArmadaComparator.rankingCompare));
 			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {

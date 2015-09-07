@@ -930,7 +930,8 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 						playerList.addAll(thisTournamentPlayers);
 					} else {
 						Collections.sort(thisTournamentPlayers,
-								new ArmadaPlayer.RankingComparator(t));
+								new ArmadaComparator(t,
+										ArmadaComparator.rankingCompare));
 						playerList.addAll(thisTournamentPlayers.subList(0,
 								playerCount));
 					}
@@ -1079,8 +1080,8 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 
 		List<ArmadaPlayer> tempPlayers = new ArrayList<ArmadaPlayer>();
 		tempPlayers.addAll(playerList);
-		Collections.sort(tempPlayers, new ArmadaPlayer.RankingComparator(
-				mergeTournament));
+		Collections.sort(tempPlayers, new ArmadaComparator(mergeTournament,
+				ArmadaComparator.rankingCompare));
 		return tempPlayers;
 	}
 }

@@ -829,8 +829,9 @@ public class IATournamentCreationWizard extends JDialog {
 							|| thisTournamentPlayers.size() <= playerCount) {
 						playerList.addAll(thisTournamentPlayers);
 					} else {
-						Collections.sort(thisTournamentPlayers,
-								new IAPlayer.RankingComparator(t));
+						Collections
+								.sort(thisTournamentPlayers, new IAComparator(
+										t, IAComparator.rankingCompare));
 						playerList.addAll(thisTournamentPlayers.subList(0,
 								playerCount));
 					}
@@ -944,8 +945,8 @@ public class IATournamentCreationWizard extends JDialog {
 
 		List<IAPlayer> tempPlayers = new ArrayList<IAPlayer>();
 		tempPlayers.addAll(playerList);
-		Collections.sort(tempPlayers, new IAPlayer.RankingComparator(
-				mergeTournament));
+		Collections.sort(tempPlayers, new IAComparator(mergeTournament,
+				IAComparator.rankingCompare));
 		return tempPlayers;
 	}
 }

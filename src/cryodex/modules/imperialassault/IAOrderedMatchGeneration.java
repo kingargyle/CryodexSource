@@ -37,7 +37,8 @@ public class IAOrderedMatchGeneration {
 
 		List<IAPlayer> tempList = new ArrayList<>();
 		tempList.addAll(players);
-		Collections.sort(tempList, new IAPlayer.PairingComparator(tournament));
+		Collections.sort(tempList, new IAComparator(tournament,
+				IAComparator.pairingCompare));
 
 		generateMatch(new ArrayList<IAMatch>(), tempList);
 
@@ -131,7 +132,8 @@ public class IAOrderedMatchGeneration {
 	private int getScore(List<IAMatch> matches) {
 
 		// order players
-		Collections.sort(players, new IAPlayer.PairingComparator(tournament));
+		Collections.sort(players, new IAComparator(tournament,
+				IAComparator.pairingCompare));
 
 		// get list of players in order of matches
 		List<IAPlayer> playerByMatchOrder = new ArrayList<IAPlayer>();

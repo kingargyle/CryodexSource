@@ -37,8 +37,8 @@ public class XWingOrderedMatchGeneration {
 
 		List<XWingPlayer> tempList = new ArrayList<>();
 		tempList.addAll(players);
-		Collections.sort(tempList,
-				new XWingPlayer.PairingComparator(tournament));
+		Collections.sort(tempList, new XWingComparator(tournament,
+				XWingComparator.pairingCompare));
 
 		generateMatch(new ArrayList<XWingMatch>(), tempList);
 
@@ -133,8 +133,8 @@ public class XWingOrderedMatchGeneration {
 	private int getScore(List<XWingMatch> matches) {
 
 		// order players
-		Collections
-				.sort(players, new XWingPlayer.PairingComparator(tournament));
+		Collections.sort(players, new XWingComparator(tournament,
+				XWingComparator.pairingCompare));
 
 		// get list of players in order of matches
 		List<XWingPlayer> playerByMatchOrder = new ArrayList<XWingPlayer>();

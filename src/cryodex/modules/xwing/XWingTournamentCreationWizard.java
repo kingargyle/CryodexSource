@@ -929,7 +929,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 						playerList.addAll(thisTournamentPlayers);
 					} else {
 						Collections.sort(thisTournamentPlayers,
-								new XWingPlayer.RankingComparator(t));
+								new XWingComparator(t,
+										XWingComparator.rankingCompare));
 						playerList.addAll(thisTournamentPlayers.subList(0,
 								playerCount));
 					}
@@ -1078,8 +1079,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 		List<XWingPlayer> tempPlayers = new ArrayList<XWingPlayer>();
 		tempPlayers.addAll(playerList);
-		Collections.sort(tempPlayers, new XWingPlayer.RankingComparator(
-				mergeTournament));
+		Collections.sort(tempPlayers, new XWingComparator(mergeTournament,
+				XWingComparator.rankingCompare));
 		return tempPlayers;
 	}
 }
