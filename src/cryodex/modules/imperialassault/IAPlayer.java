@@ -261,6 +261,10 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 				}
 			}
 
+			if (players.isEmpty()) {
+				return false;
+			}
+
 			playerLoop: for (IAPlayer p : players) {
 				for (IAMatch m : p.getMatches(t)) {
 					if (m.getPlayer1() == p && m.getPlayer2() == this

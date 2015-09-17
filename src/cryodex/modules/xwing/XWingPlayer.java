@@ -302,6 +302,10 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 				}
 			}
 
+			if (players.isEmpty()) {
+				return false;
+			}
+
 			playerLoop: for (XWingPlayer p : players) {
 				for (XWingMatch m : p.getMatches(t)) {
 					if (m.getWinner() != null && m.getWinner() == this) {

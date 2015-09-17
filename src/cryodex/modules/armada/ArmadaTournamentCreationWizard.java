@@ -418,8 +418,7 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 
 		private JTextField customPointsTF;
 		private JRadioButton standardRB;
-		private JRadioButton escalationRB;
-		private JRadioButton epicRB;
+		private JRadioButton wave2RB;
 		private JRadioButton customRB;
 
 		private JRadioButton splitRandomRB;
@@ -489,10 +488,8 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 
 				ButtonGroup pointsBG = new ButtonGroup();
 
-				standardRB = new JRadioButton("Standard - 100 Point Match");
-				escalationRB = new JRadioButton(
-						"Escalation - 60,90,120,150 Points");
-				epicRB = new JRadioButton("Epic - 300 Point Match");
+				standardRB = new JRadioButton("Standard - 300 Point Match");
+				wave2RB = new JRadioButton("Wave 2 - 400 Point Match");
 				customRB = new JRadioButton(
 						"Custom - You define the points per match");
 
@@ -512,8 +509,7 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 				};
 
 				standardRB.addActionListener(customListener);
-				escalationRB.addActionListener(customListener);
-				epicRB.addActionListener(customListener);
+				wave2RB.addActionListener(customListener);
 				customRB.addActionListener(customListener);
 
 				customPointsTF = new JTextField();
@@ -521,15 +517,13 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 				customPointsTF.setEnabled(false);
 
 				pointsBG.add(standardRB);
-				pointsBG.add(escalationRB);
-				pointsBG.add(epicRB);
+				pointsBG.add(wave2RB);
 				pointsBG.add(customRB);
 
 				standardRB.setSelected(true);
 
 				pointsPanel.add(standardRB);
-				pointsPanel.add(escalationRB);
-				pointsPanel.add(epicRB);
+				pointsPanel.add(wave2RB);
 				pointsPanel.add(customRB);
 				pointsPanel.add(customPointsInfo);
 
@@ -605,16 +599,9 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 		public void onFinish() {
 
 			if (standardRB.isSelected()) {
-				wizardOptions.setPoints(100);
-			} else if (escalationRB.isSelected()) {
-				List<Integer> points = new ArrayList<Integer>();
-				points.add(60);
-				points.add(90);
-				points.add(120);
-				points.add(150);
-				wizardOptions.setEscalationPoints(points);
-			} else if (epicRB.isSelected()) {
 				wizardOptions.setPoints(300);
+			} else if (wave2RB.isSelected()) {
+				wizardOptions.setPoints(400);
 			} else if (customRB.isSelected()) {
 				try {
 					Integer points = Integer.parseInt(customPointsTF.getText());

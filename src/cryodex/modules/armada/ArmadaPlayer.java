@@ -335,6 +335,10 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 				}
 			}
 
+			if (players.isEmpty()) {
+				return false;
+			}
+
 			playerLoop: for (ArmadaPlayer p : players) {
 				for (ArmadaMatch m : p.getMatches(t)) {
 					if (m.getPlayer1() == p && m.getPlayer2() == this

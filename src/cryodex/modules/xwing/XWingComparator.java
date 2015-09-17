@@ -5,9 +5,10 @@ import cryodex.modules.TournamentComparator;
 public class XWingComparator extends TournamentComparator<XWingPlayer> {
 
 	public static enum CompareOptions {
-		HEAD_TO_HEAD, MARGIN_OF_VICTORY, STRENGH_OF_SCHEDULE, AVERAGE_STRENGTH_OF_SCHEDULE, SCORE, RANDOM;
+		HEAD_TO_HEAD, MARGIN_OF_VICTORY, STRENGH_OF_SCHEDULE, AVERAGE_STRENGTH_OF_SCHEDULE, SCORE, RANDOM, NAME;
 	}
 
+	public static final CompareOptions[] uniqueCompare = { CompareOptions.NAME };
 	public static final CompareOptions[] pairingCompare = { CompareOptions.SCORE };
 	public static final CompareOptions[] rankingCompare = {
 			CompareOptions.SCORE, CompareOptions.HEAD_TO_HEAD,
@@ -46,7 +47,11 @@ public class XWingComparator extends TournamentComparator<XWingPlayer> {
 			result = compareInt(o1.getScore(t), o2.getScore(t));
 			break;
 		case HEAD_TO_HEAD:
+			if (o1.getName().equals(o2.getName())) {
+				return 0;
+			}
 			result = o1.isHeadToHeadWinner(t) ? 1 : 0;
+			break;
 		case STRENGH_OF_SCHEDULE:
 			// Not implemented
 			break;
@@ -69,6 +74,9 @@ public class XWingComparator extends TournamentComparator<XWingPlayer> {
 			} catch (NumberFormatException e) {
 				result = seedValue1.compareTo(seedValue2);
 			}
+			break;
+		case NAME:
+			result = o1.getName().compareTo(o2.getName());
 			break;
 		}
 

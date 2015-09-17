@@ -45,7 +45,11 @@ public class IAComparator extends TournamentComparator<IAPlayer> {
 			result = compareInt(o1.getScore(t), o2.getScore(t));
 			break;
 		case HEAD_TO_HEAD:
+			if (o1.getName().equals(o2.getName())) {
+				return 0;
+			}
 			result = o1.isHeadToHeadWinner(t) ? 1 : 0;
+			break;
 		case STRENGH_OF_SCHEDULE:
 			// Not implemented
 			break;
