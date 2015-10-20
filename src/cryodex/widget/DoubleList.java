@@ -158,10 +158,8 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					List<T> list1 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel1().toArray()));
-					List<T> list2 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel2().toArray()));
+					List<T> list1 = getList1Values();
+					List<T> list2 = getList2Values();
 
 					List<T> selected = getList1().getSelectedValuesList();
 					getList1().clearSelection();
@@ -196,10 +194,8 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					List<T> list1 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel1().toArray()));
-					List<T> list2 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel2().toArray()));
+					List<T> list1 = getList1Values();
+					List<T> list2 = getList2Values();
 
 					List<T> selected = getList2().getSelectedValuesList();
 					getList2().clearSelection();
@@ -234,10 +230,8 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					List<T> list1 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel1().toArray()));
-					List<T> list2 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel2().toArray()));
+					List<T> list1 = getList1Values();
+					List<T> list2 = getList2Values();
 
 					list2.addAll(list1);
 
@@ -264,10 +258,8 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					List<T> list1 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel1().toArray()));
-					List<T> list2 = new ArrayList<>((List<T>) Arrays
-							.asList(getModel2().toArray()));
+					List<T> list1 = getList1Values();
+					List<T> list2 = getList2Values();
 
 					list1.addAll(list2);
 
@@ -326,10 +318,10 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 	}
 
 	public List<T> getList1Values() {
-		return new ArrayList<>((List<T>) Arrays.asList(getModel1().toArray()));
+		return Collections.list(getModel1().elements());
 	}
 
 	public List<T> getList2Values() {
-		return new ArrayList<>((List<T>) Arrays.asList(getModel2().toArray()));
+		return Collections.list(getModel2().elements());
 	}
 }
