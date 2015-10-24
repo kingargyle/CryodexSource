@@ -529,7 +529,7 @@ public class XWingMenu implements Menu {
 			int currentPlayers = CryodexController.getActiveTournament()
 					.getPlayers().size();
 
-			Integer[] options = { 4, 8, 16, 32, 64 };
+			Integer[] options = { 2, 4, 8, 16, 32, 64 };
 
 			while (options[options.length - 1] > currentPlayers) {
 				Integer[] tempOptions = new Integer[options.length - 1];

@@ -167,7 +167,7 @@ public class XWingJSONBuilder {
 	private static void addPlayer(StringBuilder sb, XWingPlayer player) {
 		sb.append("{\n");
 
-		addValue(sb, "name", player.getName().replaceAll("\"", "\\\\\""));
+		addValue(sb, "name", player.getName());
 		sb.append(COMMA_NEWLINE);
 		if (player.getPlayer().getEmail() != null) {
 			addValue(sb, "email", player.getPlayer().getEmail());
@@ -219,6 +219,9 @@ public class XWingJSONBuilder {
 		if (isNumber) {
 			sb.append(value);
 		} else {
+			if (value != null) {
+				value = value.replaceAll("\"", "\\\\\"");
+			}
 			sb.append("\"" + value + "\"");
 		}
 	}

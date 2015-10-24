@@ -65,6 +65,15 @@ public class CryodexController {
 			}
 			return null;
 		}
+
+		public static Modules getEnumByName(String name) {
+			for (Modules me : values()) {
+				if (me.getName().equals(name)) {
+					return me;
+				}
+			}
+			return null;
+		}
 	}
 
 	private static List<Tournament> tournaments = new ArrayList<Tournament>();

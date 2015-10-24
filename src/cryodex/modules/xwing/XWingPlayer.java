@@ -1,5 +1,7 @@
 package cryodex.modules.xwing;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -132,7 +134,11 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 		}
 
-		return sos / matches.size();
+		double averageSos = sos / matches.size();
+
+		BigDecimal bd = new BigDecimal(averageSos);
+		bd = bd.setScale(2, RoundingMode.HALF_UP);
+		return bd.doubleValue();
 	}
 
 	public int getWins(XWingTournament t) {

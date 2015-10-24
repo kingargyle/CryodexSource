@@ -202,8 +202,11 @@ public class XWingTournament implements XMLObject, Tournament {
 	 * @return
 	 */
 	public Set<XWingPlayer> getAllXWingPlayers() {
+		// TreeSets and Head To Head comparisons can have problems.
+		// Do not use them together.
 		Set<XWingPlayer> allPlayers = new TreeSet<XWingPlayer>(
-				new XWingComparator(this, XWingComparator.rankingCompare));
+				new XWingComparator(this,
+						XWingComparator.rankingCompareNoHeadToHead));
 
 		for (XWingRound r : getAllRounds()) {
 			for (XWingMatch m : r.getMatches()) {
@@ -540,7 +543,7 @@ public class XWingTournament implements XMLObject, Tournament {
 			List<XWingPlayer> tempList = new ArrayList<>();
 			tempList.addAll(getXWingPlayers());
 			Collections.sort(tempList, new XWingComparator(this,
-					XWingComparator.pairingCompare));
+					XWingComparator.rankingCompare));
 			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {

@@ -14,6 +14,9 @@ public class XWingComparator extends TournamentComparator<XWingPlayer> {
 			CompareOptions.SCORE, CompareOptions.HEAD_TO_HEAD,
 			CompareOptions.MARGIN_OF_VICTORY,
 			CompareOptions.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptions.RANDOM };
+	public static final CompareOptions[] rankingCompareNoHeadToHead = {
+			CompareOptions.SCORE, CompareOptions.MARGIN_OF_VICTORY,
+			CompareOptions.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptions.RANDOM };
 
 	private final XWingTournament t;
 	private final CompareOptions[] sortOrder;

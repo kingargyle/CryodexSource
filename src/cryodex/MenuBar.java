@@ -127,6 +127,15 @@ public class MenuBar extends JMenuBar {
 					@Override
 					public void itemStateChanged(ItemEvent arg0) {
 						m.setModuleEnabled(moduleItem.isSelected());
+						Modules moduleEnum = Modules.getEnumByName(Modules
+								.getNameByModule(m));
+						if (moduleItem.isSelected()) {
+							CryodexController.getOptions()
+									.getNonVisibleModules().remove(moduleEnum);
+						} else {
+							CryodexController.getOptions()
+									.getNonVisibleModules().add(moduleEnum);
+						}
 					}
 				});
 

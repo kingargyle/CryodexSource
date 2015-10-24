@@ -226,7 +226,6 @@ public class XWingRankingTable extends JPanel {
 			}
 			return value;
 		}
-
 	}
 
 	public class NoCellSelectionRenderer extends DefaultTableCellRenderer {
