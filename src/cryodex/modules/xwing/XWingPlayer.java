@@ -135,10 +135,12 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		}
 
 		double averageSos = sos / matches.size();
-
-		BigDecimal bd = new BigDecimal(averageSos);
-		bd = bd.setScale(2, RoundingMode.HALF_UP);
-		return bd.doubleValue();
+		if (Double.isNaN(averageSos) != true) {
+			BigDecimal bd = new BigDecimal(averageSos);
+			bd = bd.setScale(2, RoundingMode.HALF_UP);
+			return bd.doubleValue();
+		}
+		return averageSos;
 	}
 
 	public int getWins(XWingTournament t) {

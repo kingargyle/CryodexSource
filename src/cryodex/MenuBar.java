@@ -136,6 +136,7 @@ public class MenuBar extends JMenuBar {
 							CryodexController.getOptions()
 									.getNonVisibleModules().add(moduleEnum);
 						}
+						CryodexController.saveData();
 					}
 				});
 
