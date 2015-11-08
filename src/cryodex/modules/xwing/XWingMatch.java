@@ -147,43 +147,55 @@ public class XWingMatch implements XMLObject {
 		return draw || isBye || winner != null;
 	}
 
-	public boolean isValidResult() {
+	public boolean isValidResult(boolean isSingleElimination) {
 		Integer player1Points = player1PointsDestroyed == null ? 0
 				: player1PointsDestroyed;
 		Integer player2Points = player2PointsDestroyed == null ? 0
 				: player2PointsDestroyed;
 
-		// If it is a draw, the points should be equal
-		if (draw && player1Points.equals(player2Points)) {
-			return true;
-		}
+		if (isSingleElimination) {
 
-		// If there is no second player, it must be a bye
-		if (player2 == null && isBye) {
-			return true;
-		}
-
-		int diff = player1Points > player2Points ? player1Points
-				- player2Points : player2Points - player1Points;
-		// If we are under the mod win threashold then ismodified should be true
-		if (diff < XWingTournament.MODIFIED_WIN_THREASHOLD
-				&& isModified == true) {
+			// For single elimination we just look to make sure the correct
+			// player is the winner according to points
 			if ((winner == player1 && player1Points > player2Points)
-					|| (winner == player2 && player2Points > player1Points)) {
+					|| (winner == player2 && player2Points > player1Points)
+					|| (player1Points == player2Points && winner != null)) {
 				return true;
 			}
-		}
-
-		// If we are above the mod win threashold it should not be a modified
-		// win
-		if (diff >= XWingTournament.MODIFIED_WIN_THREASHOLD
-				&& isModified == false) {
-			if ((winner == player1 && player1Points > player2Points)
-					|| (winner == player2 && player2Points > player1Points)) {
+		} else {
+			// If it is a draw, the points should be equal
+			if (draw && player1Points.equals(player2Points)) {
 				return true;
 			}
-		}
 
+			// If there is no second player, it must be a bye
+			if (player2 == null && isBye) {
+				return true;
+			}
+
+			int diff = player1Points > player2Points ? player1Points
+					- player2Points : player2Points - player1Points;
+			// If we are under the mod win threashold then ismodified should be
+			// true
+			if (diff < XWingTournament.MODIFIED_WIN_THREASHOLD
+					&& isModified == true) {
+				if ((winner == player1 && player1Points > player2Points)
+						|| (winner == player2 && player2Points > player1Points)) {
+					return true;
+				}
+			}
+
+			// If we are above the mod win threashold it should not be a
+			// modified
+			// win
+			if (diff >= XWingTournament.MODIFIED_WIN_THREASHOLD
+					&& isModified == false) {
+				if ((winner == player1 && player1Points > player2Points)
+						|| (winner == player2 && player2Points > player1Points)) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 

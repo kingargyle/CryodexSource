@@ -271,6 +271,8 @@ public class XWingTournament implements XMLObject, Tournament {
 
 	@Override
 	public boolean generateNextRound() {
+
+		// All matches must have a result filled in
 		if (getLatestRound().isComplete() == false) {
 			JOptionPane
 					.showMessageDialog(Main.getInstance(),
@@ -278,24 +280,41 @@ public class XWingTournament implements XMLObject, Tournament {
 			return false;
 		}
 
-		if (getLatestRound().isValid() == false) {
-			JOptionPane
-					.showMessageDialog(
-							Main.getInstance(),
-							"At least one tournamnt result is not correct. Check if points are backwards or a result should be a modified win or tie.");
-			return false;
-		}
-
+		// Single elimination checks
 		if (getLatestRound().isSingleElimination()) {
+			// If there was only one match then there is no reason to create a
+			// new round.
 			if (getLatestRound().getMatches().size() == 1) {
 				JOptionPane
 						.showMessageDialog(Main.getInstance(),
 								"Final tournament complete. No more rounds will be generated.");
 				return false;
 			}
+
+			if (getLatestRound().isValid(true) == false) {
+				JOptionPane
+						.showMessageDialog(
+								Main.getInstance(),
+								"At least one tournamnt result is not correct.\n"
+										+ "-Check if points are backwards or a draw has been set.\n"
+										+ "-Draws are not allowed in single elimination rounds.\n"
+										+ "--If a draw occurs, the player with initiative wins.\n"
+										+ "--This can be set by going to the X-Wing menu then the view submenu and deselect 'Enter Only Points'");
+				return false;
+			}
+
 			generateSingleEliminationMatches(getLatestRound().getMatches()
 					.size());
 		} else {
+			// Regular swiss round checks
+			if (getLatestRound().isValid(false) == false) {
+				JOptionPane
+						.showMessageDialog(
+								Main.getInstance(),
+								"At least one tournamnt result is not correct. Check if points are backwards or a result should be a modified win or tie.");
+				return false;
+			}
+
 			generateRound(getAllRounds().size() + 1);
 		}
 		return true;

@@ -629,8 +629,8 @@ public class XWingRoundPanel extends JPanel {
 			comboChange();
 		}
 
-		public void markInvalid() {
-			if (match.isValidResult() == false) {
+		public void markInvalid(boolean isSingleElimination) {
+			if (match.isValidResult(isSingleElimination) == false) {
 				getPlayerTitle().setForeground(Color.red);
 			} else {
 				getPlayerTitle().setForeground(Color.black);
@@ -638,9 +638,9 @@ public class XWingRoundPanel extends JPanel {
 		}
 	}
 
-	public void markInvalid() {
+	public void markInvalid(boolean isSingleElimination) {
 		for (GamePanel gamePanel : gamePanels) {
-			gamePanel.markInvalid();
+			gamePanel.markInvalid(isSingleElimination);
 		}
 	}
 

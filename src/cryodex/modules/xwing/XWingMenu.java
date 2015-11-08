@@ -91,7 +91,8 @@ public class XWingMenu implements Menu {
 			viewMenu = new JMenu("View");
 
 			showKillPoints = new JCheckBoxMenuItem("Show Kill Points");
-			showKillPoints.setSelected(true);
+			showKillPoints.setSelected(XWingModule.getInstance().getOptions()
+					.isShowKillPoints());
 			showKillPoints.addItemListener(new ItemListener() {
 
 				@Override
@@ -102,7 +103,8 @@ public class XWingMenu implements Menu {
 			});
 
 			onlyEnterPoints = new JCheckBoxMenuItem("Only Enter Points");
-			onlyEnterPoints.setSelected(false);
+			onlyEnterPoints.setSelected(XWingModule.getInstance().getOptions()
+					.isEnterOnlyPoints());
 			onlyEnterPoints.addItemListener(new ItemListener() {
 
 				@Override
@@ -443,6 +445,11 @@ public class XWingMenu implements Menu {
 
 		boolean isXWingTournament = CryodexController.getActiveTournament() != null
 				&& CryodexController.getActiveTournament() instanceof XWingTournament;
+
+		showKillPoints.setSelected(XWingModule.getInstance().getOptions()
+				.isShowKillPoints());
+		onlyEnterPoints.setSelected(XWingModule.getInstance().getOptions()
+				.isEnterOnlyPoints());
 
 		deleteTournament.setEnabled(isXWingTournament);
 		getTournamentMenu().setEnabled(isXWingTournament);
