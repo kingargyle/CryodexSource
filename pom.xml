@@ -43,4 +43,31 @@
        </plugin>
     </plugins>
   </build>
+  
+  <profiles>
+      <profile>
+         <id>run</id>
+         <build>
+            <plugins>
+              <plugin>
+                 <groupId>org.codehaus.mojo</groupId>
+                 <artifactId>exec-maven-plugin</artifactId>
+                 <version>1.4.0</version>
+                 <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                 </executions>
+                 <configuration>
+                     <mainClass>cryodex.Main</mainClass>
+                     <classpathScope>compile</classpathScope>
+                  </configuration>
+              </plugin>
+            </plugins>
+         </build>
+      </profile>
+  </profiles>
 </project>
