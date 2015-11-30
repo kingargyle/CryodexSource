@@ -34,6 +34,13 @@ Maven can be used to build cryodex.  The Maven Wrapper has been provided for con
     
 This will build the Cryodex jar from the latest source, you will find the output in the target directory.
 
+### Running Cryodex
+
+Maven can be used to run Cryodex as well. The Maven Wrapper has been provided for convenience.
+
+    ./mvnw package -Prun
+    
+This will build Cryodex and then run it.
 
 ## History
 
