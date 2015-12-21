@@ -11,6 +11,15 @@ import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
+
+class ScoreTable
+{
+    public static final int THRESHOLD_6 = 27;
+    public static final int THRESHOLD_7 = 67;
+    public static final int THRESHOLD_8 = 120;
+    public static final int THRESHOLD_9 = 200;
+    public static final int THRESHOLD_10 = 293;
+}
 public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		ModulePlayer {
 
@@ -122,35 +131,26 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 				mov = mov < 0 ? 0 : mov;
 
-				if (match.getWinner() == this) {
-					if (mov >= 0 && mov <= 20) {
-						score += 5;
-					} else if (mov > 20 && mov <= 50) {
-						score += 6;
-					} else if (mov > 50 && mov <= 90) {
-						score += 7;
-					} else if (mov > 90 && mov <= 150) {
-						score += 8;
-					} else if (mov > 150 && mov <= 220) {
-						score += 9;
-					} else if (mov > 220) {
-						score += 10;
-					}
-				} else {
-					if (mov >= 0 && mov <= 20) {
-						score += 5;
-					} else if (mov > 20 && mov <= 50) {
-						score += 4;
-					} else if (mov > 50 && mov <= 90) {
-						score += 3;
-					} else if (mov > 90 && mov <= 150) {
-						score += 2;
-					} else if (mov > 150 && mov <= 220) {
-						score += 1;
-					} else if (mov > 220) {
-						score += 0;
-					}
-				}
+                int increment = 0;
+
+                if (mov >= 0 && mov <= ScoreTable.THRESHOLD_6) {
+                    increment += 5;
+                } else if (mov > ScoreTable.THRESHOLD_6 && mov <= ScoreTable.THRESHOLD_7) {
+                    increment += 6;
+                } else if (mov > ScoreTable.THRESHOLD_7 && mov <= ScoreTable.THRESHOLD_8) {
+                    increment += 7;
+                } else if (mov > ScoreTable.THRESHOLD_8 && mov <= ScoreTable.THRESHOLD_9) {
+                    increment += 8;
+                } else if (mov > ScoreTable.THRESHOLD_9 && mov <= ScoreTable.THRESHOLD_10) {
+                    increment += 9;
+                } else if (mov > ScoreTable.THRESHOLD_10) {
+                    increment += 10;
+                }
+                
+                if (match.getWinner() == this)
+                    score += increment;
+                else 
+                    score += 10 - increment;
 			}
 		}
 
