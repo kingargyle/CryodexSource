@@ -29,8 +29,6 @@ public class ArmadaTournament implements XMLObject, Tournament {
 		RANDOM, BY_GROUP, IN_ORDER;
 	}
 
-	public static final int MODIFIED_WIN_THREASHOLD = 12;
-
 	private final List<ArmadaRound> rounds;
 	private List<ArmadaPlayer> players;
 	private final InitialSeedingEnum seedingEnum;

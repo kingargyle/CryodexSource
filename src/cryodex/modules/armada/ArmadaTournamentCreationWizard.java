@@ -418,7 +418,6 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 
 		private JTextField customPointsTF;
 		private JRadioButton standardRB;
-		private JRadioButton wave2RB;
 		private JRadioButton customRB;
 
 		private JRadioButton splitRandomRB;
@@ -488,8 +487,7 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 
 				ButtonGroup pointsBG = new ButtonGroup();
 
-				standardRB = new JRadioButton("Standard - 300 Point Match");
-				wave2RB = new JRadioButton("Wave 2 - 400 Point Match");
+				standardRB = new JRadioButton("Standard - 400 Point Match");
 				customRB = new JRadioButton(
 						"Custom - You define the points per match");
 
@@ -509,7 +507,6 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 				};
 
 				standardRB.addActionListener(customListener);
-				wave2RB.addActionListener(customListener);
 				customRB.addActionListener(customListener);
 
 				customPointsTF = new JTextField();
@@ -517,13 +514,11 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 				customPointsTF.setEnabled(false);
 
 				pointsBG.add(standardRB);
-				pointsBG.add(wave2RB);
 				pointsBG.add(customRB);
 
 				standardRB.setSelected(true);
 
 				pointsPanel.add(standardRB);
-				pointsPanel.add(wave2RB);
 				pointsPanel.add(customRB);
 				pointsPanel.add(customPointsInfo);
 
@@ -531,7 +526,7 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 						null, ComponentUtils.addToFlowLayout(customPointsTF,
 								FlowLayout.LEFT), new JPanel()));
 
-				SpringUtilities.makeCompactGrid(pointsPanel, 6, 1, 0, 0, 0, 0);
+				SpringUtilities.makeCompactGrid(pointsPanel, 4, 1, 0, 0, 0, 0);
 
 				centerPanel.add(ComponentUtils.addToFlowLayout(pointsPanel,
 						FlowLayout.LEFT), BorderLayout.CENTER);
@@ -599,8 +594,6 @@ public class ArmadaTournamentCreationWizard extends JDialog {
 		public void onFinish() {
 
 			if (standardRB.isSelected()) {
-				wizardOptions.setPoints(300);
-			} else if (wave2RB.isSelected()) {
 				wizardOptions.setPoints(400);
 			} else if (customRB.isSelected()) {
 				try {
