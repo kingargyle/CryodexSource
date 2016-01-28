@@ -9,7 +9,8 @@ public class XWingComparator extends TournamentComparator<XWingPlayer> {
 	}
 
 	public static final CompareOptions[] uniqueCompare = { CompareOptions.NAME };
-	public static final CompareOptions[] pairingCompare = { CompareOptions.SCORE };
+	public static final CompareOptions[] pairingCompare = {
+			CompareOptions.SCORE, CompareOptions.MARGIN_OF_VICTORY };
 	public static final CompareOptions[] rankingCompare = {
 			CompareOptions.SCORE, CompareOptions.HEAD_TO_HEAD,
 			CompareOptions.MARGIN_OF_VICTORY,
