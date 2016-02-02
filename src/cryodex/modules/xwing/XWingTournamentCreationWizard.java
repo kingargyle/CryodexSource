@@ -719,8 +719,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 									wizardOptionsList.get(last).getPlayerList()
 											.add(p);
-									first++;
 								}
+								first++;
 							}
 						}
 					}
@@ -805,8 +805,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 									wizardOptionsList.get(last).getPlayerList()
 											.add(p);
-									first++;
 								}
+								first++;
 							}
 						}
 					}

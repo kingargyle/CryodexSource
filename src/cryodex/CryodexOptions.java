@@ -10,7 +10,7 @@ import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
 public class CryodexOptions implements XMLObject {
-	private boolean showTableNumbers = false;
+	private boolean showTableNumbers = true;
 	private boolean showQuickFind = false;
 	private final List<Modules> nonVisibleModules = new ArrayList<Modules>();
 

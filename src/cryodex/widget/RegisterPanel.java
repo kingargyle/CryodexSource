@@ -201,9 +201,11 @@ public class RegisterPanel extends JPanel {
 								return;
 							}
 						}
+
 						player = new Player();
 						CryodexController.getPlayers().add(player);
 						getUserModel().addElement(player);
+
 					} else {
 						player = getPlayerList().getSelectedValue();
 					}
@@ -246,9 +248,10 @@ public class RegisterPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					CryodexController.getPlayers().remove(
-							playerList.getSelectedValue());
+							getPlayerList().getSelectedValue());
 
-					getUserModel().removeElement(playerList.getSelectedValue());
+					getUserModel().removeElement(
+							getPlayerList().getSelectedValue());
 
 					clearFields();
 					CryodexController.saveData();

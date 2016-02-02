@@ -11,16 +11,42 @@ import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
-class ScoreTable {
-	public static final int THRESHOLD_6 = 29;
-	public static final int THRESHOLD_7 = 69;
-	public static final int THRESHOLD_8 = 129;
-	public static final int THRESHOLD_9 = 219;
-	public static final int THRESHOLD_10 = 349;
-}
-
 public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		ModulePlayer {
+
+	/**
+	 *This enum represents the table of match score to tournament points
+	 */
+	public enum ScoreTableEnum {
+		THRESHOLD_5(0, 29, 5),
+		THRESHOLD_6(30, 69, 6),
+		THRESHOLD_7(70, 129, 7),
+		THRESHOLD_8(130, 219, 8),
+		THRESHOLD_9(220, 350, 9),
+		THRESHOLD_10(350, 400, 10);
+
+		private int lowerLimit;
+		private int upperLimit;
+		private int score;
+
+		private ScoreTableEnum(int lowerLimit, int upperLimit, int score) {
+			this.lowerLimit = lowerLimit;
+			this.upperLimit = upperLimit;
+			this.score = score;
+		}
+
+		public int getLowerLimit() {
+			return lowerLimit;
+		}
+
+		public int getUpperLimit() {
+			return upperLimit;
+		}
+
+		public int getScore() {
+			return score;
+		}
+	}
 
 	private Player player;
 	private String seedValue;
@@ -132,22 +158,28 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 				int increment = 0;
 
-				if (mov >= 0 && mov <= ScoreTable.THRESHOLD_6) {
-					increment += 5;
-				} else if (mov > ScoreTable.THRESHOLD_6
-						&& mov <= ScoreTable.THRESHOLD_7) {
-					increment += 6;
-				} else if (mov > ScoreTable.THRESHOLD_7
-						&& mov <= ScoreTable.THRESHOLD_8) {
-					increment += 7;
-				} else if (mov > ScoreTable.THRESHOLD_8
-						&& mov <= ScoreTable.THRESHOLD_9) {
-					increment += 8;
-				} else if (mov > ScoreTable.THRESHOLD_9
-						&& mov <= ScoreTable.THRESHOLD_10) {
-					increment += 9;
-				} else if (mov > ScoreTable.THRESHOLD_10) {
-					increment += 10;
+				if (mov >= ScoreTableEnum.THRESHOLD_5.getLowerLimit()
+						&& mov <= ScoreTableEnum.THRESHOLD_5.getUpperLimit()) {
+					increment += ScoreTableEnum.THRESHOLD_5.getScore();
+
+				} else if (mov >= ScoreTableEnum.THRESHOLD_6.getLowerLimit()
+						&& mov <= ScoreTableEnum.THRESHOLD_6.getUpperLimit()) {
+					increment += ScoreTableEnum.THRESHOLD_6.getScore();
+
+				} else if (mov >= ScoreTableEnum.THRESHOLD_7.getLowerLimit()
+						&& mov <= ScoreTableEnum.THRESHOLD_7.getUpperLimit()) {
+					increment += ScoreTableEnum.THRESHOLD_7.getScore();
+
+				} else if (mov >= ScoreTableEnum.THRESHOLD_8.getLowerLimit()
+						&& mov <= ScoreTableEnum.THRESHOLD_8.getUpperLimit()) {
+					increment += ScoreTableEnum.THRESHOLD_8.getScore();
+
+				} else if (mov >= ScoreTableEnum.THRESHOLD_9.getLowerLimit()
+						&& mov <= ScoreTableEnum.THRESHOLD_9.getUpperLimit()) {
+					increment += ScoreTableEnum.THRESHOLD_9.getScore();
+
+				} else if (mov >= ScoreTableEnum.THRESHOLD_10.getLowerLimit()) {
+					increment += ScoreTableEnum.THRESHOLD_10.getScore();
 				}
 
 				if (match.getWinner() == this)
@@ -385,88 +417,6 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 	public String getName() {
 		return getPlayer().getName();
 	}
-
-	// public static class RankingComparator extends
-	// TournamentComparator<ArmadaPlayer> {
-	//
-	// private final ArmadaTournament t;
-	//
-	// public RankingComparator(ArmadaTournament t) {
-	// this.t = t;
-	// }
-	//
-	// @Override
-	// public int compare(ArmadaPlayer o1, ArmadaPlayer o2) {
-	//
-	// int result = compareInt(o1.getScore(t), o2.getScore(t));
-	//
-	// if (result == 0) {
-	// result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
-	// }
-	//
-	// if (result == 0) {
-	// result = compareInt(o1.getMarginOfVictory(t),
-	// o2.getMarginOfVictory(t));
-	// }
-	//
-	// if (result == 0) {
-	// String seedValue1 = o1.getSeedValue();
-	// String seedValue2 = o2.getSeedValue();
-	//
-	// try {
-	// Double d1 = Double.valueOf(seedValue1);
-	// Double d2 = Double.valueOf(seedValue2);
-	//
-	// result = d1.compareTo(d2);
-	// } catch (NumberFormatException e) {
-	// result = seedValue1.compareTo(seedValue2);
-	// }
-	// }
-	//
-	// return result;
-	// }
-	// }
-
-	// public static class PairingComparator extends
-	// TournamentComparator<ArmadaPlayer> {
-	//
-	// private final ArmadaTournament t;
-	//
-	// public PairingComparator(ArmadaTournament t) {
-	// this.t = t;
-	// }
-	//
-	// @Override
-	// public int compare(ArmadaPlayer o1, ArmadaPlayer o2) {
-	//
-	// int result = compareInt(o1.getScore(t), o2.getScore(t));
-	//
-	// if (result == 0) {
-	// result = compareDouble(o1.getAverageSoS(t), o2.getAverageSoS(t));
-	// }
-	//
-	// if (result == 0) {
-	// result = compareInt(o1.getMarginOfVictory(t),
-	// o2.getMarginOfVictory(t));
-	// }
-	//
-	// if (result == 0) {
-	// String seedValue1 = o1.getSeedValue();
-	// String seedValue2 = o2.getSeedValue();
-	//
-	// try {
-	// Double d1 = Double.valueOf(seedValue1);
-	// Double d2 = Double.valueOf(seedValue2);
-	//
-	// result = d1.compareTo(d2);
-	// } catch (NumberFormatException e) {
-	// result = seedValue1.compareTo(seedValue2);
-	// }
-	// }
-	//
-	// return result;
-	// }
-	// }
 
 	@Override
 	public String getModuleName() {

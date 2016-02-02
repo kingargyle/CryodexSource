@@ -53,7 +53,7 @@ public class Main extends JFrame {
 
 	private Main() {
 
-		super("Cryodex - Version 4.1.1");
+		super("Cryodex - Version 4.1.2");
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
