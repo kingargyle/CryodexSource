@@ -28,7 +28,7 @@ public class XWingExportController {
 		Collections.sort(playerList, new XWingComparator(tournament,
 				XWingComparator.rankingCompare));
 
-		String content = "<table border=\"1\"><tr><td>Rank</td><td>Name</td><td>Score</td><td>MoV</td><td>SoS</td></tr>";
+		String content = "<table border=\"1\"><tr><th>Rank</th><th>Name</th><th>Score</th><th>MoV</th><th>SoS</th></tr>";
 
 		for (XWingPlayer p : playerList) {
 
@@ -250,7 +250,10 @@ public class XWingExportController {
 	}
 
 	public static void displayHTML(String content, String filename) {
-		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}</style></head><body>"
+		String fancyCss="table{border-collapse: collapse;margin: 20px;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(even){	background-color:lightgray;}";
+		String internationalCharacters="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}"
+				+ fancyCss+"</style>"+internationalCharacters+"</head><body>"
 				+ content + "</body></html>";
 
 		try {
@@ -258,7 +261,7 @@ public class XWingExportController {
 
 			FileOutputStream stream = new FileOutputStream(file);
 
-			stream.write(html.getBytes());
+			stream.write(html.getBytes("UTF-8"));
 			stream.flush();
 			stream.close();
 
