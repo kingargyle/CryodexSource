@@ -28,7 +28,7 @@ public class XWingExportController {
 		Collections.sort(playerList, new XWingComparator(tournament,
 				XWingComparator.rankingCompare));
 
-		String content = "<table border=\"1\"><tr><td>Rank</td><td>Name</td><td>Score</td><td>MoV</td><td>SoS</td></tr>";
+		String content = "<table border=\"1\"><tr><th>Rank</th><th>Name</th><th>Score</th><th>MoV</th><th>SoS</th></tr>";
 
 		for (XWingPlayer p : playerList) {
 
@@ -140,15 +140,15 @@ public class XWingExportController {
 		for (XWingMatch m : matches) {
 			String matchString = "";
 			if (m.getPlayer2() != null) {
-				matchString += "<table width=100%><tr><td><h4>Round "
+				matchString += "<table width=100%><tr><th><h4>Round "
 						+ roundNumber
 						+ " - Table "
 						+ counter
-						+ "</h4></td><td vAlign=bottom align=left><h4>"
+						+ "</h4></th><th vAlign=bottom align=left><h4>"
 						+ m.getPlayer1().getName()
-						+ "</h4></td><td vAlign=bottom align=left><h4>"
+						+ "</h4></th><th vAlign=bottom align=left><h4>"
 						+ m.getPlayer2().getName()
-						+ "</h4></td></tr><tr><td><table border=\"1\"><tr><td>Name</td><td>Rank</td><td>Score</td><td>MoV</td><td>SoS</td></tr><tr>"
+						+ "</h4></th></tr><tr><td><table border=\"1\"><tr><th>Name</th><th>Rank</td><th>Score</th><th>MoV</th><th>SoS</th></tr><tr>"
 						+ "<td class=\"smallFont\">"
 						+ m.getPlayer1().getName()
 						+ "</td><td class=\"smallFont\">"
@@ -250,7 +250,10 @@ public class XWingExportController {
 	}
 
 	public static void displayHTML(String content, String filename) {
-		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}</style></head><body>"
+		String fancyCss="table{border-collapse: collapse;margin: 20px;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(odd){	background-color:lightgray;}";
+		String internationalCharacters="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}"
+				+ fancyCss+"</style>"+internationalCharacters+"</head><body>"
 				+ content + "</body></html>";
 
 		try {
@@ -258,7 +261,7 @@ public class XWingExportController {
 
 			FileOutputStream stream = new FileOutputStream(file);
 
-			stream.write(html.getBytes());
+			stream.write(html.getBytes("UTF-8"));
 			stream.flush();
 			stream.close();
 
