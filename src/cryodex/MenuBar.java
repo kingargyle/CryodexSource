@@ -75,6 +75,7 @@ public class MenuBar extends JMenuBar {
 			viewMenu.setMnemonic('V');
 
 			showTableNumbers = new JCheckBoxMenuItem("Show Table Numbers");
+			showTableNumbers.setSelected(true);
 			showTableNumbers.addItemListener(new ItemListener() {
 
 				@Override
@@ -170,7 +171,7 @@ public class MenuBar extends JMenuBar {
 					if (path.exists() == false) {
 						System.out.println("Error with user directory");
 					}
-					File file = new File(path, "XWingTournament.save");
+					File file = new File(path, CryodexController.CRYODEX_SAVE);
 
 					if (file.exists()) {
 						JOptionPane.showMessageDialog(
@@ -185,7 +186,7 @@ public class MenuBar extends JMenuBar {
 					} else if (file.exists() == false) {
 						JOptionPane.showMessageDialog(
 								Main.getInstance(),
-								"<html>A save file could not be found. It should be called <b>XWingTournament.save</b> and should be located in folder <b>"
+								"<html>A save file could not be found. It should be called <b>"+CryodexController.CRYODEX_SAVE+"</b> and should be located in folder <b>"
 										+ path.getAbsolutePath()
 										+ "</b></html>");
 					}

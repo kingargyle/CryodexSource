@@ -76,6 +76,8 @@ public class CryodexController {
 		}
 	}
 
+	public static final String CRYODEX_SAVE = "Cryodex.save";
+	
 	private static List<Tournament> tournaments = new ArrayList<Tournament>();
 	private static List<Player> players = new ArrayList<Player>();
 	private static List<Module> modules;
@@ -281,7 +283,7 @@ public class CryodexController {
 			if (path.exists() == false) {
 				System.out.println("Error with user directory");
 			}
-			File file = new File(path, "Cryodex.save");
+			File file = new File(path, CRYODEX_SAVE);
 			if (file.exists() == false) {
 				file.createNewFile();
 			} else {
@@ -307,7 +309,7 @@ public class CryodexController {
 			if (path.exists() == false) {
 				System.out.println("Error with user directory");
 			}
-			file = new File(path, "Cryodex.save");
+			file = new File(path, CRYODEX_SAVE);
 
 			if (file.exists() == false) {
 				return;
