@@ -327,7 +327,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (match.isBye()) {
-				movPoints += 61;
+				movPoints += 129;
 
 				continue;
 			} else if (match.getWinner() == null) {

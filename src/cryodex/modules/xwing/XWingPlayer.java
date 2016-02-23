@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
+import cryodex.CryodexController;
 import cryodex.CryodexController.Modules;
 import cryodex.Player;
 import cryodex.modules.ModulePlayer;
+import cryodex.modules.Tournament;
 import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
@@ -16,10 +19,20 @@ import cryodex.xml.XMLUtils.Element;
 public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		ModulePlayer {
 
+	public static enum Faction{
+		IMPERIAL,
+		REBEL,
+		SCUM;
+		
+		
+	}
+	
 	private Player player;
 	private String seedValue;
 	private boolean firstRoundBye = false;
 	private String squadId;
+	private Faction faction;
+	private HashMap<Faction, Integer> killMap;
 
 	public XWingPlayer(Player p) {
 		player = p;
@@ -31,6 +44,13 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		this.seedValue = e.getStringFromChild("SEEDVALUE");
 		this.firstRoundBye = e.getBooleanFromChild("FIRSTROUNDBYE");
 		this.squadId = e.getStringFromChild("SQUADID");
+		String factionString = e.getStringFromChild("FACTION");
+		
+		if(factionString != null && factionString.isEmpty() == false){
+			faction = Faction.valueOf(factionString);	
+		} else {
+			faction = Faction.IMPERIAL;
+		}
 	}
 
 	@Override
@@ -66,6 +86,58 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 	public void setSquadId(String squadId) {
 		this.squadId = squadId;
 	}
+
+	public Faction getFaction() {
+		return faction;
+	}
+
+	public void setFaction(Faction faction) {
+		this.faction = faction;
+	}
+	
+	public void clearKillMap() {
+		killMap = null;
+	}
+
+	public HashMap<Faction, Integer> getKillMap() {
+
+		if (killMap == null) {
+
+			killMap = new HashMap<Faction, Integer>();
+			killMap.put(Faction.REBEL, 0);
+			killMap.put(Faction.IMPERIAL, 0);
+			killMap.put(Faction.SCUM, 0);
+
+			for (Tournament t : CryodexController.getAllTournaments()) {
+			if(t instanceof XWingTournament){
+				XWingTournament tournament = (XWingTournament)t;
+				for (XWingRound r : tournament.getAllRounds()) {
+					for (XWingMatch m : r.getMatches()) {
+						if (m.getPlayer2() != null) {
+							if (m.getPlayer1() == this) {
+								Integer points = killMap.get(m.getPlayer2()
+										.getFaction());
+								points = m.getPlayer1PointsDestroyed() == null ? points
+										: points
+												+ m.getPlayer1PointsDestroyed();
+								killMap.put(m.getPlayer2().getFaction(), points);
+							} else if (m.getPlayer2() == this) {
+								Integer points = killMap.get(m.getPlayer1()
+										.getFaction());
+								points = m.getPlayer2PointsDestroyed() == null ? points
+										: points
+												+ m.getPlayer2PointsDestroyed();
+								killMap.put(m.getPlayer1().getFaction(), points);
+							}
+						}
+					}
+				}
+			}
+			}
+		}
+		return killMap;
+	}
+
 
 	public List<XWingMatch> getMatches(XWingTournament t) {
 
@@ -381,6 +453,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		XMLUtils.appendObject(sb, "SEEDVALUE", getSeedValue());
 		XMLUtils.appendObject(sb, "FIRSTROUNDBYE", isFirstRoundBye());
 		XMLUtils.appendObject(sb, "SQUADID", getSquadId());
+		XMLUtils.appendObject(sb, "FACTION", getFaction());
 
 		return sb;
 	}

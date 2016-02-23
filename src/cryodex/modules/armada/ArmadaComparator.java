@@ -10,7 +10,7 @@ public class ArmadaComparator extends TournamentComparator<ArmadaPlayer> {
 
 	public static final CompareOptions[] pairingCompare = { CompareOptions.SCORE };
 	public static final CompareOptions[] rankingCompare = {
-			CompareOptions.SCORE, CompareOptions.HEAD_TO_HEAD,
+			CompareOptions.SCORE,
 			CompareOptions.MARGIN_OF_VICTORY,
 			CompareOptions.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptions.RANDOM };
 

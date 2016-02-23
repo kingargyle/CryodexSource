@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -11,12 +12,14 @@ import javax.swing.JTextField;
 import cryodex.Player;
 import cryodex.modules.ModulePlayer;
 import cryodex.modules.RegistrationPanel;
+import cryodex.modules.xwing.XWingPlayer.Faction;
 
 public class XWingRegistrationPanel implements RegistrationPanel {
 
 	private JTextField squadField;
 	private JCheckBox firstRoundByeCheckbox;
 	private JPanel panel;
+	private JComboBox<Faction> factionCombo;
 
 	@Override
 	public JPanel getPanel() {
@@ -37,12 +40,31 @@ public class XWingRegistrationPanel implements RegistrationPanel {
 
 			gbc.gridy++;
 			panel.add(getSquadField(), gbc);
+			
+			gbc.gridy++;
+			panel.add(new JLabel("Faction"), gbc);
+			
+			gbc.gridy++;
+			panel.add(getFactionCombo(), gbc);
 
 			gbc.gridy++;
 			panel.add(getFirstRoundByeCheckbox(), gbc);
 		}
 
 		return panel;
+	}
+
+	private JComboBox<Faction> getFactionCombo() {
+
+		if(factionCombo == null){
+			factionCombo = new JComboBox<XWingPlayer.Faction>();
+			factionCombo.addItem(Faction.IMPERIAL);
+			factionCombo.addItem(Faction.REBEL);
+			factionCombo.addItem(Faction.SCUM);
+			factionCombo.setSelectedIndex(-1);
+		}
+		
+		return factionCombo;
 	}
 
 	private JTextField getSquadField() {
@@ -84,6 +106,7 @@ public class XWingRegistrationPanel implements RegistrationPanel {
 		// update module information
 		xp.setSquadId(getSquadField().getText());
 		xp.setFirstRoundBye(getFirstRoundByeCheckbox().isSelected());
+		xp.setFaction((Faction) getFactionCombo().getSelectedItem());
 	}
 
 	@Override
@@ -105,6 +128,7 @@ public class XWingRegistrationPanel implements RegistrationPanel {
 		if (xp != null) {
 			getSquadField().setText(xp.getSquadId());
 			getFirstRoundByeCheckbox().setSelected(xp.isFirstRoundBye());
+			getFactionCombo().setSelectedItem(xp.getFaction());
 		} else {
 			clearFields();
 		}
@@ -113,6 +137,7 @@ public class XWingRegistrationPanel implements RegistrationPanel {
 	@Override
 	public void clearFields() {
 		getSquadField().setText("");
+		getFactionCombo().setSelectedIndex(-1);
 		getFirstRoundByeCheckbox().setSelected(false);
 	}
 

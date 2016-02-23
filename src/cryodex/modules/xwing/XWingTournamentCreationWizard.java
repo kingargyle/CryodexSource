@@ -56,7 +56,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 		this.add(getMainPanel());
 		setCurrentPage(new MainPage());
 		XWingTournamentCreationWizard.this.pack();
-		this.setMinimumSize(new Dimension(450, 500));
+		this.setMinimumSize(new Dimension(450, 300));
 	}
 
 	private void setCurrentPage(Page page) {
@@ -220,6 +220,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 		public JPanel getPanel() {
 
 			setButtonVisibility(null, true, null);
+			
+			XWingTournamentCreationWizard.this.setMinimumSize(new Dimension(450, 300));
 
 			if (pagePanel == null) {
 				JPanel namePanel = new JPanel(new BorderLayout());
@@ -323,6 +325,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 		public JPanel getPanel() {
 
 			setButtonVisibility(true, true, null);
+			
+			XWingTournamentCreationWizard.this.setMinimumSize(new Dimension(450, 500));
 
 			if (pagePanel == null) {
 
@@ -432,6 +436,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 		public JPanel getPanel() {
 
 			setButtonVisibility(true, null, true);
+			
+			XWingTournamentCreationWizard.this.setMinimumSize(new Dimension(450, 500));
 
 			if (pagePanel == null) {
 
@@ -568,6 +574,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				if (wizardOptions.getSelectedTournaments() != null
 						&& wizardOptions.getSelectedTournaments().isEmpty() == false) {
 					splitOptionsSubPanel.add(splitByRanking);
+					XWingTournamentCreationWizard.this.setMinimumSize(new Dimension(450, 550));
 				}
 
 				SpringUtilities
@@ -839,8 +846,11 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 		@Override
 		public JPanel getPanel() {
+			
 			setButtonVisibility(true, true, false);
 
+			XWingTournamentCreationWizard.this.setMinimumSize(new Dimension(450, 500));
+			
 			if (pagePanel == null) {
 				pagePanel = new JPanel(new BorderLayout());
 

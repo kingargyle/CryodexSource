@@ -271,4 +271,12 @@ public class XWingExportController {
 		}
 
 	}
+
+	public static void cacReport() {
+
+		String content = CACReport.generateCACReport();
+
+		displayHTML(content, "Campaign Against Cancer Report");
+	
+	}
 }

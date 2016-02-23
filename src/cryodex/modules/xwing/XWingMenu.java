@@ -428,6 +428,17 @@ public class XWingMenu implements Menu {
 									.getActiveTournament());
 				}
 			});
+			
+			JMenuItem cacReport = new JMenuItem(
+					"Campaign Against Cancer Report");
+			cacReport.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					XWingExportController
+							.cacReport();
+				}
+			});
 
 			exportMenu.add(exportPlayerList);
 			exportMenu.add(exportMatches);
@@ -436,6 +447,7 @@ public class XWingMenu implements Menu {
 			exportMenu.add(exportRankings);
 			exportMenu.add(exportTournamentReport);
 			exportMenu.add(saveJSON);
+			exportMenu.add(cacReport);
 		}
 		return exportMenu;
 	}
