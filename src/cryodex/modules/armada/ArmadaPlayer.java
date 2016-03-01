@@ -22,7 +22,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		THRESHOLD_6(30, 69, 6),
 		THRESHOLD_7(70, 129, 7),
 		THRESHOLD_8(130, 219, 8),
-		THRESHOLD_9(220, 350, 9),
+		THRESHOLD_9(220, 349, 9),
 		THRESHOLD_10(350, 400, 10);
 
 		private int lowerLimit;
