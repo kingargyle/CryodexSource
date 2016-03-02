@@ -582,6 +582,18 @@ public class IATournament implements XMLObject, Tournament {
 
 	@Override
 	public void addPlayer(Player p) {
+		
+		for(IARound r : getAllRounds()){
+			for(IAMatch m : r.getMatches()){
+				if(m.getPlayer1().getPlayer().equals(p)){
+					getIAPlayers().add(m.getPlayer1());
+				} else if(m.getPlayer2() != null && m.getPlayer2().getPlayer().equals(p)) {
+					getIAPlayers().add(m.getPlayer2());
+				}
+				return;
+			}
+		}
+		
 		IAPlayer xPlayer = new IAPlayer(p);
 		getIAPlayers().add(xPlayer);
 	}

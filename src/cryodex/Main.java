@@ -1,8 +1,11 @@
 package cryodex;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -50,10 +53,12 @@ public class Main extends JFrame {
 	private TournamentTabbedPane multipleTournamentTabbedPane;
 	private JPanel tournamentPane;
 	private JPanel singleTournamentPane;
+	private JPanel warningPane;
+	private JLabel warningLabel;
 
 	private Main() {
 
-		super("Cryodex - Version 4.1.5");
+		super("Cryodex - Version 4.2.0");
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -66,6 +71,7 @@ public class Main extends JFrame {
 			e.printStackTrace();
 		}
 
+		getContentFlowPane().add(getWarningPane(), BorderLayout.SOUTH);
 		getContentFlowPane().add(getRegisterPane(), BorderLayout.WEST);
 		getContentFlowPane().add(getTournamentPane(), BorderLayout.CENTER);
 
@@ -134,6 +140,32 @@ public class Main extends JFrame {
 
 		getTournamentPane().validate();
 		getTournamentPane().repaint();
+	}
+	
+	public JPanel getWarningPane() {
+		if(warningPane == null){
+			warningPane = new JPanel();
+			warningPane.setVisible(false);
+			warningLabel = new JLabel();
+			warningPane.add(warningLabel);
+			
+			warningPane.setBackground(Color.orange);
+			warningLabel.setBackground(Color.orange);
+			Font font = new Font("Courier", Font.BOLD,15);
+			warningLabel.setFont(font);
+		}
+		
+		return warningPane;
+	}
+	
+	public void setError(String error){
+		if(error == null || error.isEmpty()){
+			warningLabel.setText("");
+			getWarningPane().setVisible(false);
+		} else {
+			warningLabel.setText(error);
+			getWarningPane().setVisible(true);
+		}
 	}
 
 	public static void main(String[] args) {

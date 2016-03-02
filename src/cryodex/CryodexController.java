@@ -282,6 +282,7 @@ public class CryodexController {
 			File path = new File(System.getProperty("user.dir"));
 			if (path.exists() == false) {
 				System.out.println("Error with user directory");
+				throw new IOException("Error with user directory");
 			}
 			File file = new File(path, CRYODEX_SAVE);
 			if (file.exists() == false) {
@@ -298,6 +299,7 @@ public class CryodexController {
 			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			Main.getInstance().setError("There is a problem with the save function. Your event is unprotected. Contact the developer for advice.");
 		}
 	}
 

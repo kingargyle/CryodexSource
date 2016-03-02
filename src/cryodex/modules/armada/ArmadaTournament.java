@@ -620,6 +620,18 @@ public class ArmadaTournament implements XMLObject, Tournament {
 
 	@Override
 	public void addPlayer(Player p) {
+		
+		for(ArmadaRound r : getAllRounds()){
+			for(ArmadaMatch m : r.getMatches()){
+				if(m.getPlayer1().getPlayer().equals(p)){
+					getArmadaPlayers().add(m.getPlayer1());
+				} else if(m.getPlayer2() != null && m.getPlayer2().getPlayer().equals(p)) {
+					getArmadaPlayers().add(m.getPlayer2());
+				}
+				return;
+			}
+		}
+		
 		ArmadaPlayer xPlayer = new ArmadaPlayer(p);
 		getArmadaPlayers().add(xPlayer);
 	}

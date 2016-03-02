@@ -648,6 +648,18 @@ public class XWingTournament implements XMLObject, Tournament {
 
 	@Override
 	public void addPlayer(Player p) {
+		
+		for(XWingRound r : getAllRounds()){
+			for(XWingMatch m : r.getMatches()){
+				if(m.getPlayer1().getPlayer().equals(p)){
+					getXWingPlayers().add(m.getPlayer1());
+				} else if(m.getPlayer2() != null && m.getPlayer2().getPlayer().equals(p)) {
+					getXWingPlayers().add(m.getPlayer2());
+				}
+				return;
+			}
+		}
+		
 		XWingPlayer xPlayer = new XWingPlayer(p);
 		getXWingPlayers().add(xPlayer);
 	}
