@@ -87,12 +87,12 @@ public class XWingRankingTable extends JPanel {
 		if (table == null) {
 			table = new JTable(getTableModel());
 			table.setDefaultRenderer(Object.class,
-					new NoCellSelectionRenderer());
+					new RankingTableCellRenderer());
 			table.setDefaultRenderer(Integer.class,
-					new NoCellSelectionRenderer());
+					new RankingTableCellRenderer());
 			table.getColumnModel().getColumn(0).setPreferredWidth(200);
 
-			NoCellSelectionRenderer centerRenderer = new NoCellSelectionRenderer();
+			RankingTableCellRenderer centerRenderer = new RankingTableCellRenderer();
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
 			table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
@@ -132,6 +132,38 @@ public class XWingRankingTable extends JPanel {
 		CryodexController.saveData();
 		updateLabel();
 	}
+	
+	public class RankingTableCellRenderer extends DefaultTableCellRenderer {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+	        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	        
+	        // Working on adding color to the top 4/8/16 for easy visualization
+//	        if(row < 4){
+//	        	c.setBackground(Color.cyan);	
+//	        } else if(row < 8){
+//	        	c.setBackground(Color.green);
+//	        } else if(row < 16){
+//	        	c.setBackground(Color.yellow);
+//	        } else if(row < 32){
+//	        	c.setBackground(Color.red.brighter());
+//	        }
+	        
+//	        if(row % 2 == 1){
+//	        	c.setBackground(c.getBackground().darker());
+//	        }
+	        
+//	        c.setForeground(Color.black);
+	        
+	        setBorder(noFocusBorder);
+	        
+	        return c;
+	    }
+	}
 
 	private class RankingTableModel extends AbstractTableModel {
 
@@ -156,6 +188,8 @@ public class XWingRankingTable extends JPanel {
 					XWingComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
+		
+		
 
 		@Override
 		public String getColumnName(int column) {
@@ -199,9 +233,9 @@ public class XWingRankingTable extends JPanel {
 			Object value = null;
 			switch (arg1) {
 			case 0:
-				value = user.getPlayer().getName();
+				value = (arg0+1) + ". " + user.getPlayer().getName();
 				if (tournament.getXWingPlayers().contains(user) == false) {
-					value = "(D#" + user.getRoundDropped(tournament) + ")"
+					value = (arg0+1) + ". (D#" + user.getRoundDropped(tournament) + ")"
 							+ value;
 				}
 				break;

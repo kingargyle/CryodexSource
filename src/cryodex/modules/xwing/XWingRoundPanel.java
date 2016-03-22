@@ -30,6 +30,7 @@ import javax.swing.event.DocumentListener;
 import cryodex.CryodexController;
 import cryodex.Player;
 import cryodex.widget.ComponentUtils;
+import cryodex.widget.ConfirmationTextField;
 
 public class XWingRoundPanel extends JPanel {
 
@@ -263,15 +264,24 @@ public class XWingRoundPanel extends JPanel {
 
 				gbc.gridx = 2;
 				panel.add(gp.getPlayer1KillPointsField(), gbc);
+				
+				gbc.gridx = 3;
+				gbc.anchor = GridBagConstraints.WEST;
+				panel.add(gp.getPlayer1KillPointsField().getIndicator(), gbc);
 
 				gbc.gridy++;
 				gbc.gridwidth = 1;
+				gbc.anchor = GridBagConstraints.EAST;
 
 				gbc.gridx = 1;
 				panel.add(gp.getPlayer2KillLabel(), gbc);
 
 				gbc.gridx = 2;
 				panel.add(gp.getPlayer2KillPointsField(), gbc);
+
+				gbc.gridx = 3;
+				gbc.anchor = GridBagConstraints.WEST;
+				panel.add(gp.getPlayer2KillPointsField().getIndicator(), gbc);
 			}
 		}
 
@@ -295,8 +305,8 @@ public class XWingRoundPanel extends JPanel {
 		private final XWingMatch match;
 		private JLabel playersTitle;
 		private JComboBox<String> resultsCombo;
-		private JTextField player1KillPoints;
-		private JTextField player2KillPoints;
+		private ConfirmationTextField player1KillPoints;
+		private ConfirmationTextField player2KillPoints;
 		private JLabel player1KillLabel;
 		private JLabel player2KillLabel;
 		private boolean isLoading = false;
@@ -473,9 +483,9 @@ public class XWingRoundPanel extends JPanel {
 
 		}
 
-		public JTextField getPlayer1KillPointsField() {
+		public ConfirmationTextField getPlayer1KillPointsField() {
 			if (player1KillPoints == null) {
-				player1KillPoints = new JTextField();
+				player1KillPoints = new ConfirmationTextField();
 				player1KillPoints.addFocusListener(new FocusListener() {
 
 					@Override
@@ -508,9 +518,9 @@ public class XWingRoundPanel extends JPanel {
 			return player1KillPoints;
 		}
 
-		public JTextField getPlayer2KillPointsField() {
+		public ConfirmationTextField getPlayer2KillPointsField() {
 			if (player2KillPoints == null) {
-				player2KillPoints = new JTextField();
+				player2KillPoints = new ConfirmationTextField();
 				player2KillPoints.addFocusListener(new FocusListener() {
 
 					@Override

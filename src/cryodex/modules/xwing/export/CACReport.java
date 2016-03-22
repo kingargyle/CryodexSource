@@ -25,12 +25,12 @@ public class CACReport {
 	// “Lawlessness” Award (S&V killing most Imperial and Rebel points)
 
 	public enum KillLabel {
-		impVSimp("Rebel Secret Agent", Faction.IMPERIAL, null),
-		impVSother("Bloodstripes", Faction.REBEL, Faction.SCUM),
-		rebVSother("Rogue Squadron", Faction.REBEL, Faction.SCUM),
-		rebVSreb("Imperial Backstabber", Faction.REBEL, null),
-		mostFeared("Most Feared", Faction.REBEL, Faction.SCUM),
-		lawlessness("Lawlessness", Faction.IMPERIAL, Faction.SCUM);
+		impVSimp("Rebel Secret Agent - Imperial VS Imperial", Faction.IMPERIAL, null),
+		impVSother("Bloodstripes - Imperial VS Other", Faction.REBEL, Faction.SCUM),
+		rebVSother("Rogue Squadron - Rebel VS Other", Faction.REBEL, Faction.SCUM),
+		rebVSreb("Imperial Backstabber - Rebel VS Rebel", Faction.REBEL, null),
+		mostFeared("Most Feared - Scum VS Rebel and Scum", Faction.REBEL, Faction.SCUM),
+		lawlessness("Lawlessness - Scum VS Imperial and Rebel", Faction.IMPERIAL, Faction.REBEL);
 
 		private String label = "";
 		private final Faction f1;
