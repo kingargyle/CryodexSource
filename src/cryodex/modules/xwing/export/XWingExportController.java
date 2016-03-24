@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import cryodex.CryodexController;
 import cryodex.Player;
+import cryodex.modules.Tournament;
 import cryodex.modules.xwing.XWingComparator;
 import cryodex.modules.xwing.XWingMatch;
 import cryodex.modules.xwing.XWingPlayer;
@@ -95,18 +96,50 @@ public class XWingExportController {
 		return content;
 	}
 
-	public static void exportMatches(XWingTournament tournament,
-			List<XWingMatch> matches, int roundNumber) {
-		String content = "";
+	public static void exportMatches() {
 
-		if (roundNumber == 0) {
-			content += "<h3>Top " + (matches.size() * 2) + "</h3>";
+		XWingTournament tournament = (XWingTournament) CryodexController
+				.getActiveTournament();
+
+		List<XWingTournament> xwingTournaments = new ArrayList<XWingTournament>();
+		if (tournament.getName().endsWith(" 1")) {
+
+			String name = tournament.getName().substring(0,
+					tournament.getName().lastIndexOf(" "));
+
+			List<Tournament> tournaments = CryodexController
+					.getAllTournaments();
+
+			for (Tournament t : tournaments) {
+				if (t instanceof XWingTournament && t.getName().contains(name)) {
+					xwingTournaments.add((XWingTournament) t);
+				}
+			}
 		} else {
-			content += "<h3>Round " + roundNumber + "</h3>";
+			xwingTournaments.add(tournament);
 		}
 
-		content += appendMatches(tournament, matches);
+		String content = "";
 
+		for (XWingTournament xt : xwingTournaments) {
+
+			XWingRound round = xt.getLatestRound();
+
+			int roundNumber = round.isSingleElimination() ? 0 : xt
+					.getRoundNumber(round);
+
+			List<XWingMatch> matches = round.getMatches();
+
+			content += "<h3>Event: " + xt.getName() + "</h3>";
+			
+			if (roundNumber == 0) {
+				content += "<h3>Top " + (matches.size() * 2) + "</h3>";
+			} else {
+				content += "<h3>Round " + roundNumber + "</h3>";
+			}
+
+			content += appendMatches(xt, matches);
+		}
 		displayHTML(content, "ExportMatch");
 	}
 
@@ -250,11 +283,13 @@ public class XWingExportController {
 	}
 
 	public static void displayHTML(String content, String filename) {
-		String fancyCss="table{border-collapse: collapse;margin: 20px;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(odd){	background-color:lightgray;}";
-		String internationalCharacters="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+		String fancyCss = "table{border-collapse: collapse;margin: 20px;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(odd){	background-color:lightgray;}";
+		String internationalCharacters = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}"
-				+ fancyCss+"</style>"+internationalCharacters+"</head><body>"
-				+ content + "</body></html>";
+				+ fancyCss
+				+ "</style>"
+				+ internationalCharacters
+				+ "</head><body>" + content + "</body></html>";
 
 		try {
 			File file = File.createTempFile(filename, ".html");
@@ -277,6 +312,6 @@ public class XWingExportController {
 		String content = CACReport.generateCACReport();
 
 		displayHTML(content, "Campaign Against Cancer Report");
-	
+
 	}
 }

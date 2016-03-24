@@ -347,16 +347,7 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 
-					XWingTournament tournament = (XWingTournament) CryodexController
-							.getActiveTournament();
-
-					XWingRound round = tournament.getLatestRound();
-
-					int roundNumber = round.isSingleElimination() ? 0
-							: tournament.getRoundNumber(round);
-
-					XWingExportController.exportMatches(tournament,
-							round.getMatches(), roundNumber);
+					XWingExportController.exportMatches();
 				}
 			});
 
