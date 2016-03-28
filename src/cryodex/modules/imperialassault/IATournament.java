@@ -587,10 +587,11 @@ public class IATournament implements XMLObject, Tournament {
 			for(IAMatch m : r.getMatches()){
 				if(m.getPlayer1().getPlayer().equals(p)){
 					getIAPlayers().add(m.getPlayer1());
+					return;
 				} else if(m.getPlayer2() != null && m.getPlayer2().getPlayer().equals(p)) {
 					getIAPlayers().add(m.getPlayer2());
+					return;
 				}
-				return;
 			}
 		}
 		
