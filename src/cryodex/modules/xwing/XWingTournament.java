@@ -653,10 +653,11 @@ public class XWingTournament implements XMLObject, Tournament {
 			for(XWingMatch m : r.getMatches()){
 				if(m.getPlayer1().getPlayer().equals(p)){
 					getXWingPlayers().add(m.getPlayer1());
+					return;
 				} else if(m.getPlayer2() != null && m.getPlayer2().getPlayer().equals(p)) {
 					getXWingPlayers().add(m.getPlayer2());
+					return;
 				}
-				return;
 			}
 		}
 		

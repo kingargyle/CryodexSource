@@ -297,6 +297,7 @@ public class CryodexController {
 			stream.write(sb.toString().getBytes());
 			stream.flush();
 			stream.close();
+			Main.getInstance().setError(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Main.getInstance().setError("There is a problem with the save function. Your event is unprotected. Contact the developer for advice.");
