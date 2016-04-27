@@ -233,11 +233,12 @@ public class XWingRankingTable extends JPanel {
 			Object value = null;
 			switch (arg1) {
 			case 0:
-				value = (arg0+1) + ". " + user.getPlayer().getName();
+				value = ". " + user.getPlayer().getName();
 				if (tournament.getXWingPlayers().contains(user) == false) {
-					value = (arg0+1) + ". (D#" + user.getRoundDropped(tournament) + ")"
+					value = ". (D#" + user.getRoundDropped(tournament) + ")"
 							+ value;
 				}
+				value = "" + (arg0+1) + value;
 				break;
 			case 1:
 				value = user.getScore(tournament);

@@ -22,9 +22,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 	public static enum Faction{
 		IMPERIAL,
 		REBEL,
-		SCUM;
-		
-		
+		SCUM;	
 	}
 	
 	private Player player;
@@ -335,12 +333,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (match.isBye()) {
-				if (roundNumber == 1 && isFirstRoundBye()) {
-					movPoints += tournamentPoints * 2;
-				} else {
-					movPoints += tournamentPoints + (tournamentPoints / 2);
-				}
-
+				movPoints += tournamentPoints + (tournamentPoints / 2);
 				continue;
 			} else if (match.isDraw()) {
 				movPoints += tournamentPoints;
