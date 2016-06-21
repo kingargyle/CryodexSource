@@ -54,6 +54,15 @@ public class MenuBar extends JMenuBar {
 			fileMenu = new JMenu("File");
 			fileMenu.setMnemonic('F');
 
+			JMenuItem importPlayers = new JMenuItem("Import Players");
+			importPlayers.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					PlayerImport.importPlayers();
+				}
+			});
+			
 			JMenuItem exit = new JMenuItem("Exit");
 			exit.addActionListener(new ActionListener() {
 
@@ -63,6 +72,7 @@ public class MenuBar extends JMenuBar {
 				}
 			});
 
+			fileMenu.add(importPlayers);
 			fileMenu.add(exit);
 		}
 

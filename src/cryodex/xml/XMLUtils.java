@@ -63,14 +63,17 @@ public class XMLUtils {
 	public static Element getItem(BufferedReader r) throws IOException {
 		String line = r.readLine();
 
-		if (line == null) {
+		if (line == null || line.trim().isEmpty()) {
 			return null;
-		} else if (line.matches("<.*>.*</.*>")) {
-			return new Element(r, line, true);
-		} else if (line.indexOf("/") == 1) {
-			return null;
-		} else if (line.matches("<.*>")) {
-			return new Element(r, line, false);
+		} else {
+			line = line.trim();
+			if (line.matches("<.*>.*</.*>")) {
+				return new Element(r, line, true);
+			} else if (line.indexOf("/") == 1) {
+				return null;
+			} else if (line.matches("<.*>")) {
+				return new Element(r, line, false);
+			}
 		}
 
 		return null;

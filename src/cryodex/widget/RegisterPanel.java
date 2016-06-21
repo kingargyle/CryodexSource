@@ -407,5 +407,13 @@ public class RegisterPanel extends JPanel {
 	public void registerButton() {
 		this.getRootPane().setDefaultButton(getSaveButton());
 	}
+	
+	public void importPlayers(List<Player> players){
+		for(Player p : players){
+			CryodexController.getPlayers().add(p);
+			getUserModel().addElement(p);
+		}
+		CryodexController.saveData();
+	}
 
 }
