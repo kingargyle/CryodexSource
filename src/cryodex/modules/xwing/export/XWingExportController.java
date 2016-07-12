@@ -26,8 +26,7 @@ public class XWingExportController {
 		List<XWingPlayer> activePlayers = tournament.getXWingPlayers();
 
 		playerList.addAll(tournament.getAllXWingPlayers());
-		Collections.sort(playerList, new XWingComparator(tournament,
-				XWingComparator.rankingCompare));
+		Collections.sort(playerList, new XWingComparator(tournament, XWingComparator.rankingCompare));
 
 		String content = "<table border=\"1\"><tr><th>Rank</th><th>Name</th><th>Score</th><th>MoV</th><th>SoS</th></tr>";
 
@@ -39,10 +38,9 @@ public class XWingExportController {
 				name = "(D#" + p.getRoundDropped(tournament) + ")" + name;
 			}
 
-			content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name
-					+ "</td><td>" + p.getScore(tournament) + "</td><td>"
-					+ p.getMarginOfVictory(tournament) + "</td><td>"
-					+ p.getAverageSoS(tournament) + "</td></tr>";
+			content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name + "</td><td>" + p.getScore(tournament)
+					+ "</td><td>" + p.getMarginOfVictory(tournament) + "</td><td>" + p.getAverageSoS(tournament)
+					+ "</td></tr>";
 		}
 
 		content += "</table>";
@@ -57,8 +55,7 @@ public class XWingExportController {
 		displayHTML(content, "ExportRankings");
 	}
 
-	public static String appendMatches(XWingTournament tournament,
-			List<XWingMatch> matches) {
+	public static String appendMatches(XWingTournament tournament, List<XWingMatch> matches) {
 		String content = "";
 
 		int counter = 1;
@@ -67,8 +64,7 @@ public class XWingExportController {
 			if (m.getPlayer2() == null) {
 				matchString += m.getPlayer1().getName() + " has a BYE";
 			} else {
-				matchString += m.getPlayer1().getName() + " VS "
-						+ m.getPlayer2().getName();
+				matchString += m.getPlayer1().getName() + " VS " + m.getPlayer2().getName();
 				if (CryodexController.getOptions().isShowTableNumbers()) {
 					matchString = counter + ": " + matchString;
 					counter++;
@@ -76,17 +72,12 @@ public class XWingExportController {
 
 				if (m.isMatchComplete()) {
 					matchString += " - Match Results: ";
-					if (m.isDraw()) {
-						matchString += "Draw";
-					} else if (m.getWinner() != null) {
-						matchString += m.getWinner().getName()
-								+ " is the winner";
+					if (m.getWinner() != null) {
+						matchString += m.getWinner().getName() + " is the winner";
 					}
 
-					if (m.getPlayer1PointsDestroyed() != null
-							&& m.getPlayer2PointsDestroyed() != null) {
-						matchString += " " + m.getPlayer1PointsDestroyed()
-								+ " to " + m.getPlayer2PointsDestroyed();
+					if (m.getPlayer1PointsDestroyed() != null && m.getPlayer2PointsDestroyed() != null) {
+						matchString += " " + m.getPlayer1PointsDestroyed() + " to " + m.getPlayer2PointsDestroyed();
 					}
 				}
 			}
@@ -98,17 +89,14 @@ public class XWingExportController {
 
 	public static void exportMatches() {
 
-		XWingTournament tournament = (XWingTournament) CryodexController
-				.getActiveTournament();
+		XWingTournament tournament = (XWingTournament) CryodexController.getActiveTournament();
 
 		List<XWingTournament> xwingTournaments = new ArrayList<XWingTournament>();
 		if (tournament.getName().endsWith(" 1")) {
 
-			String name = tournament.getName().substring(0,
-					tournament.getName().lastIndexOf(" "));
+			String name = tournament.getName().substring(0, tournament.getName().lastIndexOf(" "));
 
-			List<Tournament> tournaments = CryodexController
-					.getAllTournaments();
+			List<Tournament> tournaments = CryodexController.getAllTournaments();
 
 			for (Tournament t : tournaments) {
 				if (t instanceof XWingTournament && t.getName().contains(name)) {
@@ -125,13 +113,12 @@ public class XWingExportController {
 
 			XWingRound round = xt.getLatestRound();
 
-			int roundNumber = round.isSingleElimination() ? 0 : xt
-					.getRoundNumber(round);
+			int roundNumber = round.isSingleElimination() ? 0 : xt.getRoundNumber(round);
 
 			List<XWingMatch> matches = round.getMatches();
 
 			content += "<h3>Event: " + xt.getName() + "</h3>";
-			
+
 			if (roundNumber == 0) {
 				content += "<h3>Top " + (matches.size() * 2) + "</h3>";
 			} else {
@@ -163,8 +150,7 @@ public class XWingExportController {
 		displayHTML(content, "TournamentReport");
 	}
 
-	public static void exportTournamentSlipsWithStats(
-			XWingTournament tournament, List<XWingMatch> matches,
+	public static void exportTournamentSlipsWithStats(XWingTournament tournament, List<XWingMatch> matches,
 			int roundNumber) {
 
 		String content = "";
@@ -173,36 +159,20 @@ public class XWingExportController {
 		for (XWingMatch m : matches) {
 			String matchString = "";
 			if (m.getPlayer2() != null) {
-				matchString += "<table width=100%><tr><th><h4>Round "
-						+ roundNumber
-						+ " - Table "
-						+ counter
-						+ "</h4></th><th vAlign=bottom align=left><h4>"
-						+ m.getPlayer1().getName()
-						+ "</h4></th><th vAlign=bottom align=left><h4>"
-						+ m.getPlayer2().getName()
+				matchString += "<table width=100%><tr><th><h4>Round " + roundNumber + " - Table " + counter
+						+ "</h4></th><th vAlign=bottom align=left><h4>" + m.getPlayer1().getName()
+						+ "</h4></th><th vAlign=bottom align=left><h4>" + m.getPlayer2().getName()
 						+ "</h4></th></tr><tr><td><table border=\"1\"><tr><th>Name</th><th>Rank</td><th>Score</th><th>MoV</th><th>SoS</th></tr><tr>"
-						+ "<td class=\"smallFont\">"
-						+ m.getPlayer1().getName()
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer1().getRank(tournament)
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer1().getScore(tournament)
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer1().getMarginOfVictory(tournament)
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer1().getAverageSoS(tournament)
-						+ "</td></tr><tr><td class=\"smallFont\">"
-						+ m.getPlayer2().getName()
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer2().getRank(tournament)
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer2().getScore(tournament)
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer2().getMarginOfVictory(tournament)
-						+ "</td><td class=\"smallFont\">"
-						+ m.getPlayer2().getAverageSoS(tournament)
-						+ "</td></tr></table>"
+						+ "<td class=\"smallFont\">" + m.getPlayer1().getName() + "</td><td class=\"smallFont\">"
+						+ m.getPlayer1().getRank(tournament) + "</td><td class=\"smallFont\">"
+						+ m.getPlayer1().getScore(tournament) + "</td><td class=\"smallFont\">"
+						+ m.getPlayer1().getMarginOfVictory(tournament) + "</td><td class=\"smallFont\">"
+						+ m.getPlayer1().getAverageSoS(tournament) + "</td></tr><tr><td class=\"smallFont\">"
+						+ m.getPlayer2().getName() + "</td><td class=\"smallFont\">"
+						+ m.getPlayer2().getRank(tournament) + "</td><td class=\"smallFont\">"
+						+ m.getPlayer2().getScore(tournament) + "</td><td class=\"smallFont\">"
+						+ m.getPlayer2().getMarginOfVictory(tournament) + "</td><td class=\"smallFont\">"
+						+ m.getPlayer2().getAverageSoS(tournament) + "</td></tr></table>"
 						+ "</td><td class=\"smallFont\">"
 						+ "<div style=\"vertical-align: bottom; height: 100%;\">Points Killed ____________</div>"
 						+ "</br>"
@@ -227,8 +197,7 @@ public class XWingExportController {
 		displayHTML(content, "ExportMatchSlips");
 	}
 
-	public static void exportTournamentSlips(XWingTournament tournament,
-			List<XWingMatch> matches, int roundNumber) {
+	public static void exportTournamentSlips(XWingTournament tournament, List<XWingMatch> matches, int roundNumber) {
 
 		String content = "";
 
@@ -236,16 +205,10 @@ public class XWingExportController {
 		for (XWingMatch m : matches) {
 			String matchString = "";
 			if (m.getPlayer2() != null) {
-				matchString += "<table width=100%><tr><td><h4>Round "
-						+ roundNumber
-						+ " - Table "
-						+ counter
-						+ "</h4></td><td vAlign=bottom align=left><h4>"
-						+ m.getPlayer1().getName()
-						+ "</h4></td><td vAlign=bottom align=left><h4>"
-						+ m.getPlayer2().getName()
-						+ "</h4></td></tr><tr><td>"
-						+ "</td><td class=\"smallFont\">"
+				matchString += "<table width=100%><tr><td><h4>Round " + roundNumber + " - Table " + counter
+						+ "</h4></td><td vAlign=bottom align=left><h4>" + m.getPlayer1().getName()
+						+ "</h4></td><td vAlign=bottom align=left><h4>" + m.getPlayer2().getName()
+						+ "</h4></td></tr><tr><td>" + "</td><td class=\"smallFont\">"
 						+ "<div style=\"vertical-align: bottom; height: 100%;\">Points Killed ____________</div>"
 						+ "</br>"
 						+ "<div style=\"vertical-align: top; height: 100%;\"><input type=\"checkbox\">I wish to drop</input></div>"
@@ -286,10 +249,7 @@ public class XWingExportController {
 		String fancyCss = "table{border-collapse: collapse;margin: 20px;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(odd){	background-color:lightgray;}";
 		String internationalCharacters = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}"
-				+ fancyCss
-				+ "</style>"
-				+ internationalCharacters
-				+ "</head><body>" + content + "</body></html>";
+				+ fancyCss + "</style>" + internationalCharacters + "</head><body>" + content + "</body></html>";
 
 		try {
 			File file = File.createTempFile(filename, ".html");

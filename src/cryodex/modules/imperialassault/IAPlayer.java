@@ -97,8 +97,6 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		for (IAMatch match : getMatches(t)) {
 			if (match.getWinner() == this) {
 				score += IAMatch.WIN_POINTS;
-			} else if (match.isDraw()) {
-				score += IAMatch.DRAW_POINTS;
 			} else if (match.isBye()) {
 				score += IAMatch.BYE_POINTS;
 			} else {
@@ -118,16 +116,12 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		List<IAMatch> matches = getMatches(t);
 
 		for (IAMatch m : matches) {
-			if (m.isBye() == false && (m.getWinner() != null || m.isDraw())) {
+			if (m.isBye() == false && (m.getWinner() != null)) {
 				if (m.getPlayer1() == this) {
 					sos += m.getPlayer2().getAverageScore(t);
 				} else {
 					sos += m.getPlayer1().getAverageScore(t);
 				}
-			}
-
-			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-				sos += (getMatches(t).size() - 1) * 5;
 			}
 		}
 
@@ -154,16 +148,6 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return score;
 	}
 
-	public int getDraws(IATournament t) {
-		int score = 0;
-		for (IAMatch match : getMatches(t)) {
-			if (match.isDraw()) {
-				score++;
-			}
-		}
-		return score;
-	}
-
 	public int getByes(IATournament t) {
 		int byes = 0;
 		for (IAMatch match : getMatches(t)) {
@@ -174,33 +158,12 @@ public class IAPlayer implements Comparable<ModulePlayer>, XMLObject,
 		return byes;
 	}
 
-	// public int getStrengthOfSchedule(IATournament t) {
-	// Integer sos = 0;
-	// List<IAMatch> matches = getMatches(t);
-	//
-	// for (IAMatch m : matches) {
-	// if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
-	// if (m.getPlayer1() == this) {
-	// sos += m.getPlayer2().getScore(t);
-	// } else {
-	// sos += m.getPlayer1().getScore(t);
-	// }
-	// }
-	//
-	// if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-	// sos += (getMatches(t).size() - 1) * 5;
-	// }
-	// }
-	//
-	// return sos;
-	// }
-
 	public double getExtendedStrengthOfSchedule(IATournament t) {
 		double sos = 0;
 		List<IAMatch> matches = getMatches(t);
 
 		for (IAMatch m : matches) {
-			if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
+			if (m.isBye() == false & m.getWinner() != null) {
 				if (m.getPlayer1() == this) {
 					sos += m.getPlayer2().getAverageSoS(t);
 				} else {

@@ -14,25 +14,28 @@ import cryodex.xml.XMLUtils.Element;
 public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		ModulePlayer {
 
+	public static final int BYE_MOV = 140;
+	
 	/**
 	 *This enum represents the table of match score to tournament points
 	 */
 	public enum ScoreTableEnum {
-		THRESHOLD_5(0, 29, 5),
-		THRESHOLD_6(30, 69, 6),
-		THRESHOLD_7(70, 129, 7),
-		THRESHOLD_8(130, 219, 8),
-		THRESHOLD_9(220, 349, 9),
-		THRESHOLD_10(350, 400, 10);
+		THRESHOLD_6(0, 59, 6, 5),
+		THRESHOLD_7(60, 139, 7, 4),
+		THRESHOLD_8(140, 219, 8, 3),
+		THRESHOLD_9(220, 299, 9, 2),
+		THRESHOLD_10(300, 400, 10, 1);
 
 		private int lowerLimit;
 		private int upperLimit;
-		private int score;
+		private int winScore;
+		private int loseScore;
 
-		private ScoreTableEnum(int lowerLimit, int upperLimit, int score) {
+		private ScoreTableEnum(int lowerLimit, int upperLimit, int winScore, int loseScore) {
 			this.lowerLimit = lowerLimit;
 			this.upperLimit = upperLimit;
-			this.score = score;
+			this.winScore = winScore;
+			this.loseScore = loseScore;
 		}
 
 		public int getLowerLimit() {
@@ -43,8 +46,46 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			return upperLimit;
 		}
 
-		public int getScore() {
-			return score;
+		public int getWinScore() {
+			return winScore;
+		}
+		
+		public int getLoseScore() {
+			return loseScore;
+		}
+		
+		private static ScoreTableEnum getResultByMOV(int mov){
+			ScoreTableEnum result = ScoreTableEnum.THRESHOLD_6;
+
+			if (mov >= ScoreTableEnum.THRESHOLD_6.getLowerLimit()
+					&& mov <= ScoreTableEnum.THRESHOLD_6.getUpperLimit()) {
+				result = ScoreTableEnum.THRESHOLD_6;
+
+			} else if (mov >= ScoreTableEnum.THRESHOLD_7.getLowerLimit()
+					&& mov <= ScoreTableEnum.THRESHOLD_7.getUpperLimit()) {
+				result = ScoreTableEnum.THRESHOLD_7;
+
+			} else if (mov >= ScoreTableEnum.THRESHOLD_8.getLowerLimit()
+					&& mov <= ScoreTableEnum.THRESHOLD_8.getUpperLimit()) {
+				result = ScoreTableEnum.THRESHOLD_8;
+
+			} else if (mov >= ScoreTableEnum.THRESHOLD_9.getLowerLimit()
+					&& mov <= ScoreTableEnum.THRESHOLD_9.getUpperLimit()) {
+				result = ScoreTableEnum.THRESHOLD_9;
+
+			} else if (mov >= ScoreTableEnum.THRESHOLD_10.getLowerLimit()) {
+				result = ScoreTableEnum.THRESHOLD_10;
+			}
+			
+			return result;
+		}
+		
+		public static int getWinScore(int mov){
+			return getResultByMOV(mov).getWinScore();
+		}
+		
+		public static int getLoseScore(int mov){
+			return getResultByMOV(mov).getLoseScore();
 		}
 	}
 
@@ -156,41 +197,17 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 				mov = mov < 0 ? 0 : mov;
 
-				int increment = 0;
-
-				if (mov >= ScoreTableEnum.THRESHOLD_5.getLowerLimit()
-						&& mov <= ScoreTableEnum.THRESHOLD_5.getUpperLimit()) {
-					increment += ScoreTableEnum.THRESHOLD_5.getScore();
-
-				} else if (mov >= ScoreTableEnum.THRESHOLD_6.getLowerLimit()
-						&& mov <= ScoreTableEnum.THRESHOLD_6.getUpperLimit()) {
-					increment += ScoreTableEnum.THRESHOLD_6.getScore();
-
-				} else if (mov >= ScoreTableEnum.THRESHOLD_7.getLowerLimit()
-						&& mov <= ScoreTableEnum.THRESHOLD_7.getUpperLimit()) {
-					increment += ScoreTableEnum.THRESHOLD_7.getScore();
-
-				} else if (mov >= ScoreTableEnum.THRESHOLD_8.getLowerLimit()
-						&& mov <= ScoreTableEnum.THRESHOLD_8.getUpperLimit()) {
-					increment += ScoreTableEnum.THRESHOLD_8.getScore();
-
-				} else if (mov >= ScoreTableEnum.THRESHOLD_9.getLowerLimit()
-						&& mov <= ScoreTableEnum.THRESHOLD_9.getUpperLimit()) {
-					increment += ScoreTableEnum.THRESHOLD_9.getScore();
-
-				} else if (mov >= ScoreTableEnum.THRESHOLD_10.getLowerLimit()) {
-					increment += ScoreTableEnum.THRESHOLD_10.getScore();
-				}
-
 				if (match.getWinner() == this)
-					score += increment;
+					score += ScoreTableEnum.getWinScore(mov);
 				else
-					score += 10 - increment;
+					score += ScoreTableEnum.getLoseScore(mov);
 			}
 		}
 
 		return score;
 	}
+	
+	
 
 	public double getAverageScore(ArmadaTournament t) {
 		return getScore(t) * 1.0 / getMatches(t).size();
@@ -207,10 +224,6 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 				} else {
 					sos += m.getPlayer1().getAverageScore(t);
 				}
-			}
-
-			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-				sos += (getMatches(t).size() - 1) * 5;
 			}
 		}
 
@@ -246,27 +259,6 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		}
 		return byes;
 	}
-
-	// public int getStrengthOfSchedule(ArmadaTournament t) {
-	// Integer sos = 0;
-	// List<ArmadaMatch> matches = getMatches(t);
-	//
-	// for (ArmadaMatch m : matches) {
-	// if (m.isBye() == false & (m.getWinner() != null)) {
-	// if (m.getPlayer1() == this) {
-	// sos += m.getPlayer2().getScore(t);
-	// } else {
-	// sos += m.getPlayer1().getScore(t);
-	// }
-	// }
-	//
-	// if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-	// sos += (getMatches(t).size() - 1) * 5;
-	// }
-	// }
-	//
-	// return sos;
-	// }
 
 	public int getRank(ArmadaTournament t) {
 		List<ArmadaPlayer> players = new ArrayList<ArmadaPlayer>();
@@ -327,7 +319,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (match.isBye()) {
-				movPoints += 129;
+				movPoints += BYE_MOV;
 
 				continue;
 			} else if (match.getWinner() == null) {

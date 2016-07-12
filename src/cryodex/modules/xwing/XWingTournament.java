@@ -29,8 +29,6 @@ public class XWingTournament implements XMLObject, Tournament {
 		RANDOM, BY_GROUP, IN_ORDER;
 	}
 
-	public static final int MODIFIED_WIN_THREASHOLD = 12;
-
 	private final List<XWingRound> rounds;
 	private List<XWingPlayer> players;
 	private final InitialSeedingEnum seedingEnum;
@@ -330,9 +328,7 @@ public class XWingTournament implements XMLObject, Tournament {
 				XWingRound roundToRemove = rounds.get(index);
 				for (XWingMatch m : roundToRemove.getMatches()) {
 					m.setWinner(null);
-					m.setModified(false);
 					m.setBye(false);
-					m.setDraw(false);
 					m.setPlayer1(null);
 					m.setPlayer2(null);
 					m.setPlayer1PointsDestroyed(null);

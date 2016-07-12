@@ -140,8 +140,6 @@ public class XWingJSONBuilder {
 		String result = "win";
 		if (match.isBye()) {
 			result = "bye";
-		} else if (match.isDraw()) {
-			result = "draw";
 		}
 
 		addValue(sb, "result", result);

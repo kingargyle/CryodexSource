@@ -330,20 +330,10 @@ public class XWingRoundPanel extends JPanel {
 				if (match.isBye()) {
 					getResultCombo().setSelectedIndex(1);
 				} else {
-					if (match.isDraw()) {
-						getResultCombo().setSelectedIndex(5);
-					} else if (match.getWinner() == match.getPlayer1()) {
-						if (match.isModified()) {
-							getResultCombo().setSelectedIndex(3);
-						} else {
+					if (match.getWinner() == match.getPlayer1()) {
 							getResultCombo().setSelectedIndex(1);
-						}
 					} else if (match.getWinner() == match.getPlayer2()) {
-						if (match.isModified()) {
-							getResultCombo().setSelectedIndex(4);
-						} else {
 							getResultCombo().setSelectedIndex(2);
-						}
 					}
 				}
 			}
@@ -400,10 +390,7 @@ public class XWingRoundPanel extends JPanel {
 						: "Select a result";
 				String[] values = { generic,
 						"WIN - " + match.getPlayer1().getName(),
-						"WIN - " + match.getPlayer2().getName(),
-						"MODIFIED WIN - " + match.getPlayer1().getName(),
-						"MODIFIED WIN - " + match.getPlayer2().getName(),
-						"DRAW" };
+						"WIN - " + match.getPlayer2().getName()};
 				return values;
 			}
 		}
@@ -442,8 +429,6 @@ public class XWingRoundPanel extends JPanel {
 
 			switch (resultsCombo.getSelectedIndex()) {
 			case 0:
-				match.setModified(false);
-				match.setDraw(false);
 				match.setWinner(null);
 				match.setBye(false);
 				break;
@@ -451,30 +436,11 @@ public class XWingRoundPanel extends JPanel {
 				if (match.getPlayer2() == null) {
 					match.setBye(true);
 				} else {
-					match.setModified(false);
-					match.setDraw(false);
 					match.setWinner(match.getPlayer1());
 				}
 				break;
 			case 2:
-				match.setModified(false);
-				match.setDraw(false);
 				match.setWinner(match.getPlayer2());
-				break;
-			case 3:
-				match.setModified(true);
-				match.setDraw(false);
-				match.setWinner(match.getPlayer1());
-				break;
-			case 4:
-				match.setModified(true);
-				match.setDraw(false);
-				match.setWinner(match.getPlayer2());
-				break;
-			case 5:
-				match.setModified(false);
-				match.setDraw(true);
-				match.setWinner(null);
 				break;
 			default:
 				break;
@@ -608,6 +574,12 @@ public class XWingRoundPanel extends JPanel {
 		}
 
 		public void setResultsCombo() {
+			
+			boolean enterOnlyPoints = XWingModule.getInstance().getOptions()
+					.isEnterOnlyPoints();
+			
+			getResultCombo().setEnabled(!enterOnlyPoints);
+			
 			if (match.getPlayer1PointsDestroyed() != null
 					|| match.getPlayer2PointsDestroyed() != null) {
 				Integer p1points = match.getPlayer1PointsDestroyed() == null ? 0
@@ -616,22 +588,15 @@ public class XWingRoundPanel extends JPanel {
 						: match.getPlayer2PointsDestroyed();
 
 				if (p1points.equals(p2points)) {
-					getResultCombo().setSelectedIndex(5);
+					getResultCombo().setSelectedIndex(0);
+					getResultCombo().setEnabled(true);		
 				}
 				if (p1points > p2points) {
-					if (p1points - p2points >= 12) {
 						getResultCombo().setSelectedIndex(1);
-					} else {
-						getResultCombo().setSelectedIndex(3);
-					}
 				}
 
 				if (p2points > p1points) {
-					if (p2points - p1points >= 12) {
 						getResultCombo().setSelectedIndex(2);
-					} else {
-						getResultCombo().setSelectedIndex(4);
-					}
 				}
 			} else {
 				getResultCombo().setSelectedIndex(0);

@@ -216,8 +216,7 @@ public class IARankingTable extends JPanel {
 				break;
 			case 4:
 				value = user.getWins(tournament) + " / "
-						+ user.getLosses(tournament) + " / "
-						+ user.getDraws(tournament);
+						+ user.getLosses(tournament);
 				break;
 			case 5:
 				value = user.getByes(tournament);

@@ -10,7 +10,7 @@ public class IAComparator extends TournamentComparator<IAPlayer> {
 
 	public static final CompareOptions[] pairingCompare = { CompareOptions.SCORE };
 	public static final CompareOptions[] rankingCompare = {
-			CompareOptions.SCORE, CompareOptions.HEAD_TO_HEAD,
+			CompareOptions.SCORE,
 			CompareOptions.AVERAGE_STRENGTH_OF_SCHEDULE,
 			CompareOptions.EXTENDED_STRENGTH_OF_SCHEDULE, CompareOptions.RANDOM };
 
@@ -49,6 +49,9 @@ public class IAComparator extends TournamentComparator<IAPlayer> {
 				return 0;
 			}
 			result = o1.isHeadToHeadWinner(t) ? 1 : 0;
+			if(result == 0){
+				result = o2.isHeadToHeadWinner(t) ? -1 : 0;
+			}
 			break;
 		case STRENGH_OF_SCHEDULE:
 			// Not implemented

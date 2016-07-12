@@ -12,7 +12,7 @@ public class XWingComparator extends TournamentComparator<XWingPlayer> {
 	public static final CompareOptions[] pairingCompare = {
 			CompareOptions.SCORE, CompareOptions.MARGIN_OF_VICTORY };
 	public static final CompareOptions[] rankingCompare = {
-			CompareOptions.SCORE, CompareOptions.HEAD_TO_HEAD,
+			CompareOptions.SCORE,
 			CompareOptions.MARGIN_OF_VICTORY,
 			CompareOptions.AVERAGE_STRENGTH_OF_SCHEDULE, CompareOptions.RANDOM };
 	public static final CompareOptions[] rankingCompareNoHeadToHead = {
@@ -55,6 +55,9 @@ public class XWingComparator extends TournamentComparator<XWingPlayer> {
 				return 0;
 			}
 			result = o1.isHeadToHeadWinner(t) ? 1 : 0;
+			if(result == 0){
+				result = o2.isHeadToHeadWinner(t) ? -1 : 0;
+			}
 			break;
 		case STRENGH_OF_SCHEDULE:
 			// Not implemented

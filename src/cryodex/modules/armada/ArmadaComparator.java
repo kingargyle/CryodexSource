@@ -50,6 +50,9 @@ public class ArmadaComparator extends TournamentComparator<ArmadaPlayer> {
 				return 0;
 			}
 			result = o1.isHeadToHeadWinner(t) ? 1 : 0;
+			if(result == 0){
+				result = o2.isHeadToHeadWinner(t) ? -1 : 0;
+			}
 			break;
 		case STRENGH_OF_SCHEDULE:
 			// Not implemented

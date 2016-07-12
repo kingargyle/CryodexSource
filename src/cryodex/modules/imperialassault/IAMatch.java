@@ -12,15 +12,13 @@ import cryodex.xml.XMLUtils.Element;
 
 public class IAMatch implements XMLObject {
 
-	public static final int WIN_POINTS = 3;
-	public static final int BYE_POINTS = 3;
-	public static final int DRAW_POINTS = 1;
+	public static final int WIN_POINTS = 1;
+	public static final int BYE_POINTS = 1;
 	public static final int LOSS_POINTS = 0;
 
 	private IAPlayer player1;
 	private IAPlayer player2;
 	private IAPlayer winner;
-	private boolean draw = false;
 	private boolean isBye = false;
 	private boolean isDuplicate;
 
@@ -55,7 +53,6 @@ public class IAMatch implements XMLObject {
 			winner = (IAPlayer) p.getModuleInfoByModule(m);
 		}
 
-		draw = matchElement.getBooleanFromChild("ISDRAW");
 		isBye = matchElement.getBooleanFromChild("ISBYE");
 		isDuplicate = matchElement.getBooleanFromChild("ISDUPLICATE");
 	}
@@ -84,14 +81,6 @@ public class IAMatch implements XMLObject {
 		this.winner = winner;
 	}
 
-	public boolean isDraw() {
-		return draw;
-	}
-
-	public void setDraw(boolean draw) {
-		this.draw = draw;
-	}
-
 	public boolean isBye() {
 		return isBye;
 	}
@@ -109,7 +98,7 @@ public class IAMatch implements XMLObject {
 	}
 
 	public boolean isMatchComplete() {
-		return draw || isBye || winner != null;
+		return isBye || winner != null;
 	}
 
 	public boolean isValidResult() {
@@ -161,7 +150,6 @@ public class IAMatch implements XMLObject {
 				: getPlayer2().getPlayer().getSaveId());
 		XMLUtils.appendObject(sb, "WINNER", getWinner() == null ? ""
 				: getWinner().getPlayer().getSaveId());
-		XMLUtils.appendObject(sb, "ISDRAW", isDraw());
 		XMLUtils.appendObject(sb, "ISBYE", isBye());
 		XMLUtils.appendObject(sb, "ISDUPLICATE", isDuplicate());
 

@@ -276,7 +276,6 @@ public class IATournament implements XMLObject, Tournament {
 				for (IAMatch m : roundToRemove.getMatches()) {
 					m.setWinner(null);
 					m.setBye(false);
-					m.setDraw(false);
 					m.setPlayer1(null);
 					m.setPlayer2(null);
 				}

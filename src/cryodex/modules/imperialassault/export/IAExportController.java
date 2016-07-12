@@ -76,9 +76,7 @@ public class IAExportController {
 
 				if (m.isMatchComplete()) {
 					matchString += " - Match Results: ";
-					if (m.isDraw()) {
-						matchString += "Draw";
-					} else if (m.getWinner() != null) {
+					if (m.getWinner() != null) {
 						matchString += m.getWinner().getName()
 								+ " is the winner";
 					}

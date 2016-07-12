@@ -12,17 +12,13 @@ import cryodex.xml.XMLUtils.Element;
 
 public class XWingMatch implements XMLObject {
 
-	public static final int WIN_POINTS = 5;
-	public static final int MOD_WIN_POINTS = 3;
-	public static final int BYE_POINTS = 5;
-	public static final int DRAW_POINTS = 1;
+	public static final int WIN_POINTS = 1;
+	public static final int BYE_POINTS = 1;
 	public static final int LOSS_POINTS = 0;
 
 	private XWingPlayer player1;
 	private XWingPlayer player2;
 	private XWingPlayer winner;
-	private boolean isModified = false;
-	private boolean draw = false;
 	private boolean isBye = false;
 	private Integer player1PointsDestroyed;
 	private Integer player2PointsDestroyed;
@@ -59,15 +55,11 @@ public class XWingMatch implements XMLObject {
 			winner = (XWingPlayer) p.getModuleInfoByModule(m);
 		}
 
-		isModified = matchElement.getBooleanFromChild("ISMODIFIED");
-		draw = matchElement.getBooleanFromChild("ISDRAW");
 		isBye = matchElement.getBooleanFromChild("ISBYE");
 		isDuplicate = matchElement.getBooleanFromChild("ISDUPLICATE");
 
-		player1PointsDestroyed = matchElement
-				.getIntegerFromChild("PLAYER1POINTS");
-		player2PointsDestroyed = matchElement
-				.getIntegerFromChild("PLAYER2POINTS");
+		player1PointsDestroyed = matchElement.getIntegerFromChild("PLAYER1POINTS");
+		player2PointsDestroyed = matchElement.getIntegerFromChild("PLAYER2POINTS");
 
 	}
 
@@ -93,22 +85,6 @@ public class XWingMatch implements XMLObject {
 
 	public void setWinner(XWingPlayer winner) {
 		this.winner = winner;
-	}
-
-	public boolean isModified() {
-		return isModified;
-	}
-
-	public void setModified(boolean isModified) {
-		this.isModified = isModified;
-	}
-
-	public boolean isDraw() {
-		return draw;
-	}
-
-	public void setDraw(boolean draw) {
-		this.draw = draw;
 	}
 
 	public boolean isBye() {
@@ -144,58 +120,26 @@ public class XWingMatch implements XMLObject {
 	}
 
 	public boolean isMatchComplete() {
-		return draw || isBye || winner != null;
+		return isBye || winner != null;
 	}
 
 	public boolean isValidResult(boolean isSingleElimination) {
-		Integer player1Points = player1PointsDestroyed == null ? 0
-				: player1PointsDestroyed;
-		Integer player2Points = player2PointsDestroyed == null ? 0
-				: player2PointsDestroyed;
+		Integer player1Points = player1PointsDestroyed == null ? 0 : player1PointsDestroyed;
+		Integer player2Points = player2PointsDestroyed == null ? 0 : player2PointsDestroyed;
 
-		if (isSingleElimination) {
-
-			// For single elimination we just look to make sure the correct
-			// player is the winner according to points
-			if ((winner == player1 && player1Points > player2Points)
-					|| (winner == player2 && player2Points > player1Points)
-					|| (player1Points == player2Points && winner != null)) {
-				return true;
-			}
-		} else {
-			// If it is a draw, the points should be equal
-			if (draw && player1Points.equals(player2Points)) {
-				return true;
-			}
-
-			// If there is no second player, it must be a bye
-			if (player2 == null && isBye) {
-				return true;
-			}
-
-			int diff = player1Points > player2Points ? player1Points
-					- player2Points : player2Points - player1Points;
-			// If we are under the mod win threashold then ismodified should be
-			// true
-			if (diff < XWingTournament.MODIFIED_WIN_THREASHOLD
-					&& isModified == true) {
-				if ((winner == player1 && player1Points > player2Points)
-						|| (winner == player2 && player2Points > player1Points)) {
-					return true;
-				}
-			}
-
-			// If we are above the mod win threashold it should not be a
-			// modified
-			// win
-			if (diff >= XWingTournament.MODIFIED_WIN_THREASHOLD
-					&& isModified == false) {
-				if ((winner == player1 && player1Points > player2Points)
-						|| (winner == player2 && player2Points > player1Points)) {
-					return true;
-				}
-			}
+		// If there is no second player, it must be a bye
+		if (player2 == null && isBye) {
+			return true;
 		}
+
+		// For single elimination we just look to make sure the correct
+		// player is the winner according to points
+		if ((winner == player1 && player1Points >= player2Points)
+				|| (winner == player2 && player2Points >= player1Points)
+				|| (player1Points == player2Points && winner != null)) {
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -216,10 +160,8 @@ public class XWingMatch implements XMLObject {
 					continue;
 				}
 
-				if ((match.getPlayer1() == this.getPlayer1() && match
-						.getPlayer2() == this.getPlayer2())
-						|| (match.getPlayer1() == this.getPlayer2() && match
-								.getPlayer2() == this.getPlayer1())) {
+				if ((match.getPlayer1() == this.getPlayer1() && match.getPlayer2() == this.getPlayer2())
+						|| (match.getPlayer1() == this.getPlayer2() && match.getPlayer2() == this.getPlayer1())) {
 					this.setDuplicate(true);
 					return;
 				}
@@ -231,21 +173,15 @@ public class XWingMatch implements XMLObject {
 
 	@Override
 	public String toString() {
-		return getPlayer1() + " vs " + getPlayer2() + " : isDuplicate="
-				+ isDuplicate();
+		return getPlayer1() + " vs " + getPlayer2() + " : isDuplicate=" + isDuplicate();
 	}
 
 	@Override
 	public StringBuilder appendXML(StringBuilder sb) {
 
-		XMLUtils.appendObject(sb, "PLAYER1", getPlayer1().getPlayer()
-				.getSaveId());
-		XMLUtils.appendObject(sb, "PLAYER2", getPlayer2() == null ? ""
-				: getPlayer2().getPlayer().getSaveId());
-		XMLUtils.appendObject(sb, "WINNER", getWinner() == null ? ""
-				: getWinner().getPlayer().getSaveId());
-		XMLUtils.appendObject(sb, "ISMODIFIED", isModified());
-		XMLUtils.appendObject(sb, "ISDRAW", isDraw());
+		XMLUtils.appendObject(sb, "PLAYER1", getPlayer1().getPlayer().getSaveId());
+		XMLUtils.appendObject(sb, "PLAYER2", getPlayer2() == null ? "" : getPlayer2().getPlayer().getSaveId());
+		XMLUtils.appendObject(sb, "WINNER", getWinner() == null ? "" : getWinner().getPlayer().getSaveId());
 		XMLUtils.appendObject(sb, "ISBYE", isBye());
 		XMLUtils.appendObject(sb, "PLAYER1POINTS", getPlayer1PointsDestroyed());
 		XMLUtils.appendObject(sb, "PLAYER2POINTS", getPlayer2PointsDestroyed());

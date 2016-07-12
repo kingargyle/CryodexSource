@@ -282,9 +282,7 @@ public class IARoundPanel extends JPanel {
 				if (match.isBye()) {
 					getResultCombo().setSelectedIndex(1);
 				} else {
-					if (match.isDraw()) {
-						getResultCombo().setSelectedIndex(3);
-					} else if (match.getWinner() == match.getPlayer1()) {
+					if (match.getWinner() == match.getPlayer1()) {
 						getResultCombo().setSelectedIndex(1);
 					} else if (match.getWinner() == match.getPlayer2()) {
 						getResultCombo().setSelectedIndex(2);
@@ -314,7 +312,7 @@ public class IARoundPanel extends JPanel {
 				String generic = "Select a result";
 				String[] values = { generic,
 						"WIN - " + match.getPlayer1().getName(),
-						"WIN - " + match.getPlayer2().getName(), "DRAW" };
+						"WIN - " + match.getPlayer2().getName() };
 				return values;
 			}
 		}
@@ -353,7 +351,6 @@ public class IARoundPanel extends JPanel {
 
 			switch (resultsCombo.getSelectedIndex()) {
 			case 0:
-				match.setDraw(false);
 				match.setWinner(null);
 				match.setBye(false);
 				break;
@@ -361,17 +358,11 @@ public class IARoundPanel extends JPanel {
 				if (match.getPlayer2() == null) {
 					match.setBye(true);
 				} else {
-					match.setDraw(false);
 					match.setWinner(match.getPlayer1());
 				}
 				break;
 			case 2:
-				match.setDraw(false);
 				match.setWinner(match.getPlayer2());
-				break;
-			case 3:
-				match.setDraw(true);
-				match.setWinner(null);
 				break;
 			default:
 				break;

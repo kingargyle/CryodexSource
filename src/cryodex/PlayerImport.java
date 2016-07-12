@@ -3,6 +3,7 @@ package cryodex;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.swing.JFileChooser;
 public class PlayerImport {
 
 	public static void importPlayers(){
+		BufferedReader reader = null;
 		try {
 			JFileChooser fc = new JFileChooser();
 			
@@ -21,7 +23,7 @@ public class PlayerImport {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 			    File file = fc.getSelectedFile();
 			    
-				BufferedReader reader = new BufferedReader(new FileReader(file));
+				reader = new BufferedReader(new FileReader(file));
 				
 				String line = reader.readLine();
 				
@@ -73,6 +75,11 @@ public class PlayerImport {
 				Main.getInstance().getRegisterPanel().importPlayers(players);
 			}
 		} catch (Exception e) {
+			try {
+				if(reader != null){
+					reader.close();
+				}
+			} catch (IOException e1) {}
 			e.printStackTrace();
 		}
 	}

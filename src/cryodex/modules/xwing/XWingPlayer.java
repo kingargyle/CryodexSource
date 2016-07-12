@@ -168,10 +168,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		int score = 0;
 		for (XWingMatch match : getMatches(t)) {
 			if (match.getWinner() == this) {
-				score += match.isModified() ? XWingMatch.MOD_WIN_POINTS
-						: XWingMatch.WIN_POINTS;
-			} else if (match.isDraw()) {
-				score += XWingMatch.DRAW_POINTS;
+				score += XWingMatch.WIN_POINTS;
 			} else if (match.isBye()) {
 				score += XWingMatch.BYE_POINTS;
 			} else {
@@ -191,7 +188,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		List<XWingMatch> matches = getMatches(t);
 
 		for (XWingMatch m : matches) {
-			if (m.isBye() == false && (m.getWinner() != null || m.isDraw())) {
+			if (m.isBye() == false && m.getWinner() != null) {
 				if (m.getPlayer1() == this) {
 					sos += m.getPlayer2().getAverageScore(t);
 				} else {
@@ -227,16 +224,6 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		int score = 0;
 		for (XWingMatch match : getMatches(t)) {
 			if (match.getWinner() != null && match.getWinner() != this) {
-				score++;
-			}
-		}
-		return score;
-	}
-
-	public int getDraws(XWingTournament t) {
-		int score = 0;
-		for (XWingMatch match : getMatches(t)) {
-			if (match.isDraw()) {
 				score++;
 			}
 		}
@@ -335,9 +322,6 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 			if (match.isBye()) {
 				movPoints += tournamentPoints + (tournamentPoints / 2);
 				continue;
-			} else if (match.isDraw()) {
-				movPoints += tournamentPoints;
-				continue;
 			} else if (match.getWinner() == null) {
 				continue;
 			}
@@ -384,13 +368,6 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 					if (m.getWinner() != null && m.getWinner() == this) {
 						continue playerLoop;
 					}
-					// if (m.getPlayer1() == p && m.getPlayer2() == this
-					// && m.getWinner() == this) {
-					// continue playerLoop;
-					// } else if (m.getPlayer2() == p && m.getPlayer1() == this
-					// && m.getWinner() == p) {
-					// continue playerLoop;
-					// }
 				}
 				return false;
 			}
