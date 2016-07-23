@@ -61,8 +61,7 @@ public class XWingRoundPanel extends JPanel {
 			counter++;
 		}
 
-		scroll = new JScrollPane(ComponentUtils.addToFlowLayout(buildPanel(),
-				FlowLayout.CENTER));
+		scroll = new JScrollPane(ComponentUtils.addToFlowLayout(buildPanel(), FlowLayout.CENTER));
 		scroll.setBorder(BorderFactory.createEmptyBorder());
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -80,8 +79,7 @@ public class XWingRoundPanel extends JPanel {
 	public JPanel getQuickEntryPanel() {
 		if (quickEntryPanel == null) {
 			quickEntryPanel = new JPanel(new BorderLayout());
-			quickEntryPanel.setVisible(CryodexController.getOptions()
-					.isShowQuickFind());
+			quickEntryPanel.setVisible(CryodexController.getOptions().isShowQuickFind());
 			ComponentUtils.forceSize(quickEntryPanel, 405, 135);
 
 			quickEntrySubPanel = new JPanel(new BorderLayout());
@@ -89,23 +87,22 @@ public class XWingRoundPanel extends JPanel {
 
 			roundNumber = new JTextField(5);
 
-			roundNumber.getDocument().addDocumentListener(
-					new DocumentListener() {
-						@Override
-						public void changedUpdate(DocumentEvent e) {
-							update();
-						}
+			roundNumber.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					update();
+				}
 
-						@Override
-						public void removeUpdate(DocumentEvent e) {
-							update();
-						}
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					update();
+				}
 
-						@Override
-						public void insertUpdate(DocumentEvent e) {
-							update();
-						}
-					});
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					update();
+				}
+			});
 
 			List<XWingPlayer> playerList = new ArrayList<XWingPlayer>();
 
@@ -114,8 +111,7 @@ public class XWingRoundPanel extends JPanel {
 
 			Collections.sort(playerList);
 
-			playerCombo = new JComboBox<XWingPlayer>(
-					playerList.toArray(new XWingPlayer[playerList.size()]));
+			playerCombo = new JComboBox<XWingPlayer>(playerList.toArray(new XWingPlayer[playerList.size()]));
 
 			playerCombo.addActionListener(new ActionListener() {
 
@@ -125,12 +121,14 @@ public class XWingRoundPanel extends JPanel {
 				}
 			});
 
-			quickEntryPanel.add(ComponentUtils.addToFlowLayout(ComponentUtils
-					.addToHorizontalBorderLayout(new JLabel(
-							"Enter table number"), roundNumber, ComponentUtils
-							.addToHorizontalBorderLayout(new JLabel(
-									"or choose a player"), playerCombo, null)),
-					FlowLayout.CENTER), BorderLayout.NORTH);
+			quickEntryPanel
+					.add(ComponentUtils
+							.addToFlowLayout(
+									ComponentUtils.addToHorizontalBorderLayout(new JLabel("Enter table number"),
+											roundNumber, ComponentUtils.addToHorizontalBorderLayout(
+													new JLabel("or choose a player"), playerCombo, null)),
+									FlowLayout.CENTER),
+							BorderLayout.NORTH);
 
 			quickEntryPanel.add(quickEntrySubPanel);
 		}
@@ -141,9 +139,7 @@ public class XWingRoundPanel extends JPanel {
 	public void update() {
 
 		scroll.getViewport().removeAll();
-		scroll.getViewport()
-				.add(ComponentUtils.addToFlowLayout(buildPanel(),
-						FlowLayout.CENTER));
+		scroll.getViewport().add(ComponentUtils.addToFlowLayout(buildPanel(), FlowLayout.CENTER));
 		ComponentUtils.repaint(XWingRoundPanel.this);
 
 		Integer i = null;
@@ -153,8 +149,7 @@ public class XWingRoundPanel extends JPanel {
 
 		}
 
-		XWingPlayer player = playerCombo.getSelectedIndex() == 0 ? null
-				: (XWingPlayer) playerCombo.getSelectedItem();
+		XWingPlayer player = playerCombo.getSelectedIndex() == 0 ? null : (XWingPlayer) playerCombo.getSelectedItem();
 
 		if (player != null) {
 			roundNumber.setEnabled(false);
@@ -177,8 +172,7 @@ public class XWingRoundPanel extends JPanel {
 				if (g.getMatch().getPlayer1() == player) {
 					gamePanel = g;
 					break;
-				} else if (g.getMatch().getPlayer2() != null
-						&& g.getMatch().getPlayer2() == player) {
+				} else if (g.getMatch().getPlayer2() != null && g.getMatch().getPlayer2() == player) {
 					gamePanel = g;
 					break;
 				}
@@ -264,7 +258,7 @@ public class XWingRoundPanel extends JPanel {
 
 				gbc.gridx = 2;
 				panel.add(gp.getPlayer1KillPointsField(), gbc);
-				
+
 				gbc.gridx = 3;
 				gbc.anchor = GridBagConstraints.WEST;
 				panel.add(gp.getPlayer1KillPointsField().getIndicator(), gbc);
@@ -296,8 +290,7 @@ public class XWingRoundPanel extends JPanel {
 		for (GamePanel gp : gamePanels) {
 			gp.reset(isTextOnly);
 		}
-		getQuickEntryPanel().setVisible(
-				CryodexController.getOptions().isShowQuickFind());
+		getQuickEntryPanel().setVisible(CryodexController.getOptions().isShowQuickFind());
 		ComponentUtils.repaint(this);
 	}
 
@@ -331,20 +324,18 @@ public class XWingRoundPanel extends JPanel {
 					getResultCombo().setSelectedIndex(1);
 				} else {
 					if (match.getWinner() == match.getPlayer1()) {
-							getResultCombo().setSelectedIndex(1);
+						getResultCombo().setSelectedIndex(1);
 					} else if (match.getWinner() == match.getPlayer2()) {
-							getResultCombo().setSelectedIndex(2);
+						getResultCombo().setSelectedIndex(2);
 					}
 				}
 			}
 			if (match.getPlayer2() != null) {
 				if (match.getPlayer1PointsDestroyed() != null) {
-					getPlayer1KillPointsField().setText(
-							String.valueOf(match.getPlayer1PointsDestroyed()));
+					getPlayer1KillPointsField().setText(String.valueOf(match.getPlayer1PointsDestroyed()));
 				}
 				if (match.getPlayer2PointsDestroyed() != null) {
-					getPlayer2KillPointsField().setText(
-							String.valueOf(match.getPlayer2PointsDestroyed()));
+					getPlayer2KillPointsField().setText(String.valueOf(match.getPlayer2PointsDestroyed()));
 				}
 			}
 			isLoading = false;
@@ -358,8 +349,7 @@ public class XWingRoundPanel extends JPanel {
 			if (playersTitle == null) {
 
 				playersTitle = new JLabel("");
-				playersTitle.setFont(new Font(playersTitle.getFont().getName(),
-						playersTitle.getFont().getStyle(), 20));
+				playersTitle.setFont(new Font(playersTitle.getFont().getName(), playersTitle.getFont().getStyle(), 20));
 				playersTitle.setHorizontalAlignment(SwingConstants.RIGHT);
 			}
 			return playersTitle;
@@ -385,12 +375,10 @@ public class XWingRoundPanel extends JPanel {
 				String[] values = { "Select a result", "BYE" };
 				return values;
 			} else {
-				String generic = XWingModule.getInstance().getOptions()
-						.isEnterOnlyPoints() ? "Enter results"
+				String generic = XWingModule.getInstance().getOptions().isEnterOnlyPoints() ? "Enter results"
 						: "Select a result";
-				String[] values = { generic,
-						"WIN - " + match.getPlayer1().getName(),
-						"WIN - " + match.getPlayer2().getName()};
+				String[] values = { generic, "WIN - " + match.getPlayer1().getName(),
+						"WIN - " + match.getPlayer2().getName() };
 				return values;
 			}
 		}
@@ -458,18 +446,15 @@ public class XWingRoundPanel extends JPanel {
 					public void focusLost(FocusEvent arg0) {
 						Integer points = null;
 						try {
-							points = Integer.valueOf(player1KillPoints
-									.getText());
+							points = Integer.valueOf(player1KillPoints.getText());
 						} catch (Exception e) {
 
 						}
 
 						match.setPlayer1PointsDestroyed(points);
-						tournament.getTournamentGUI().getRankingTable()
-								.resetPlayers();
+						tournament.getTournamentGUI().getRankingTable().resetPlayers();
 
-						if (XWingModule.getInstance().getOptions()
-								.isEnterOnlyPoints()) {
+						if (XWingModule.getInstance().getOptions().isEnterOnlyPoints()) {
 							setResultsCombo();
 						}
 					}
@@ -493,18 +478,15 @@ public class XWingRoundPanel extends JPanel {
 					public void focusLost(FocusEvent arg0) {
 						Integer points = null;
 						try {
-							points = Integer.valueOf(player2KillPoints
-									.getText());
+							points = Integer.valueOf(player2KillPoints.getText());
 						} catch (Exception e) {
 
 						}
 
 						match.setPlayer2PointsDestroyed(points);
-						tournament.getTournamentGUI().getRankingTable()
-								.resetPlayers();
+						tournament.getTournamentGUI().getRankingTable().resetPlayers();
 
-						if (XWingModule.getInstance().getOptions()
-								.isEnterOnlyPoints()) {
+						if (XWingModule.getInstance().getOptions().isEnterOnlyPoints()) {
 							setResultsCombo();
 						}
 					}
@@ -523,10 +505,8 @@ public class XWingRoundPanel extends JPanel {
 
 			String titleText = null;
 
-			boolean showKillPoints = XWingModule.getInstance().getOptions()
-					.isShowKillPoints();
-			boolean enterOnlyPoints = XWingModule.getInstance().getOptions()
-					.isEnterOnlyPoints();
+			boolean showKillPoints = XWingModule.getInstance().getOptions().isShowKillPoints();
+			boolean enterOnlyPoints = XWingModule.getInstance().getOptions().isEnterOnlyPoints();
 
 			getPlayer1KillLabel().setVisible(showKillPoints);
 			getPlayer1KillPointsField().setVisible(showKillPoints);
@@ -536,8 +516,7 @@ public class XWingRoundPanel extends JPanel {
 			if (match.getPlayer2() == null) {
 				titleText = match.getPlayer1().getName() + " has a BYE";
 			} else {
-				titleText = match.getPlayer1().getName() + " VS "
-						+ match.getPlayer2().getName();
+				titleText = match.getPlayer1().getName() + " VS " + match.getPlayer2().getName();
 				if (match.isDuplicate()) {
 					titleText = "(Duplicate)" + titleText;
 				}
@@ -546,10 +525,8 @@ public class XWingRoundPanel extends JPanel {
 					titleText = tableNumber + ": " + titleText;
 				}
 
-				getPlayer1KillLabel().setText(
-						match.getPlayer1().getName() + " kill points");
-				getPlayer2KillLabel().setText(
-						match.getPlayer2().getName() + " kill points");
+				getPlayer1KillLabel().setText(match.getPlayer1().getName() + " kill points");
+				getPlayer2KillLabel().setText(match.getPlayer2().getName() + " kill points");
 			}
 
 			getPlayerTitle().setText(titleText);
@@ -573,33 +550,39 @@ public class XWingRoundPanel extends JPanel {
 			}
 		}
 
+		/**
+		 * This function sets the combo box value to the winner of the match based on points.
+		 */
 		public void setResultsCombo() {
-			
-			boolean enterOnlyPoints = XWingModule.getInstance().getOptions()
-					.isEnterOnlyPoints();
-			
-			getResultCombo().setEnabled(!enterOnlyPoints);
-			
-			if (match.getPlayer1PointsDestroyed() != null
-					|| match.getPlayer2PointsDestroyed() != null) {
-				Integer p1points = match.getPlayer1PointsDestroyed() == null ? 0
-						: match.getPlayer1PointsDestroyed();
-				Integer p2points = match.getPlayer2PointsDestroyed() == null ? 0
-						: match.getPlayer2PointsDestroyed();
+
+			boolean enterOnlyPoints = XWingModule.getInstance().getOptions().isEnterOnlyPoints();
+
+			if (match.getPlayer1PointsDestroyed() != null || match.getPlayer2PointsDestroyed() != null) {
+
+				Integer p1points = match.getPlayer1PointsDestroyed() == null ? 0 : match.getPlayer1PointsDestroyed();
+				Integer p2points = match.getPlayer2PointsDestroyed() == null ? 0 : match.getPlayer2PointsDestroyed();
 
 				if (p1points.equals(p2points)) {
-					getResultCombo().setSelectedIndex(0);
-					getResultCombo().setEnabled(true);		
+					// Only reset the result if it was not enabled before. This
+					// prevents the combo box from resetting if the result
+					// didn't actually change.
+					if (getResultCombo().isEnabled() == false) {
+						getResultCombo().setSelectedIndex(0);
+					}
+					getResultCombo().setEnabled(true);
 				}
 				if (p1points > p2points) {
-						getResultCombo().setSelectedIndex(1);
+					getResultCombo().setSelectedIndex(1);
+					getResultCombo().setEnabled(!enterOnlyPoints);
 				}
 
 				if (p2points > p1points) {
-						getResultCombo().setSelectedIndex(2);
+					getResultCombo().setSelectedIndex(2);
+					getResultCombo().setEnabled(!enterOnlyPoints);
 				}
 			} else {
 				getResultCombo().setSelectedIndex(0);
+				getResultCombo().setEnabled(!enterOnlyPoints);
 			}
 			comboChange();
 		}

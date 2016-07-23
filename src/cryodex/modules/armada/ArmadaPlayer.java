@@ -15,6 +15,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		ModulePlayer {
 
 	public static final int BYE_MOV = 140;
+	public static final int MAX_MOV = 400;
 	
 	/**
 	 *This enum represents the table of match score to tournament points
@@ -195,7 +196,9 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 				} catch (Exception e) {
 				}
 
+				// Check to see if MOV is outside the min/max
 				mov = mov < 0 ? 0 : mov;
+				mov = mov > MAX_MOV ? MAX_MOV : mov;
 
 				if (match.getWinner() == this)
 					score += ScoreTableEnum.getWinScore(mov);
@@ -302,7 +305,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 		int roundNumber = 0;
 
-		Integer movPoints = 0;
+		Integer totalMov = 0;
 
 		for (ArmadaMatch match : getMatches(t)) {
 
@@ -319,7 +322,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (match.isBye()) {
-				movPoints += BYE_MOV;
+				totalMov += BYE_MOV;
 
 				continue;
 			} else if (match.getWinner() == null) {
@@ -327,7 +330,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (match.getWinner() == this) {
-				int points = 0;
+				int mov = 0;
 				try {
 
 					int player1Score = match.getPlayer1Score() == null ? 0
@@ -336,19 +339,23 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 							: match.getPlayer2Score();
 
 					if (match.getPlayer1() == this) {
-						points = player1Score - player2Score;
+						mov = player1Score - player2Score;
 					} else {
-						points = player2Score - player1Score;
+						mov = player2Score - player1Score;
 					}
 				} catch (Exception e) {
 				}
 
-				movPoints += points < 0 ? 0 : points;
+				// Check to see if MOV is outside the min/max
+				mov = mov < 0 ? 0 : mov;
+				mov = mov > MAX_MOV ? MAX_MOV : mov;
+				
+				totalMov += mov;
 			} else {
-				movPoints += 0;
+				totalMov += 0;
 			}
 		}
-		return movPoints;
+		return totalMov;
 	}
 
 	public boolean isHeadToHeadWinner(ArmadaTournament t) {
