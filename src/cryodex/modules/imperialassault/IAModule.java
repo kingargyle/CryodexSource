@@ -1,5 +1,6 @@
 package cryodex.modules.imperialassault;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 
 import cryodex.CryodexController;
@@ -27,6 +28,7 @@ public class IAModule implements Module {
 		return module;
 	}
 
+	private JCheckBoxMenuItem viewMenuItem;
 	private IARegistrationPanel registrationPanel;
 	private IAMenu menu;
 	private IAOptions options;
@@ -120,5 +122,15 @@ public class IAModule implements Module {
 	@Override
 	public ModulePlayer getNewModulePlayer(Player player) {
 		return new IAPlayer(player);
+	}
+
+	@Override
+	public JCheckBoxMenuItem getViewMenuItem() {
+		return viewMenuItem;
+	}
+
+	@Override
+	public void setViewMenuItem(JCheckBoxMenuItem viewMenuItem) {
+		this.viewMenuItem = viewMenuItem;
 	}
 }

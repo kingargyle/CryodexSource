@@ -321,9 +321,17 @@ public class ArmadaRoundPanel extends JPanel {
 					getResultCombo().setSelectedIndex(1);
 				} else {
 					if (match.getWinner() == match.getPlayer1()) {
-						getResultCombo().setSelectedIndex(1);
+						if(match.isConcede()){
+							getResultCombo().setSelectedIndex(4);
+						} else {
+							getResultCombo().setSelectedIndex(1);	
+						}
 					} else if (match.getWinner() == match.getPlayer2()) {
-						getResultCombo().setSelectedIndex(2);
+						if(match.isConcede()){
+							getResultCombo().setSelectedIndex(3);
+						} else {
+							getResultCombo().setSelectedIndex(2);	
+						}
 					}
 				}
 			}
@@ -378,7 +386,9 @@ public class ArmadaRoundPanel extends JPanel {
 				String generic = "Select a result";
 				String[] values = { generic,
 						"WIN - " + match.getPlayer1().getName(),
-						"WIN - " + match.getPlayer2().getName() };
+						"WIN - " + match.getPlayer2().getName(),
+						match.getPlayer1().getName() + " Conceded", 
+						match.getPlayer2().getName() + " Conceded"};
 				return values;
 			}
 		}
@@ -419,6 +429,7 @@ public class ArmadaRoundPanel extends JPanel {
 			case 0:
 				match.setWinner(null);
 				match.setBye(false);
+				match.setConcede(false);
 				break;
 			case 1:
 				if (match.getPlayer2() == null) {
@@ -426,9 +437,19 @@ public class ArmadaRoundPanel extends JPanel {
 				} else {
 					match.setWinner(match.getPlayer1());
 				}
+				match.setConcede(false);
 				break;
 			case 2:
 				match.setWinner(match.getPlayer2());
+				match.setConcede(false);
+				break;
+			case 3:
+				match.setWinner(match.getPlayer2());
+				match.setConcede(true);
+				break;
+			case 4:
+				match.setWinner(match.getPlayer1());
+				match.setConcede(true);
 				break;
 			default:
 				break;

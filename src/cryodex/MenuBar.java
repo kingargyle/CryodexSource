@@ -150,6 +150,8 @@ public class MenuBar extends JMenuBar {
 						CryodexController.saveData();
 					}
 				});
+				
+				m.setViewMenuItem(moduleItem);
 
 				viewMenu.add(moduleItem);
 			}

@@ -1,5 +1,6 @@
 package cryodex.modules.armada;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 
 import cryodex.CryodexController;
@@ -27,6 +28,7 @@ public class ArmadaModule implements Module {
 		return module;
 	}
 
+	private JCheckBoxMenuItem viewMenuItem;
 	private ArmadaRegistrationPanel registrationPanel;
 	private ArmadaMenu menu;
 	private ArmadaOptions options;
@@ -121,5 +123,15 @@ public class ArmadaModule implements Module {
 	@Override
 	public ModulePlayer getNewModulePlayer(Player player) {
 		return new ArmadaPlayer(player);
+	}
+
+	@Override
+	public JCheckBoxMenuItem getViewMenuItem() {
+		return viewMenuItem;
+	}
+
+	@Override
+	public void setViewMenuItem(JCheckBoxMenuItem viewMenuItem) {
+		this.viewMenuItem = viewMenuItem;
 	}
 }

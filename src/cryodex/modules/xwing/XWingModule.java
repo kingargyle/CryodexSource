@@ -1,5 +1,6 @@
 package cryodex.modules.xwing;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 
 import cryodex.CryodexController;
@@ -27,6 +28,7 @@ public class XWingModule implements Module {
 		return module;
 	}
 
+	private JCheckBoxMenuItem viewMenuItem;
 	private XWingRegistrationPanel registrationPanel;
 	private XWingMenu menu;
 	private XWingOptions options;
@@ -121,5 +123,15 @@ public class XWingModule implements Module {
 	@Override
 	public ModulePlayer getNewModulePlayer(Player player) {
 		return new XWingPlayer(player);
+	}
+
+	@Override
+	public JCheckBoxMenuItem getViewMenuItem() {
+		return viewMenuItem;
+	}
+
+	@Override
+	public void setViewMenuItem(JCheckBoxMenuItem viewMenuItem) {
+		this.viewMenuItem = viewMenuItem;
 	}
 }

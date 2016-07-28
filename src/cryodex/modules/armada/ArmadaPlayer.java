@@ -11,21 +11,20 @@ import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
-public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
-		ModulePlayer {
+public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject, ModulePlayer {
 
 	public static final int BYE_MOV = 140;
 	public static final int MAX_MOV = 400;
-	
+	public static final int CONCEDE_MOV = 140;
+	public static final int CONCEDE_WIN_SCORE = 8;
+	public static final int CONCEDE_LOSE_SCORE = 0;
+
 	/**
-	 *This enum represents the table of match score to tournament points
+	 * This enum represents the table of match score to tournament points
 	 */
 	public enum ScoreTableEnum {
-		THRESHOLD_6(0, 59, 6, 5),
-		THRESHOLD_7(60, 139, 7, 4),
-		THRESHOLD_8(140, 219, 8, 3),
-		THRESHOLD_9(220, 299, 9, 2),
-		THRESHOLD_10(300, 400, 10, 1);
+		THRESHOLD_6(0, 59, 6, 5), THRESHOLD_7(60, 139, 7, 4), THRESHOLD_8(140, 219, 8, 3), THRESHOLD_9(220, 299, 9,
+				2), THRESHOLD_10(300, 400, 10, 1);
 
 		private int lowerLimit;
 		private int upperLimit;
@@ -50,12 +49,12 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 		public int getWinScore() {
 			return winScore;
 		}
-		
+
 		public int getLoseScore() {
 			return loseScore;
 		}
-		
-		private static ScoreTableEnum getResultByMOV(int mov){
+
+		private static ScoreTableEnum getResultByMOV(int mov) {
 			ScoreTableEnum result = ScoreTableEnum.THRESHOLD_6;
 
 			if (mov >= ScoreTableEnum.THRESHOLD_6.getLowerLimit()
@@ -77,15 +76,15 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			} else if (mov >= ScoreTableEnum.THRESHOLD_10.getLowerLimit()) {
 				result = ScoreTableEnum.THRESHOLD_10;
 			}
-			
+
 			return result;
 		}
-		
-		public static int getWinScore(int mov){
+
+		public static int getWinScore(int mov) {
 			return getResultByMOV(mov).getWinScore();
 		}
-		
-		public static int getLoseScore(int mov){
+
+		public static int getLoseScore(int mov) {
 			return getResultByMOV(mov).getLoseScore();
 		}
 	}
@@ -152,8 +151,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 					continue;
 				}
 				for (ArmadaMatch m : r.getMatches()) {
-					if (m.getPlayer1() == this
-							|| (m.getPlayer2() != null && m.getPlayer2() == this)) {
+					if (m.getPlayer1() == this || (m.getPlayer2() != null && m.getPlayer2() == this)) {
 						matches.add(m);
 						continue rounds;
 					}
@@ -183,10 +181,8 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 				try {
 
-					int player1Score = match.getPlayer1Score() == null ? 0
-							: match.getPlayer1Score();
-					int player2Score = match.getPlayer2Score() == null ? 0
-							: match.getPlayer2Score();
+					int player1Score = match.getPlayer1Score() == null ? 0 : match.getPlayer1Score();
+					int player2Score = match.getPlayer2Score() == null ? 0 : match.getPlayer2Score();
 
 					if (match.getPlayer1() == match.getWinner()) {
 						mov = player1Score - player2Score;
@@ -200,17 +196,26 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 				mov = mov < 0 ? 0 : mov;
 				mov = mov > MAX_MOV ? MAX_MOV : mov;
 
-				if (match.getWinner() == this)
-					score += ScoreTableEnum.getWinScore(mov);
-				else
-					score += ScoreTableEnum.getLoseScore(mov);
+				int matchScore = 0;
+				if (match.getWinner() == this) {
+					if(match.isConcede()){
+						matchScore = CONCEDE_WIN_SCORE;
+					} else {
+						matchScore = ScoreTableEnum.getWinScore(mov);	
+					}
+				} else {
+					if(match.isConcede()){
+						matchScore = CONCEDE_LOSE_SCORE;
+					} else {
+						matchScore = ScoreTableEnum.getLoseScore(mov);	
+					}
+				}
+				score += matchScore;
 			}
 		}
 
 		return score;
 	}
-	
-	
 
 	public double getAverageScore(ArmadaTournament t) {
 		return getScore(t) * 1.0 / getMatches(t).size();
@@ -266,8 +271,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 	public int getRank(ArmadaTournament t) {
 		List<ArmadaPlayer> players = new ArrayList<ArmadaPlayer>();
 		players.addAll(t.getArmadaPlayers());
-		Collections.sort(players, new ArmadaComparator(t,
-				ArmadaComparator.rankingCompare));
+		Collections.sort(players, new ArmadaComparator(t, ArmadaComparator.rankingCompare));
 
 		for (int i = 0; i < players.size(); i++) {
 			if (players.get(i) == this) {
@@ -290,8 +294,7 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 						return r.getMatches().size() * 2;
 					}
 
-					if (r.getMatches().size() == 1 && m.getWinner() != null
-							&& m.getWinner() == this) {
+					if (r.getMatches().size() == 1 && m.getWinner() != null && m.getWinner() == this) {
 						return 1;
 					}
 				}
@@ -315,10 +318,9 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 			if (tournamentPoints == null && t.getEscalationPoints() != null
 					&& t.getEscalationPoints().isEmpty() == false) {
 
-				tournamentPoints = t.getEscalationPoints().size() >= roundNumber ? t
-						.getEscalationPoints().get(roundNumber - 1) : t
-						.getEscalationPoints().get(
-								t.getEscalationPoints().size() - 1);
+				tournamentPoints = t.getEscalationPoints().size() >= roundNumber
+						? t.getEscalationPoints().get(roundNumber - 1)
+						: t.getEscalationPoints().get(t.getEscalationPoints().size() - 1);
 			}
 
 			if (match.isBye()) {
@@ -333,10 +335,8 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 				int mov = 0;
 				try {
 
-					int player1Score = match.getPlayer1Score() == null ? 0
-							: match.getPlayer1Score();
-					int player2Score = match.getPlayer2Score() == null ? 0
-							: match.getPlayer2Score();
+					int player1Score = match.getPlayer1Score() == null ? 0 : match.getPlayer1Score();
+					int player2Score = match.getPlayer2Score() == null ? 0 : match.getPlayer2Score();
 
 					if (match.getPlayer1() == this) {
 						mov = player1Score - player2Score;
@@ -346,10 +346,14 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 				} catch (Exception e) {
 				}
 
+				if (match.isConcede()) {
+					mov = CONCEDE_MOV;
+				}
+
 				// Check to see if MOV is outside the min/max
 				mov = mov < 0 ? 0 : mov;
 				mov = mov > MAX_MOV ? MAX_MOV : mov;
-				
+
 				totalMov += mov;
 			} else {
 				totalMov += 0;
@@ -375,11 +379,9 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 			playerLoop: for (ArmadaPlayer p : players) {
 				for (ArmadaMatch m : p.getMatches(t)) {
-					if (m.getPlayer1() == p && m.getPlayer2() == this
-							&& m.getWinner() == this) {
+					if (m.getPlayer1() == p && m.getPlayer2() == this && m.getWinner() == this) {
 						continue playerLoop;
-					} else if (m.getPlayer2() == p && m.getPlayer1() == this
-							&& m.getWinner() == p) {
+					} else if (m.getPlayer2() == p && m.getPlayer1() == this && m.getWinner() == p) {
 						continue playerLoop;
 					}
 				}
@@ -443,7 +445,6 @@ public class ArmadaPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 	@Override
 	public int compareTo(ModulePlayer arg0) {
-		return this.getPlayer().getName().toUpperCase()
-				.compareTo(arg0.getPlayer().getName().toUpperCase());
+		return this.getPlayer().getName().toUpperCase().compareTo(arg0.getPlayer().getName().toUpperCase());
 	}
 }

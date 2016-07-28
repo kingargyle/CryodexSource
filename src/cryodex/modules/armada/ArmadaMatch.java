@@ -19,6 +19,7 @@ public class ArmadaMatch implements XMLObject {
 	private Integer player1Score;
 	private Integer player2Score;
 	private boolean isDuplicate;
+	private boolean isConcede;
 
 	public ArmadaMatch() {
 
@@ -53,6 +54,7 @@ public class ArmadaMatch implements XMLObject {
 
 		isBye = matchElement.getBooleanFromChild("ISBYE");
 		isDuplicate = matchElement.getBooleanFromChild("ISDUPLICATE");
+		isConcede = matchElement.getBooleanFromChild("ISCONCEDE", false);
 
 		player1Score = matchElement.getIntegerFromChild("PLAYER1POINTS");
 		player2Score = matchElement.getIntegerFromChild("PLAYER2POINTS");
@@ -114,6 +116,14 @@ public class ArmadaMatch implements XMLObject {
 	public void setDuplicate(boolean isDuplicate) {
 		this.isDuplicate = isDuplicate;
 	}
+	
+	public boolean isConcede() {
+		return isConcede;
+	}
+	
+	public void setConcede(boolean isConcede) {
+		this.isConcede = isConcede;
+	}
 
 	public boolean isMatchComplete() {
 		return isBye || winner != null;
@@ -172,6 +182,7 @@ public class ArmadaMatch implements XMLObject {
 		XMLUtils.appendObject(sb, "PLAYER1POINTS", getPlayer1Score());
 		XMLUtils.appendObject(sb, "PLAYER2POINTS", getPlayer2Score());
 		XMLUtils.appendObject(sb, "ISDUPLICATE", isDuplicate());
+		XMLUtils.appendObject(sb, "ISCONCEDE", isConcede());
 
 		return sb;
 	}
