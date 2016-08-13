@@ -1,6 +1,7 @@
 package cryodex.widget;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import cryodex.BigClock;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -34,6 +36,7 @@ public class TimerPanel extends JPanel {
 	private Timer timer;
 	private long timeRemaining = 0;
 	private long millisInRound = 0;
+	private JButton expandButton;
 
 	private final static java.text.SimpleDateFormat timerFormat = new java.text.SimpleDateFormat(
 			"ss");
@@ -41,9 +44,10 @@ public class TimerPanel extends JPanel {
 	public TimerPanel() {
 
 		super(new FlowLayout());
-		JPanel panel = new JPanel(new BorderLayout());
+		JPanel bottomPanel = new JPanel(new BorderLayout());
 		JPanel buttonPanel = new JPanel(new BorderLayout());
 		JPanel spinnerPanel = new JPanel(new FlowLayout());
+		JPanel mainPanel = new JPanel(new BorderLayout());
 
 		spinnerPanel.add(new JLabel("Mins:"));
 		spinnerPanel.add(getSpinner());
@@ -52,11 +56,30 @@ public class TimerPanel extends JPanel {
 		buttonPanel.add(getStopTimeButton(), BorderLayout.CENTER);
 		buttonPanel.add(getResetTimeButton(), BorderLayout.SOUTH);
 
-		panel.add(getTimeLabel(), BorderLayout.NORTH);
-		panel.add(buttonPanel, BorderLayout.CENTER);
-		panel.add(spinnerPanel, BorderLayout.SOUTH);
+//		panel.add(getTimeLabel(), BorderLayout.NORTH);
+		bottomPanel.add(buttonPanel, BorderLayout.NORTH);
+		bottomPanel.add(getExpandButton(), BorderLayout.CENTER);
+		bottomPanel.add(spinnerPanel, BorderLayout.SOUTH);
+		
+		mainPanel.add(getTimeLabel(), BorderLayout.CENTER);
+		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-		this.add(panel);
+		this.add(mainPanel);
+	}
+
+	private Component getExpandButton() {
+		if(expandButton == null){
+			expandButton = new JButton("Expand");
+			expandButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					BigClock.getInstance().setVisible(true);
+				}
+			});
+		}
+		
+		return expandButton;
 	}
 
 	public JLabel getTimeLabel() {
@@ -207,6 +230,10 @@ public class TimerPanel extends JPanel {
 							+ ":"
 							+ timerFormat.format(new java.util.Date(
 									timeRemaining)));
+		}
+		
+		if(BigClock.getInstance().isVisible()){
+			BigClock.getInstance().getBigClockLabel().setText(getTimeLabel().getText());
 		}
 
 	}
