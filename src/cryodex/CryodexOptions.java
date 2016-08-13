@@ -31,6 +31,7 @@ public class CryodexOptions implements XMLObject {
 				if (m != null) {
 					nonVisibleModules.add(m);
 					m.getModule().setModuleEnabled(false);
+					m.getModule().getViewMenuItem().setSelected(false);
 				}
 			}
 		}
@@ -73,7 +74,7 @@ public class CryodexOptions implements XMLObject {
 
 		String moduleString = "";
 		String seperator = "";
-		for (Modules m : nonVisibleModules) {
+		for (Modules m : getNonVisibleModules()) {
 			moduleString += seperator + m.getName();
 			seperator = ",";
 		}

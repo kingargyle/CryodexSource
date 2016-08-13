@@ -25,6 +25,7 @@ import javax.swing.SpringLayout;
 
 import cryodex.CryodexController;
 import cryodex.CryodexController.Modules;
+import cryodex.Language;
 import cryodex.Main;
 import cryodex.Player;
 import cryodex.modules.Tournament;
@@ -51,7 +52,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 	private final List<Page> pages = new ArrayList<Page>();
 
 	public XWingTournamentCreationWizard() {
-		super(Main.getInstance(), "Tournament Wizard", true);
+		super(Main.getInstance(), Language.tournament_wizard, true);
 
 		this.add(getMainPanel());
 		setCurrentPage(new MainPage());
@@ -135,7 +136,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 	private JButton getPreviousButton() {
 		if (previousButton == null) {
-			previousButton = new JButton("Previous");
+			previousButton = new JButton(Language.previous);
 			previousButton.setEnabled(false);
 			previousButton.addActionListener(new ActionListener() {
 
@@ -151,7 +152,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 	private JButton getNextButton() {
 		if (nextButton == null) {
-			nextButton = new JButton("Next");
+			nextButton = new JButton(Language.next);
 			nextButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -166,7 +167,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 	private JButton getFinishButton() {
 		if (finishButton == null) {
-			finishButton = new JButton("Finish");
+			finishButton = new JButton(Language.finish);
 			finishButton.setVisible(false);
 			finishButton.addActionListener(new ActionListener() {
 
@@ -182,7 +183,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
-			cancelButton = new JButton("Cancel");
+			cancelButton = new JButton(Language.cancel);
 			cancelButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -227,7 +228,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				JPanel namePanel = new JPanel(new BorderLayout());
 
 				JLabel nameHeader = new JLabel(
-						"<HTML><H1>Name Event</H1></HTML>");
+						"<HTML><H1>" + Language.name_event + "</H1></HTML>");
 
 				nameTextField = new JTextField(10);
 
@@ -239,7 +240,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				JPanel creationOptionsPanel = new JPanel(new BorderLayout());
 
 				JLabel additionalOptionsHeader = new JLabel(
-						"<HTML><H1>Additional Options</H1></HTML>");
+						"<HTML><H1>" + Language.additional_options + "</H1></HTML>");
 
 				creationOptionsPanel.add(ComponentUtils.addToFlowLayout(
 						additionalOptionsHeader, FlowLayout.LEFT),
@@ -248,9 +249,9 @@ public class XWingTournamentCreationWizard extends JDialog {
 				JPanel splitEntryPanel = new JPanel(new BorderLayout());
 				ComponentUtils.forceSize(splitEntryPanel, 210, 60);
 
-				splitCB = new JCheckBox("Split into subtournaments");
+				splitCB = new JCheckBox(Language.split_into_subtournaments);
 				final JLabel splitLabel = new JLabel(
-						"Number of sub tournaments:");
+						Language.number_of_sub_tournaments + ":");
 				numSubs = new JTextField(3);
 
 				splitLabel.setVisible(false);
@@ -274,7 +275,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				creationOptionsPanel.add(ComponentUtils.addToFlowLayout(
 						splitEntryPanel, FlowLayout.LEFT), BorderLayout.SOUTH);
 
-				mergeCB = new JCheckBox("Merge multiple tournaments into one");
+				mergeCB = new JCheckBox(Language.merge_multiple_tournaments_into_one);
 
 				creationOptionsPanel.add(ComponentUtils.addToFlowLayout(
 						mergeCB, FlowLayout.LEFT), BorderLayout.CENTER);
@@ -333,19 +334,19 @@ public class XWingTournamentCreationWizard extends JDialog {
 				pagePanel = new JPanel(new BorderLayout());
 
 				JLabel header = new JLabel(
-						"<HTML><H1>Select Players</H1></HTML>");
+						"<HTML><H1>" + Language.select_players + "</H1></HTML>");
 
 				pagePanel.add(ComponentUtils.addToFlowLayout(header,
 						FlowLayout.CENTER), BorderLayout.NORTH);
 
 				playerList = new DoubleList<Player>(
 						CryodexController.getPlayers(), null,
-						"Available Players", "Event Players");
+						Language.available_players, Language.event_players);
 
 				pagePanel.add(playerList, BorderLayout.CENTER);
 
 				removeCurrentlyPlaying = new JCheckBox(
-						"Remove players currently in an event");
+						Language.remove_players_currently_in_an_event);
 				removeCurrentlyPlaying.addActionListener(new ActionListener() {
 
 					@Override
@@ -444,7 +445,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				JPanel initialPairingPanel = new JPanel(new BorderLayout());
 
 				JLabel header = new JLabel(
-						"<HTML><H3>First Round Pairing</H3></HTML>");
+						"<HTML><H3>" + Language.first_round_pairing + "</H3></HTML>");
 
 				initialPairingPanel
 						.add(ComponentUtils.addToFlowLayout(header,
@@ -454,11 +455,11 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 				ButtonGroup bg = new ButtonGroup();
 
-				randomRB = new JRadioButton("Random");
-				byGroupRB = new JRadioButton("Seperate By Group Name");
-				byRankingRB = new JRadioButton("By Ranking");
+				randomRB = new JRadioButton(Language.random);
+				byGroupRB = new JRadioButton(Language.seperate_by_group_name);
+				byRankingRB = new JRadioButton(Language.by_ranking);
 				singleElimination = new JCheckBox(
-						"<HTML>Start event as single elimination<br>(only for 2/4/8/16/32 players)</HTML>");
+						"<HTML>" + Language.start_as_single_elimination + "</HTML>");
 
 				bg.add(randomRB);
 				bg.add(byGroupRB);
@@ -486,7 +487,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				JPanel centerPanel = new JPanel(new BorderLayout());
 
 				JLabel pointHeader = new JLabel(
-						"<HTML><H3>Choose Point Type</H3></HTML>");
+						"<HTML><H3>" + Language.choose_point_type + "</H3></HTML>");
 
 				centerPanel.add(ComponentUtils.addToFlowLayout(pointHeader,
 						FlowLayout.LEFT), BorderLayout.NORTH);
@@ -495,15 +496,15 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 				ButtonGroup pointsBG = new ButtonGroup();
 
-				standardRB = new JRadioButton("Standard - 100 Point Match");
+				standardRB = new JRadioButton(Language.standard_points);
 				escalationRB = new JRadioButton(
-						"Escalation - 60,90,120,150 Points");
-				epicRB = new JRadioButton("Epic - 300 Point Match");
+						Language.escalation_points);
+				epicRB = new JRadioButton(Language.epic_points);
 				customRB = new JRadioButton(
-						"Custom - You define the points per match");
+						Language.custom_points);
 
 				final JLabel customPointsInfo = new JLabel(
-						"A single number or comma seperated values.");
+						Language.comma_separated);
 
 				ActionListener customListener = new ActionListener() {
 
@@ -551,7 +552,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				JPanel splitOptionsPanel = new JPanel(new BorderLayout());
 
 				JLabel splitOptionsHeader = new JLabel(
-						"<HTML><H3>How To Split Tournament</H3></HTML>");
+						"<HTML><H3>" + Language.how_to_split_tournament + "</H3></HTML>");
 
 				splitOptionsPanel.add(ComponentUtils.addToFlowLayout(
 						splitOptionsHeader, FlowLayout.LEFT),
@@ -561,9 +562,9 @@ public class XWingTournamentCreationWizard extends JDialog {
 
 				ButtonGroup splitOptionsBG = new ButtonGroup();
 
-				splitRandomRB = new JRadioButton("Random");
-				splitByGroupRB = new JRadioButton("Seperate By Group Name");
-				splitByRanking = new JRadioButton("Split by ranking");
+				splitRandomRB = new JRadioButton(Language.random);
+				splitByGroupRB = new JRadioButton(Language.separate_by_group_name);
+				splitByRanking = new JRadioButton(Language.split_by_ranking);
 
 				splitOptionsBG.add(splitRandomRB);
 				splitOptionsBG.add(splitByGroupRB);
@@ -855,7 +856,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				pagePanel = new JPanel(new BorderLayout());
 
 				JLabel header = new JLabel(
-						"<HTML><H3>Select Tournaments</H3></HTML>");
+						"<HTML><H3>" + Language.select_tournaments + "</H3></HTML>");
 
 				JPanel listPanel = new JPanel(new SpringLayout());
 
@@ -872,11 +873,11 @@ public class XWingTournamentCreationWizard extends JDialog {
 						listPanel.getComponentCount(), 1, 0, 0, 0, 0);
 
 				JLabel playersFromLabel = new JLabel(
-						"<HTML><H3>How many players From Each Event?</H3></HTML>");
+						"<HTML><H3>" + Language.how_many_players_from_each_event + "</H3></HTML>");
 				ButtonGroup pf = new ButtonGroup();
 
-				all = new JRadioButton("All Players");
-				manual = new JRadioButton("Let me pick:");
+				all = new JRadioButton(Language.all_players);
+				manual = new JRadioButton(Language.let_me_pick + ":");
 				manualInput = new JTextField(3);
 				manualInput.setEnabled(false);
 
