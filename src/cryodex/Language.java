@@ -1,0 +1,46 @@
+package cryodex;
+
+public class Language {
+	public static final String name_event = "Name Event";
+	public static final String additional_options = "Additional Options";
+	public static final String split_into_subtournaments = "Split into subtournaments";
+	public static final String number_of_sub_tournaments = "Number of sub tournaments";
+	public static final String cancel = "Cancel";
+	public static final String finish = "Finish";
+	public static final String next = "Next";
+	public static final String previous = "Previous";
+	public static final String tournament_wizard = "Tournament Wizard";
+	public static final String merge_multiple_tournaments_into_one = "Merge multiple tournaments into one";
+	public static final String select_players = "Select Players";
+	public static final String available_players = "Available Players";
+	public static final String event_players = "Event Players";
+	public static final String remove_players_currently_in_an_event = "Remove players currently in an event";
+	public static final String first_round_pairing = "First Round Pairing";
+	public static final String random = "Random";
+	public static final String seperate_by_group_name = "Seperate By Group Name";
+	public static final String by_ranking = "By Ranking";
+	public static final String start_as_single_elimination = "Start event as single elimination<br>(only for 2/4/8/16/32 players)";
+	public static final String standard_points = "Standard - 100 Point Match";
+	public static final String escalation_points = "Escalation - 60,90,120,150 Points";
+	public static final String epic_points = "Epic - 300 Point Match";
+	public static final String custom_points = "Custom - You define the points per match";
+	public static final String comma_separated = "A single number or comma separated values.";
+	public static final String how_to_split_tournament = "How To Split Tournament";
+	public static final String separate_by_group_name = "Separate By Group Name";
+	public static final String split_by_ranking = "Split by ranking";
+	public static final String select_tournaments = "Select Tournaments";
+	public static final String how_many_players_from_each_event = "How many players From Each Event?";
+	public static final String all_players = "All Players";
+	public static final String let_me_pick = "Let me pick";
+	public static final String choose_point_type = "Choose Point Type";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+//	public static final String temp = "temp";
+}
