@@ -989,6 +989,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 		private boolean isMerge = false;
 		private List<XWingTournament> selectedTournaments;
 		private boolean isSingleElimination = false;
+		private boolean isRoundRobin = false;
 
 		public WizardOptions() {
 
@@ -1000,6 +1001,14 @@ public class XWingTournamentCreationWizard extends JDialog {
 			this.points = wizardOptions.getPoints();
 			this.escalationPoints = wizardOptions.getEscalationPoints();
 			this.isSingleElimination = wizardOptions.isSingleElimination();
+			this.isRoundRobin = wizardOptions.isRoundRobin();
+		}
+		public boolean isRoundRobin() {
+			return isRoundRobin;
+		}
+
+		public void setRoundRobin(boolean isRoundRobin) {
+			this.isRoundRobin = isRoundRobin;
 		}
 
 		public InitialSeedingEnum getInitialSeedingEnum() {
