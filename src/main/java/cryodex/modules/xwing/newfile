@@ -29,6 +29,8 @@ public class XWingTournament implements XMLObject, Tournament {
 		RANDOM, BY_GROUP, IN_ORDER;
 	}
 
+	public static final int MODIFIED_WIN_THREASHOLD = 12;
+
 	private final List<XWingRound> rounds;
 	private List<XWingPlayer> players;
 	private final InitialSeedingEnum seedingEnum;
@@ -37,7 +39,7 @@ public class XWingTournament implements XMLObject, Tournament {
 	private final Integer points;
 	private List<Integer> escalationPoints;
 	private boolean startAsSingleElimination = false;
-        private boolean startAsRoundRobin = false;
+	private boolean startRoundRobin = false;
 
 	public XWingTournament(Element tournamentElement) {
 
@@ -61,15 +63,13 @@ public class XWingTournament implements XMLObject, Tournament {
 				}
 			}
 		}
-                
 
 		Element roundElement = tournamentElement.getChild("ROUNDS");
 
 		for (Element e : roundElement.getChildren()) {
 			rounds.add(new XWingRound(e, this));
-                        
 		}
-                
+
 		name = tournamentElement.getStringFromChild("NAME");
 		points = tournamentElement.getIntegerFromChild("POINTS");
 
@@ -91,9 +91,6 @@ public class XWingTournament implements XMLObject, Tournament {
 						.addSingleEliminationTab(r.getMatches().size() * 2,
 								r.getPanel());
 			} else {
-                                if(r.isRoundRobin()){
-                                    this.startAsRoundRobin=true;
-                                }
 				getTournamentGUI().getRoundTabbedPane().addSwissTab(counter,
 						r.getPanel());
 				counter++;
@@ -106,8 +103,7 @@ public class XWingTournament implements XMLObject, Tournament {
 
 	public XWingTournament(String name, List<XWingPlayer> players,
 			InitialSeedingEnum seedingEnum, Integer points,
-			List<Integer> escalationPoints, boolean isSingleElimination, 
-                        boolean isRoundRobin) {
+			List<Integer> escalationPoints, boolean isSingleElimination, boolean isRoundRobin) {
 		this.name = name;
 		this.players = new ArrayList<>(players);
 		this.rounds = new ArrayList<>();
@@ -115,7 +111,7 @@ public class XWingTournament implements XMLObject, Tournament {
 		this.points = points;
 		this.escalationPoints = escalationPoints;
 		this.startAsSingleElimination = isSingleElimination;
-                this.startAsRoundRobin = isRoundRobin;
+		this.startRoundRobin = isRoundRobin;
 
 		tournamentGUI = new XWingTournamentGUI(this);
 	}
@@ -170,6 +166,11 @@ public class XWingTournament implements XMLObject, Tournament {
 		}
 	}
 
+	public boolean getIsRoundRobin()
+	{
+		return startRoundRobin;
+	}
+	
 	@Override
 	public void setPlayers(List<Player> players) {
 		List<XWingPlayer> xwPlayers = new ArrayList<>();
@@ -320,7 +321,7 @@ public class XWingTournament implements XMLObject, Tournament {
 								"At least one tournamnt result is not correct. Check if points are backwards or a result should be a modified win or tie.");
 				return false;
 			}
-                        if (startAsRoundRobin) {
+			if (startRoundRobin) {
 				if((players.size()%2==1 && rounds.size()>=players.size()) ||
 						(players.size()%2==0 && rounds.size()>=players.size()-1) ) {
 					JOptionPane
@@ -329,7 +330,6 @@ public class XWingTournament implements XMLObject, Tournament {
 					return false;
 				}
 			}
-
 			generateRound(getAllRounds().size() + 1);
 		}
 		return true;
@@ -345,7 +345,9 @@ public class XWingTournament implements XMLObject, Tournament {
 				XWingRound roundToRemove = rounds.get(index);
 				for (XWingMatch m : roundToRemove.getMatches()) {
 					m.setWinner(null);
+					m.setModified(false);
 					m.setBye(false);
+					m.setDraw(false);
 					m.setPlayer1(null);
 					m.setPlayer2(null);
 					m.setPlayer1PointsDestroyed(null);
@@ -357,7 +359,9 @@ public class XWingTournament implements XMLObject, Tournament {
 			}
 		}
 	}
-private void generateRoundRobinRound(int roundNumber)
+
+	//Generate consecutive rounds for a Round Robin-tournament
+	private void generateRoundRobinRound(int roundNumber)
 	{
 		List<XWingMatch> matches;
 
@@ -404,7 +408,7 @@ private void generateRoundRobinRound(int roundNumber)
 
 			
 		XWingRound r = new XWingRound(matches, this, roundNumber);
-		r.setRoundRobin(true);
+		//r.setSingleElimination(true);
 		rounds.add(r);
 		{
 			getTournamentGUI().getRoundTabbedPane().addSwissTab(roundNumber,
@@ -414,7 +418,6 @@ private void generateRoundRobinRound(int roundNumber)
 		getTournamentGUI().getRankingTable().setPlayers(getAllXWingPlayers());
 		
 	}
-
 	@Override
 	public void generateRound(int roundNumber) {
 
@@ -424,7 +427,7 @@ private void generateRoundRobinRound(int roundNumber)
 		}
 
 		cancelRound(roundNumber);
-                if(startAsRoundRobin) {
+		if(startAsRoundRobin) {
 			generateRoundRobinRound(roundNumber);
 			return;
 		}
@@ -721,19 +724,6 @@ private void generateRoundRobinRound(int roundNumber)
 
 	@Override
 	public void addPlayer(Player p) {
-		
-		for(XWingRound r : getAllRounds()){
-			for(XWingMatch m : r.getMatches()){
-				if(m.getPlayer1().getPlayer().equals(p)){
-					getXWingPlayers().add(m.getPlayer1());
-					return;
-				} else if(m.getPlayer2() != null && m.getPlayer2().getPlayer().equals(p)) {
-					getXWingPlayers().add(m.getPlayer2());
-					return;
-				}
-			}
-		}
-		
 		XWingPlayer xPlayer = new XWingPlayer(p);
 		getXWingPlayers().add(xPlayer);
 	}

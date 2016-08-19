@@ -1141,7 +1141,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				wizardOptions.getPlayerList(), null, wizardOptions
 						.getSelectedTournaments().get(0).getPoints(),
 				wizardOptions.getSelectedTournaments().get(0)
-						.getEscalationPoints(), false);
+						.getEscalationPoints(), false, false);
 		for (XWingTournament t : wizardOptions.getSelectedTournaments()) {
 			mergeTournament.getAllRounds().addAll(t.getAllRounds());
 		}

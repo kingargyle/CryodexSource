@@ -80,7 +80,8 @@ public class XWingModule implements Module {
 				wizardOptions.getName(), wizardOptions.getPlayerList(),
 				wizardOptions.getInitialSeedingEnum(),
 				wizardOptions.getPoints(), wizardOptions.getEscalationPoints(),
-				wizardOptions.isSingleElimination());
+				wizardOptions.isSingleElimination(),
+                                wizardOptions.isRoundRobin());
 
 		CryodexController.registerTournament(tournament);
 
