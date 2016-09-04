@@ -1,25 +1,26 @@
 package cryodex.widget;
 
+import cryodex.Player;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpringLayout;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class DoubleList<T extends Comparable<T>> extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+    private static final String filterHint = "Filter Player List";
 
 	private JList<T> list1;
 	private JList<T> list2;
@@ -39,6 +40,11 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 	private String list1LabelText = "";
 	private String list2LabelText = "";
 
+    private JTextField filterList1;
+    private List<T> list1Prefiltered = new ArrayList<>();
+    private List<T> list1Filtered = new ArrayList<>();
+    private boolean filtering = false;
+
 	public DoubleList() {
 		this(null, null, "", "");
 	}
@@ -52,11 +58,13 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 		list2LabelText = label2;
 
 		if (values1 != null) {
+		    Collections.sort(values1);
 			for (T element : values1) {
 				getModel1().addElement(element);
 			}
 		}
 		if (values2 != null) {
+		    Collections.sort(values2);
 			for (T element : values2) {
 				getModel2().addElement(element);
 			}
@@ -104,6 +112,8 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel(new SpringLayout());
 
+            buttonPanel.add(ComponentUtils.addToFlowLayout(getList1FilterInput(),
+                    FlowLayout.CENTER));
 			buttonPanel.add(ComponentUtils.addToFlowLayout(getTo2(),
 					FlowLayout.CENTER));
 			buttonPanel.add(ComponentUtils.addToFlowLayout(getAllTo2(),
@@ -178,6 +188,7 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 					}
 
 					updateLabels();
+                    list1Prefiltered = getList1Values();
 				}
 			});
 		}
@@ -214,6 +225,7 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 					}
 
 					updateLabels();
+                    list1Prefiltered = getList1Values();
 				}
 			});
 		}
@@ -242,6 +254,7 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 					}
 
 					updateLabels();
+                    list1Prefiltered = getList1Values();
 				}
 			});
 		}
@@ -270,6 +283,7 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 					}
 
 					updateLabels();
+                    list1Prefiltered = getList1Values();
 				}
 			});
 		}
@@ -320,5 +334,78 @@ public class DoubleList<T extends Comparable<T>> extends JPanel {
 
 	public List<T> getList2Values() {
 		return Collections.list(getModel2().elements());
+	}
+
+	public JTextField getList1FilterInput() {
+		if (filterList1 == null) {
+			list1Prefiltered = getList1Values();
+			filterList1 = new JTextField(filterHint, 10);
+			filterList1.addFocusListener(new FocusListener() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					if(filterList1.getText().equals(filterHint)) {
+						filterList1.setText("");
+					}
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(filterList1.getText().trim().equals("")) {
+						filterList1.setText(filterHint);
+					}
+				}
+			});
+
+			filterList1.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					filterList1();
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					filterList1();
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					filterList1();
+				}
+			});
+		}
+		return filterList1;
+	}
+
+
+	private void filterList1() {
+		if(!filtering) {
+			filtering = true;
+			getModel1().removeAllElements();
+			if (filterList1.getText().trim().equals("") || filterList1.getText().trim().equals(filterHint)) {
+				for (T element : list1Prefiltered) {
+					getModel1().addElement(element);
+				}
+				updateLabels();
+			} else {
+				list1Filtered.clear();
+				for (T element : list1Prefiltered) {
+					String[] name = ((Player) element).getName().toLowerCase().split(" ");
+					if (name[0].startsWith(filterList1.getText().toLowerCase().trim()) ||
+							name[1].startsWith(filterList1.getText().toLowerCase().trim())) {
+						list1Filtered.add(element);
+					}
+				}
+				for (T element : list1Prefiltered) {
+					if (((Player) element).getName().toLowerCase().contains(filterList1.getText().toLowerCase().trim()) && !list1Filtered.contains(element)) {
+						list1Filtered.add(element);
+					}
+				}
+				for (T element : list1Filtered) {
+					getModel1().addElement(element);
+				}
+				updateLabels();
+			}
+			filtering = false;
+		}
 	}
 }
