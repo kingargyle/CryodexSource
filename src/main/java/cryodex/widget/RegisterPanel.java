@@ -1,17 +1,8 @@
 package cryodex.widget;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -24,10 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 
 import cryodex.CryodexController;
 import cryodex.Player;
@@ -42,6 +30,7 @@ import cryodex.modules.Module;
 public class RegisterPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+    private static final String filterHint = "Filter Player List";
 
 	private JButton saveButton;
 	private JButton deleteButton;
@@ -56,6 +45,12 @@ public class RegisterPanel extends JPanel {
 	private JTextField emailField;
 	private JPanel playerInfoPanel;
 	private JPanel playerPanel;
+
+    private JTextField playerSearchField;
+    private JButton clearFilter;
+    private List<Player> preFilteredPlayerList = new ArrayList<>();
+    private List<Player> filteredPlayerList = new ArrayList<>();
+    private boolean filtering = false;
 
 	public RegisterPanel() {
 		super(new BorderLayout());
@@ -81,7 +76,7 @@ public class RegisterPanel extends JPanel {
 					playersTitle.getFont().getStyle(), 20));
 
 			JScrollPane listScroller = new JScrollPane(getPlayerList());
-			listScroller.setPreferredSize(new Dimension(150, 250));
+			listScroller.setPreferredSize(new Dimension(150, 180));
 
 			JPanel labelPanel = ComponentUtils.addToVerticalBorderLayout(
 					getCounterLabel(), getDonationLabel(), null);
@@ -141,6 +136,10 @@ public class RegisterPanel extends JPanel {
 					.add(ComponentUtils.addToHorizontalBorderLayout(
 							getSaveButton(), getCancelButton(),
 							getDeleteButton()), gbc);
+
+            gbc.gridy++;
+            playerInfoPanel.add(ComponentUtils.addToHorizontalBorderLayout(getPlayerFilterTextField(), null, getClearFilterButton()), gbc);
+
 		}
 		return playerInfoPanel;
 	}
@@ -222,6 +221,7 @@ public class RegisterPanel extends JPanel {
 
 					clearFields();
 					CryodexController.saveData();
+                    preFilteredPlayerList = CryodexController.getPlayers();
 
 					EventQueue.invokeLater(new Runnable() {
 
@@ -255,6 +255,7 @@ public class RegisterPanel extends JPanel {
 
 					clearFields();
 					CryodexController.saveData();
+                    preFilteredPlayerList = CryodexController.getPlayers();
 
 					updateCounterLabel();
 				}
@@ -414,6 +415,98 @@ public class RegisterPanel extends JPanel {
 			getUserModel().addElement(p);
 		}
 		CryodexController.saveData();
+        preFilteredPlayerList = CryodexController.getPlayers();
 	}
 
+
+    public JTextField getPlayerFilterTextField() {
+        if (playerSearchField == null) {
+            preFilteredPlayerList = CryodexController.getPlayers();
+            playerSearchField = new JTextField(filterHint, 10);
+            playerSearchField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if(playerSearchField.getText().equals(filterHint)) {
+                        playerSearchField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if(playerSearchField.getText().trim().equals("")) {
+                        playerSearchField.setText(filterHint);
+                    }
+                }
+            });
+
+            playerSearchField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    filterPlayerList();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    filterPlayerList();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    filterPlayerList();
+                }
+            });
+        }
+        return playerSearchField;
+    }
+
+    private void filterPlayerList() {
+        if(!filtering) {
+            filtering = true;
+            getUserModel().removeAllElements();
+            if (playerSearchField.getText().trim().equals("") || playerSearchField.getText().trim().equals(filterHint)) {
+                for (Player element : preFilteredPlayerList) {
+                    getUserModel().addElement(element);
+                }
+                updateCounterLabel();
+            } else {
+                filteredPlayerList.clear();
+                for (Player element : filteredPlayerList) {
+                    String[] name = element.getName().toLowerCase().split(" ");
+                    if (name[0].startsWith(playerSearchField.getText().toLowerCase().trim()) ||
+                            name[1].startsWith(playerSearchField.getText().toLowerCase().trim())) {
+                        filteredPlayerList.add(element);
+                    }
+                }
+                for (Player element : preFilteredPlayerList) {
+                    if (element.getName().toLowerCase().contains(playerSearchField.getText().toLowerCase().trim()) && !filteredPlayerList.contains(element)) {
+                        filteredPlayerList.add(element);
+                    }
+                }
+                for (Player element : filteredPlayerList) {
+                    getUserModel().addElement(element);
+                }
+                updateCounterLabel();
+            }
+            filtering = false;
+        }
+    }
+
+
+    public JButton getClearFilterButton() {
+
+        if (clearFilter == null) {
+
+            clearFilter = new JButton("Clear Filter");
+
+            clearFilter.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    playerSearchField.setText(filterHint);
+                    filterPlayerList();
+                }
+            });
+        }
+
+        return clearFilter;
+    }
 }
