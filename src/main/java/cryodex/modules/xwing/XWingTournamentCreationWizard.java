@@ -419,7 +419,9 @@ public class XWingTournamentCreationWizard extends JDialog {
 		private JRadioButton randomRB;
 		private JRadioButton byGroupRB;
 		private JRadioButton byRankingRB;
-		private JCheckBox singleElimination;
+		private JCheckBox nonSwiss;
+                private JRadioButton singleElimination;
+                private JRadioButton roundRobin;
 
 		private JTextField customPointsTF;
 		private JRadioButton standardRB;
@@ -454,16 +456,27 @@ public class XWingTournamentCreationWizard extends JDialog {
 				JPanel tournamentTypesPanel = new JPanel(new SpringLayout());
 
 				ButtonGroup bg = new ButtonGroup();
-
+                                
+                                //Another radiobutton-group for Single Elim or Round Robin
+                                ButtonGroup bg2 = new ButtonGroup();
+                                
 				randomRB = new JRadioButton(Language.random);
 				byGroupRB = new JRadioButton(Language.seperate_by_group_name);
 				byRankingRB = new JRadioButton(Language.by_ranking);
-				singleElimination = new JCheckBox(
+				
+                                nonSwiss = new JCheckBox("Non-Swiss alternatives");
+				singleElimination = new JRadioButton(
 						"<HTML>" + Language.start_as_single_elimination + "</HTML>");
+				roundRobin = new JRadioButton("<HTML>Start event as Round Robin</HTML>");
+
 
 				bg.add(randomRB);
 				bg.add(byGroupRB);
 				bg.add(byRankingRB);
+                                
+                                //Adding buttons to buttongroup nr 2
+                                bg2.add(singleElimination);
+				bg2.add(roundRobin);
 
 				randomRB.setSelected(true);
 
@@ -473,8 +486,12 @@ public class XWingTournamentCreationWizard extends JDialog {
 						&& wizardOptions.getSelectedTournaments().isEmpty() == false) {
 					tournamentTypesPanel.add(byRankingRB);
 				}
+				tournamentTypesPanel.add(nonSwiss);
 				tournamentTypesPanel.add(singleElimination);
-
+				tournamentTypesPanel.add(roundRobin);
+				roundRobin.setEnabled(false);
+				singleElimination.setEnabled(false);
+				
 				SpringUtilities
 						.makeCompactGrid(tournamentTypesPanel,
 								tournamentTypesPanel.getComponentCount(), 1, 0,
@@ -515,6 +532,29 @@ public class XWingTournamentCreationWizard extends JDialog {
 						} else {
 							customPointsTF.setEnabled(false);
 						}
+                                                //Enable/Disable parts of UI 
+                                                if (nonSwiss.isSelected()) {
+							singleElimination.setEnabled(true);
+							roundRobin.setEnabled(true);
+							if(roundRobin.isSelected())
+							{
+								byGroupRB.setEnabled(false);
+								randomRB.setEnabled(false);
+							}
+							else
+							{
+								byGroupRB.setEnabled(true);
+								randomRB.setEnabled(true);
+							}
+						} else {
+							singleElimination.setEnabled(false);
+							singleElimination.setSelected(false);
+							roundRobin.setEnabled(false);
+							roundRobin.setSelected(false);
+							byGroupRB.setEnabled(true);
+							randomRB.setEnabled(true);
+						}
+				
 					}
 				};
 
@@ -522,6 +562,10 @@ public class XWingTournamentCreationWizard extends JDialog {
 				escalationRB.addActionListener(customListener);
 				epicRB.addActionListener(customListener);
 				customRB.addActionListener(customListener);
+                                nonSwiss.addActionListener(customListener);
+				roundRobin.addActionListener(customListener);
+				singleElimination.addActionListener(customListener);
+				
 
 				customPointsTF = new JTextField();
 				customPointsTF.setColumns(12);
@@ -648,10 +692,15 @@ public class XWingTournamentCreationWizard extends JDialog {
 						.setInitialSeedingEnum(InitialSeedingEnum.IN_ORDER);
 			}
 
-			if (singleElimination.isSelected()) {
-				wizardOptions.setSingleElimination(true);
+			if(nonSwiss.isSelected())
+			{
+				if (singleElimination.isSelected()) {
+					wizardOptions.setSingleElimination(true);
+				}
+				else if(roundRobin.isSelected()) {
+					wizardOptions.setRoundRobin(true);
+				}
 			}
-
 			boolean fixByes = true;
 
 			if (wizardOptions.getSplit() > 1) {
@@ -989,6 +1038,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 		private boolean isMerge = false;
 		private List<XWingTournament> selectedTournaments;
 		private boolean isSingleElimination = false;
+		private boolean isRoundRobin = false;
 
 		public WizardOptions() {
 
@@ -1000,6 +1050,14 @@ public class XWingTournamentCreationWizard extends JDialog {
 			this.points = wizardOptions.getPoints();
 			this.escalationPoints = wizardOptions.getEscalationPoints();
 			this.isSingleElimination = wizardOptions.isSingleElimination();
+			this.isRoundRobin = wizardOptions.isRoundRobin();
+		}
+		public boolean isRoundRobin() {
+			return isRoundRobin;
+		}
+
+		public void setRoundRobin(boolean isRoundRobin) {
+			this.isRoundRobin = isRoundRobin;
 		}
 
 		public InitialSeedingEnum getInitialSeedingEnum() {
@@ -1083,7 +1141,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 				wizardOptions.getPlayerList(), null, wizardOptions
 						.getSelectedTournaments().get(0).getPoints(),
 				wizardOptions.getSelectedTournaments().get(0)
-						.getEscalationPoints(), false);
+						.getEscalationPoints(), false, false);
 		for (XWingTournament t : wizardOptions.getSelectedTournaments()) {
 			mergeTournament.getAllRounds().addAll(t.getAllRounds());
 		}
