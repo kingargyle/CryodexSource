@@ -1,9 +1,5 @@
 package cryodex.modules.xwing.export;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +8,7 @@ import java.util.TreeSet;
 
 import cryodex.CryodexController;
 import cryodex.Player;
+import cryodex.export.ExportUtils;
 import cryodex.modules.Tournament;
 import cryodex.modules.xwing.XWingComparator;
 import cryodex.modules.xwing.XWingMatch;
@@ -52,7 +49,7 @@ public class XWingExportController {
 
 		String content = appendRankings(tournament);
 
-		displayHTML(content, "ExportRankings");
+		ExportUtils.displayHTML(content, "ExportRankings");
 	}
 
 	public static String appendMatches(XWingTournament tournament, List<XWingMatch> matches) {
@@ -127,7 +124,7 @@ public class XWingExportController {
 
 			content += appendMatches(xt, matches);
 		}
-		displayHTML(content, "ExportMatch");
+		ExportUtils.displayHTML(content, "ExportMatch");
 	}
 
 	public static void exportTournamentReport(XWingTournament tournament) {
@@ -147,7 +144,7 @@ public class XWingExportController {
 		content += "<h3>Rankings</h3>";
 		content += appendRankings(tournament);
 
-		displayHTML(content, "TournamentReport");
+		ExportUtils.displayHTML(content, "TournamentReport");
 	}
 
 	public static void exportTournamentSlipsWithStats(XWingTournament tournament, List<XWingMatch> matches,
@@ -194,7 +191,7 @@ public class XWingExportController {
 			}
 		}
 
-		displayHTML(content, "ExportMatchSlips");
+		ExportUtils.displayHTML(content, "ExportMatchSlips");
 	}
 
 	public static void exportTournamentSlips(XWingTournament tournament, List<XWingMatch> matches, int roundNumber) {
@@ -229,7 +226,7 @@ public class XWingExportController {
 			}
 		}
 
-		displayHTML(content, "ExportMatchSlips");
+		ExportUtils.displayHTML(content, "ExportMatchSlips");
 	}
 
 	public static void playerList(List<Player> players) {
@@ -242,36 +239,14 @@ public class XWingExportController {
 			sb.append(p.getName()).append("<br>");
 		}
 
-		displayHTML(sb.toString(), "Player List");
-	}
-
-	public static void displayHTML(String content, String filename) {
-		String fancyCss = "table{border-collapse: collapse;margin: 20px;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(odd){	background-color:lightgray;}";
-		String internationalCharacters = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
-		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}"
-				+ fancyCss + "</style>" + internationalCharacters + "</head><body>" + content + "</body></html>";
-
-		try {
-			File file = File.createTempFile(filename, ".html");
-
-			FileOutputStream stream = new FileOutputStream(file);
-
-			stream.write(html.getBytes("UTF-8"));
-			stream.flush();
-			stream.close();
-
-			Desktop.getDesktop().open(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		ExportUtils.displayHTML(sb.toString(), "Player List");
 	}
 
 	public static void cacReport() {
 
 		String content = CACReport.generateCACReport();
 
-		displayHTML(content, "Campaign Against Cancer Report");
+		ExportUtils.displayHTML(content, "Campaign Against Cancer Report");
 
 	}
 }

@@ -1,9 +1,5 @@
 package cryodex.modules.imperialassault.export;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +8,7 @@ import java.util.TreeSet;
 
 import cryodex.CryodexController;
 import cryodex.Player;
+import cryodex.export.ExportUtils;
 import cryodex.modules.imperialassault.IAComparator;
 import cryodex.modules.imperialassault.IAMatch;
 import cryodex.modules.imperialassault.IAPlayer;
@@ -54,7 +51,7 @@ public class IAExportController {
 
 		String content = appendRankings(tournament);
 
-		displayHTML(content, "ExportRankings");
+		ExportUtils.displayHTML(content, "ExportRankings");
 	}
 
 	public static String appendMatches(IATournament tournament,
@@ -100,7 +97,7 @@ public class IAExportController {
 
 		content += appendMatches(tournament, matches);
 
-		displayHTML(content, "ExportMatch");
+		ExportUtils.displayHTML(content, "ExportMatch");
 	}
 
 	public static void exportTournamentReport(IATournament tournament) {
@@ -120,7 +117,7 @@ public class IAExportController {
 		content += "<h3>Rankings</h3>";
 		content += appendRankings(tournament);
 
-		displayHTML(content, "TournamentReport");
+		ExportUtils.displayHTML(content, "TournamentReport");
 	}
 
 	public static void exportTournamentSlipsWithStats(IATournament tournament,
@@ -183,7 +180,7 @@ public class IAExportController {
 			}
 		}
 
-		displayHTML(content, "ExportMatchSlips");
+		ExportUtils.displayHTML(content, "ExportMatchSlips");
 	}
 
 	public static void exportTournamentSlips(IATournament tournament,
@@ -223,7 +220,7 @@ public class IAExportController {
 			}
 		}
 
-		displayHTML(content, "ExportMatchSlips");
+		ExportUtils.displayHTML(content, "ExportMatchSlips");
 	}
 
 	public static void playerList(List<Player> players) {
@@ -236,26 +233,6 @@ public class IAExportController {
 			sb.append(p.getName()).append("<br>");
 		}
 
-		displayHTML(sb.toString(), "Player List");
-	}
-
-	public static void displayHTML(String content, String filename) {
-		String html = "<html><head><style type=\"text/css\">.pagebreak {page-break-after: always;}.smallFont{font-size:10px}</style></head><body>"
-				+ content + "</body></html>";
-
-		try {
-			File file = File.createTempFile(filename, ".html");
-
-			FileOutputStream stream = new FileOutputStream(file);
-
-			stream.write(html.getBytes());
-			stream.flush();
-			stream.close();
-
-			Desktop.getDesktop().open(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		ExportUtils.displayHTML(sb.toString(), "Player List");
 	}
 }

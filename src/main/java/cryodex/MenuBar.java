@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import cryodex.CryodexController.Modules;
+import cryodex.export.PlayerExport;
 import cryodex.modules.Module;
 import cryodex.widget.AboutPanel;
 
@@ -63,6 +64,15 @@ public class MenuBar extends JMenuBar {
 				}
 			});
 			
+			JMenuItem exportPlayers = new JMenuItem("Export Players");
+            exportPlayers.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    PlayerExport.exportPlayersDetail();
+                }
+            });
+			
 			JMenuItem exit = new JMenuItem("Exit");
 			exit.addActionListener(new ActionListener() {
 
@@ -72,7 +82,8 @@ public class MenuBar extends JMenuBar {
 				}
 			});
 
-			fileMenu.add(importPlayers);
+            fileMenu.add(importPlayers);
+            fileMenu.add(exportPlayers);
 			fileMenu.add(exit);
 		}
 
