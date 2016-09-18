@@ -75,7 +75,7 @@ public class RegisterPanel extends JPanel {
             playersTitle.setFont(new Font(playersTitle.getFont().getName(), playersTitle.getFont().getStyle(), 20));
 
             JScrollPane listScroller = new JScrollPane(getPlayerList());
-            listScroller.setPreferredSize(new Dimension(150, 180));
+            listScroller.setPreferredSize(new Dimension(150, 250));
 
             JPanel labelPanel = ComponentUtils.addToVerticalBorderLayout(getCounterLabel(), getDonationLabel(), null);
 

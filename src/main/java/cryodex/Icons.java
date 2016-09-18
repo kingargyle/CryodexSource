@@ -23,9 +23,10 @@ public class Icons {
 		if (redx == null) {
 			URL imgURL = Icons.class.getResource("RedX.png");
 			if (imgURL == null) {
-				System.out.println("fail!!!!!!!!!!");
+				System.out.println("Failed to load RedX!");
+			} else {
+			    redx = new ImageIcon(imgURL);
 			}
-			redx = new ImageIcon(imgURL);
 		}
 		return redx;
 	}
@@ -34,9 +35,10 @@ public class Icons {
 		if (greencheckmark == null) {
 			URL imgURL = Icons.class.getResource("GreenCheckMark.png");
 			if (imgURL == null) {
-				System.out.println("fail!!!!!!!!!!");
+				System.out.println("Failed to load GreenCheck");
+			} else {
+			    greencheckmark = new ImageIcon(imgURL);
 			}
-			greencheckmark = new ImageIcon(imgURL);
 		}
 		return greencheckmark;
 	}
