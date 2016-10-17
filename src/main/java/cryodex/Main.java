@@ -24,6 +24,8 @@ import cryodex.widget.TournamentTabbedPane;
  */
 public class Main extends JFrame {
 
+    public static final String version = "4.4.2";
+    
 	public static final long delay = 3000;
 
 	private static final long serialVersionUID = 1L;
@@ -58,7 +60,7 @@ public class Main extends JFrame {
 
 	private Main() {
 
-		super("Cryodex - Version 4.4.1");
+		super("Cryodex - Version " + version);
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {

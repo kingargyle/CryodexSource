@@ -11,6 +11,8 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 
+import cryodex.modules.xwing.XWingPlayer;
+
 public class PlayerImport {
 
 	public static void importPlayers(){
@@ -40,6 +42,8 @@ public class PlayerImport {
 				Integer lastName = headerMap.get("\"Last Name\"");
 				Integer name = headerMap.get("\"Name\"");
 				Integer emailAddress = headerMap.get("\"Email Address\"");
+                Integer group = headerMap.get("\"Group\"");
+                Integer squad = headerMap.get("\"Squad\"");
 				
 				List<Player> players = new ArrayList<Player>();
 
@@ -61,11 +65,13 @@ public class PlayerImport {
 					
 					Player p = new Player(playerName);
 					
-					if(emailAddress != null){
-						String playerEmailAddress = playerLine[emailAddress];
-						playerEmailAddress = playerEmailAddress.replace("\"", "");
-						p.setEmail(playerEmailAddress);
-					}
+					p.setEmail(getString(emailAddress, playerLine));
+					p.setGroupName(getString(group, playerLine));
+					
+					XWingPlayer xp = new XWingPlayer(p);
+					xp.setSquadId(getString(squad, playerLine));
+					
+					p.getModuleInfo().add(xp);
 					
 					players.add(p);
 
@@ -83,4 +89,15 @@ public class PlayerImport {
 			e.printStackTrace();
 		}
 	}
+	
+	private static String getString(Integer column, String[] playerLine) {
+	    String returnString = null;
+	    
+	    if(column != null){
+            returnString = playerLine[column];
+            returnString = returnString.replace("\"", "");
+        }
+	    
+	    return returnString;
+    }
 }
