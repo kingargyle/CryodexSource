@@ -25,7 +25,7 @@ public class XWingExportController {
 		playerList.addAll(tournament.getAllXWingPlayers());
 		Collections.sort(playerList, new XWingComparator(tournament, XWingComparator.rankingCompare));
 
-		String content = "<table border=\"1\"><tr><th>Rank</th><th>Name</th><th>Score</th><th>MoV</th><th>SoS</th></tr>";
+		String content = "<table border=\"1\"><tr><th>Rank</th><th>Name</th><th>Faction</th><th>Score</th><th>MoV</th><th>SoS</th></tr>";
 
 		for (XWingPlayer p : playerList) {
 
@@ -35,7 +35,7 @@ public class XWingExportController {
 				name = "(D#" + p.getRoundDropped(tournament) + ")" + name;
 			}
 
-			content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name + "</td><td>" + p.getScore(tournament)
+			content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name + "</td><td>" + p.getFaction() + "</td><td>" + p.getScore(tournament)
 					+ "</td><td>" + p.getMarginOfVictory(tournament) + "</td><td>" + p.getAverageSoS(tournament)
 					+ "</td></tr>";
 		}
