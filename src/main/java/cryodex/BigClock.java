@@ -55,7 +55,7 @@ public class BigClock extends JFrame{
 		int componentHeight = getBigClockLabel().getHeight();
 
 		// Pick a new font size so it will not be larger than the height of label.
-		int fontSizeToUse = Math.min(newFontSize, componentHeight)-1;
+		int fontSizeToUse = Math.min(newFontSize, componentHeight)-2;
 
 		// Set the label's font size to the newly determined size.
 		getBigClockLabel().setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));

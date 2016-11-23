@@ -246,6 +246,9 @@ public class RegisterPanel extends JPanel {
                     CryodexController.saveData();
 
                     updateCounterLabel();
+                    
+                    // Fix to prevent the filter textbox from stealing focus after a delete
+                    playerSearchField.transferFocus();
                 }
 
             });

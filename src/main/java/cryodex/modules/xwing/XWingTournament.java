@@ -31,13 +31,13 @@ public class XWingTournament implements XMLObject, Tournament {
 
 	private final List<XWingRound> rounds;
 	private List<XWingPlayer> players;
-	private final InitialSeedingEnum seedingEnum;
+	private InitialSeedingEnum seedingEnum;
 	private final XWingTournamentGUI tournamentGUI;
 	private String name;
 	private final Integer points;
 	private List<Integer> escalationPoints;
 	private boolean startAsSingleElimination = false;
-        private boolean startAsRoundRobin = false;
+    private boolean startAsRoundRobin = false;
 
 	public XWingTournament(Element tournamentElement) {
 
@@ -72,6 +72,12 @@ public class XWingTournament implements XMLObject, Tournament {
                 
 		name = tournamentElement.getStringFromChild("NAME");
 		points = tournamentElement.getIntegerFromChild("POINTS");
+		String seeding = tournamentElement.getStringFromChild("SEEDING");
+		if(seeding != null && seeding.isEmpty() == false){
+		    seedingEnum = InitialSeedingEnum.valueOf(seeding);
+		} else {
+		    seedingEnum = InitialSeedingEnum.RANDOM;
+		}
 
 		String escalationPointsString = tournamentElement
 				.getStringFromChild("ESCALATIONPOINTS");
@@ -505,26 +511,34 @@ private void generateRoundRobinRound(int roundNumber)
 				XWingPlayer p2 = null;
 				while (seedValues.isEmpty() == false) {
 					int i = 0;
+					String lastSeedValue = null;
 					while (i < seedValues.size()) {
+					    
+					    lastSeedValue = seedValues.get(i);
+					    
 						if (p1 == null) {
-							p1 = playerMap.get(seedValues.get(i)).get(0);
+							p1 = playerMap.get(lastSeedValue).get(0);
 						} else {
-							p2 = playerMap.get(seedValues.get(i)).get(0);
+							p2 = playerMap.get(lastSeedValue).get(0);
 							matches.add(new XWingMatch(p1, p2));
 							p1 = null;
 							p2 = null;
 						}
 
-						playerMap.get(seedValues.get(i)).remove(0);
+						playerMap.get(lastSeedValue).remove(0);
 
-						if (playerMap.get(seedValues.get(i)).isEmpty()) {
+						if (playerMap.get(lastSeedValue).isEmpty()) {
 							seedValues.remove(i);
 						} else {
 							i++;
 						}
 					}
 
+					
 					Collections.shuffle(seedValues);
+					while(seedValues.size() > 1 && seedValues.get(0) == lastSeedValue){
+					    Collections.shuffle(seedValues);
+					}
 				}
 				if (p1 != null) {
 					matches.add(new XWingMatch(p1, null));
@@ -710,6 +724,7 @@ private void generateRoundRobinRound(int roundNumber)
 		XMLUtils.appendObject(sb, "POINTS", points);
 		XMLUtils.appendObject(sb, "NAME", name);
 		XMLUtils.appendObject(sb, "MODULE", Modules.XWING.getName());
+		XMLUtils.appendObject(sb, "SEEDING", seedingEnum);
 
 		return sb;
 	}
@@ -766,7 +781,7 @@ private void generateRoundRobinRound(int roundNumber)
 	public Icon getIcon() {
 		URL imgURL = XWingTournament.class.getResource("x.png");
 		if (imgURL == null) {
-			System.out.println("fail!!!!!!!!!!");
+			System.out.println("Failed to retrieve X-Wing Icon");
 		}
 		ImageIcon icon = new ImageIcon(imgURL);
 		return icon;
@@ -776,4 +791,15 @@ private void generateRoundRobinRound(int roundNumber)
 	public String getModuleName() {
 		return Modules.XWING.getName();
 	}
+	
+    public int getRoundPoints(int roundNumber) {
+        Integer tournamentPoints = getPoints();
+        if (tournamentPoints == null && getEscalationPoints() != null && getEscalationPoints().isEmpty() == false) {
+
+            tournamentPoints = getEscalationPoints().size() >= roundNumber ? getEscalationPoints().get(roundNumber - 1)
+                    : getEscalationPoints().get(getEscalationPoints().size() - 1);
+        }
+
+        return tournamentPoints;
+    }
 }

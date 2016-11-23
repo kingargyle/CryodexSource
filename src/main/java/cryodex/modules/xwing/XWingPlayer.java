@@ -76,6 +76,14 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 	public void setFirstRoundBye(boolean firstRoundBye) {
 		this.firstRoundBye = firstRoundBye;
 	}
+	
+	public int getFirstRoundByeScore(XWingTournament t){
+	    return (getMatches(t).size() - 1) * XWingMatch.WIN_POINTS;
+	}
+	
+	public int getFirstRoundByeMOV(XWingTournament t){
+	    return t.getRoundPoints(0) + (t.getRoundPoints(0) / 2);
+	}
 
 	public String getSquadId() {
 		return squadId;
@@ -197,7 +205,7 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 			}
 
 			if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-				sos += (getMatches(t).size() - 1) * 5;
+				sos += getFirstRoundByeScore(t);
 			}
 		}
 
@@ -309,17 +317,12 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 
 			roundNumber++;
 
-			Integer tournamentPoints = t.getPoints();
-			if (tournamentPoints == null && t.getEscalationPoints() != null
-					&& t.getEscalationPoints().isEmpty() == false) {
+			Integer tournamentPoints = t.getRoundPoints(roundNumber);
 
-				tournamentPoints = t.getEscalationPoints().size() >= roundNumber ? t
-						.getEscalationPoints().get(roundNumber - 1) : t
-						.getEscalationPoints().get(
-								t.getEscalationPoints().size() - 1);
-			}
-
-			if (match.isBye()) {
+			if (isFirstRoundBye() && match == getMatches(t).get(0)){
+			    movPoints += getFirstRoundByeMOV(t);
+                continue;
+			} else if (match.isBye()) {
 				movPoints += tournamentPoints + (tournamentPoints / 2);
 				continue;
 			} else if (match.getWinner() == null) {
