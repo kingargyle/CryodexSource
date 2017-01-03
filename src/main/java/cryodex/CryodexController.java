@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import cryodex.modules.Module;
 import cryodex.modules.Tournament;
 import cryodex.modules.armada.ArmadaModule;
+import cryodex.modules.destiny.DestinyModule;
 import cryodex.modules.imperialassault.IAModule;
 import cryodex.modules.xwing.XWingModule;
 import cryodex.widget.ComponentUtils;
@@ -30,7 +31,7 @@ public class CryodexController {
 	public static enum Modules {
 		XWING("X-Wing", XWingModule.getInstance()), IA("Imperial Assault",
 				IAModule.getInstance()), ARMADA("Armada", ArmadaModule
-				.getInstance());
+				.getInstance()), DESTINY("Destiny", DestinyModule.getInstance());
 
 		Module module;
 		String name;
