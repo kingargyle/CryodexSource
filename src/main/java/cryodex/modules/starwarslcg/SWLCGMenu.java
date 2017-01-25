@@ -1,4 +1,4 @@
-package cryodex.modules.destiny;
+package cryodex.modules.starwarslcg;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,12 +23,12 @@ import cryodex.CryodexController.Modules;
 import cryodex.Main;
 import cryodex.Player;
 import cryodex.modules.Menu;
-import cryodex.modules.destiny.export.DestinyExportController;
 import cryodex.modules.imperialassault.export.IAExportController;
+import cryodex.modules.starwarslcg.export.SWLCGExportController;
 import cryodex.widget.ComponentUtils;
 
 @SuppressWarnings("serial")
-public class DestinyMenu implements Menu {
+public class SWLCGMenu implements Menu {
 
 	private JMenu mainMenu;
 
@@ -46,8 +46,8 @@ public class DestinyMenu implements Menu {
 
 		if (mainMenu == null) {
 
-			mainMenu = new JMenu(Modules.DESTINY.getName());
-			mainMenu.setMnemonic('D');
+			mainMenu = new JMenu(Modules.SWLCG.getName());
+			mainMenu.setMnemonic('L');
 
 			JMenuItem createNewTournament = new JMenuItem(
 					"Create New Tournament");
@@ -56,7 +56,7 @@ public class DestinyMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Main.getInstance().setExtendedState(Frame.MAXIMIZED_BOTH);
-					DestinyModule.createTournament();
+					SWLCGModule.createTournament();
 				}
 			});
 
@@ -179,7 +179,7 @@ public class DestinyMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					DestinyTournament tournament = (DestinyTournament) CryodexController
+					SWLCGTournament tournament = (SWLCGTournament) CryodexController
 							.getActiveTournament();
 
 					int index = tournament.getTournamentGUI()
@@ -190,8 +190,8 @@ public class DestinyMenu implements Menu {
 							"Regenerating a round will cancel all results and destroy any subsequent rounds. Are you sure you want to do this?");
 
 					if (result == JOptionPane.OK_OPTION) {
-						DestinyRound r = tournament.getRound(index);
-						if (r.isSingleElimination()) {
+						SWLCGRound r = tournament.getRound(index);
+						if (r.isElimination()) {
 							int playerCount = r.getMatches().size() * 2;
 							tournament.cancelRound(tournament.getRoundNumber(r));
 							tournament
@@ -215,7 +215,7 @@ public class DestinyMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					DestinyTournament tournament = (DestinyTournament) CryodexController
+					SWLCGTournament tournament = (SWLCGTournament) CryodexController
 							.getActiveTournament();
 
 					int index = tournament.getTournamentGUI()
@@ -249,7 +249,7 @@ public class DestinyMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					DestinyTournament tournament = (DestinyTournament) CryodexController
+					SWLCGTournament tournament = (SWLCGTournament) CryodexController
 							.getActiveTournament();
 
 					if (tournament.getSelectedRound().isComplete()) {
@@ -258,7 +258,7 @@ public class DestinyMenu implements Menu {
 						return;
 					}
 
-					DestinySwapPanel.showSwapPanel();
+					SWLCGSwapPanel.showSwapPanel();
 				}
 			});
 
@@ -277,7 +277,7 @@ public class DestinyMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 
-					DestinyTournament tournament = (DestinyTournament) CryodexController
+					SWLCGTournament tournament = (SWLCGTournament) CryodexController
 							.getActiveTournament();
 
 					if (tournament.getLatestRound().isComplete() == false) {
@@ -315,15 +315,15 @@ public class DestinyMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 
-					DestinyTournament tournament = (DestinyTournament) CryodexController
+					SWLCGTournament tournament = (SWLCGTournament) CryodexController
 							.getActiveTournament();
 
-					DestinyRound round = tournament.getLatestRound();
+					SWLCGRound round = tournament.getLatestRound();
 
-					int roundNumber = round.isSingleElimination() ? 0
+					int roundNumber = round.isElimination() ? 0
 							: tournament.getRoundNumber(round);
 
-					DestinyExportController.exportMatches(tournament,
+					SWLCGExportController.exportMatches(tournament,
 							round.getMatches(), roundNumber);
 				}
 			});
@@ -333,14 +333,14 @@ public class DestinyMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					DestinyTournament tournament = (DestinyTournament) CryodexController
+					SWLCGTournament tournament = (SWLCGTournament) CryodexController
 							.getActiveTournament();
-					DestinyRound round = tournament.getLatestRound();
+					SWLCGRound round = tournament.getLatestRound();
 
-					int roundNumber = round.isSingleElimination() ? 0
+					int roundNumber = round.isElimination() ? 0
 							: tournament.getRoundNumber(round);
 
-					DestinyExportController.exportTournamentSlips(tournament,
+					SWLCGExportController.exportTournamentSlips(tournament,
 							round.getMatches(), roundNumber);
 				}
 			});
@@ -351,14 +351,14 @@ public class DestinyMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					DestinyTournament tournament = (DestinyTournament) CryodexController
+					SWLCGTournament tournament = (SWLCGTournament) CryodexController
 							.getActiveTournament();
-					DestinyRound round = tournament.getLatestRound();
+					SWLCGRound round = tournament.getLatestRound();
 
-					int roundNumber = round.isSingleElimination() ? 0
+					int roundNumber = round.isElimination() ? 0
 							: tournament.getRoundNumber(round);
 
-					DestinyExportController.exportTournamentSlipsWithStats(
+					SWLCGExportController.exportTournamentSlipsWithStats(
 							tournament, round.getMatches(), roundNumber);
 				}
 			});
@@ -368,8 +368,8 @@ public class DestinyMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-				    DestinyExportController
-							.exportRankings((DestinyTournament) CryodexController
+				    SWLCGExportController
+							.exportRankings((SWLCGTournament) CryodexController
 									.getActiveTournament());
 				}
 			});
@@ -380,8 +380,8 @@ public class DestinyMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-				    DestinyExportController
-							.exportTournamentReport((DestinyTournament) CryodexController
+				    SWLCGExportController
+							.exportTournamentReport((SWLCGTournament) CryodexController
 									.getActiveTournament());
 				}
 			});
@@ -400,7 +400,7 @@ public class DestinyMenu implements Menu {
 	public void resetMenuBar() {
 
 		boolean isIATournament = CryodexController.getActiveTournament() != null
-				&& CryodexController.getActiveTournament() instanceof DestinyTournament;
+				&& CryodexController.getActiveTournament() instanceof SWLCGTournament;
 
 		deleteTournament.setEnabled(isIATournament);
 		getTournamentMenu().setEnabled(isIATournament);
@@ -408,9 +408,9 @@ public class DestinyMenu implements Menu {
 		getExportMenu().setEnabled(isIATournament);
 
 		if (isIATournament) {
-			boolean isSingleElimination = ((DestinyTournament) CryodexController
+			boolean isSingleElimination = ((SWLCGTournament) CryodexController
 					.getActiveTournament()).getLatestRound()
-					.isSingleElimination();
+					.isElimination();
 			getCutPlayers().setEnabled(!isSingleElimination);
 		}
 	}

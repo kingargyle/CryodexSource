@@ -293,6 +293,10 @@ public class RegisterPanel extends JPanel {
         }
         sortPlayer();
     }
+    
+    public void removeAllPlayers(){
+        getUserModel().removeAllElements();
+    }
 
     public void sortPlayer() {
         List<Player> players = Collections.list(getUserModel().elements());

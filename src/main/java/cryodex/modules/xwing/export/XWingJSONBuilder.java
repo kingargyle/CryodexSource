@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import cryodex.CryodexController;
 import cryodex.Main;
 import cryodex.modules.xwing.XWingMatch;
 import cryodex.modules.xwing.XWingPlayer;
@@ -41,7 +42,7 @@ public class XWingJSONBuilder {
 		sb.append("\n}");
 
 		try {
-			File path = new File(System.getProperty("user.dir"));
+			File path = new File(CryodexController.getSavePath());
 			if (path.exists() == false) {
 				System.out.println("Error with user directory");
 			}

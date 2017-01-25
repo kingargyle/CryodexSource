@@ -11,6 +11,11 @@ public class Language {
 	public static final String previous = "Previous";
 	public static final String tournament_wizard = "Tournament Wizard";
 	public static final String merge_multiple_tournaments_into_one = "Merge multiple tournaments into one";
+	public static final String progression_cut = "Progression Cut";
+    public static final String graduated_cut = "Graduated Cut";
+    public static final String additional_information = "Additional Information";
+    public static final String max_players = "Maximum Players";
+    public static final String min_points = "Minimum Points";
 	public static final String select_players = "Select Players";
 	public static final String available_players = "Available Players";
 	public static final String event_players = "Event Players";

@@ -24,7 +24,7 @@ import cryodex.widget.TournamentTabbedPane;
  */
 public class Main extends JFrame {
 
-    public static final String version = "4.5.1";
+    public static final String version = "4.6.1";
     
 	public static final long delay = 3000;
 
@@ -38,7 +38,7 @@ public class Main extends JFrame {
 			instance = new Main();
 			instance.setSize(300, 700);
 
-			CryodexController.loadData();
+			CryodexController.loadData(null);
 			instance.getRegisterPanel().addPlayers(
 					CryodexController.getPlayers());
 			CryodexController.isLoading = true;

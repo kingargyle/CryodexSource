@@ -59,6 +59,21 @@ public class XMLUtils {
 		sb.append("</" + listLabel + ">\n");
 		return sb;
 	}
+	
+	   public static StringBuilder appendStringList(StringBuilder sb, String listLabel,
+	            String label, List<String> objectList) {
+
+	        sb.append("<" + listLabel + ">\n");
+	        for (String object : objectList) {
+	            sb.append("<" + label + ">");
+
+	            sb.append(object);
+
+	            sb.append("</" + label + ">\n");
+	        }
+	        sb.append("</" + listLabel + ">\n");
+	        return sb;
+	    }
 
 	public static Element getItem(BufferedReader r) throws IOException {
 		String line = r.readLine();

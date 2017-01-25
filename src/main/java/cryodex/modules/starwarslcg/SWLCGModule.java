@@ -1,4 +1,4 @@
-package cryodex.modules.xwing;
+package cryodex.modules.starwarslcg;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
@@ -12,38 +12,37 @@ import cryodex.modules.Module;
 import cryodex.modules.ModulePlayer;
 import cryodex.modules.RegistrationPanel;
 import cryodex.modules.Tournament;
-import cryodex.modules.xwing.wizard.WizardOptions;
-import cryodex.modules.xwing.wizard.XWingWizard;
+import cryodex.modules.starwarslcg.SWLCGTournamentCreationWizard.WizardOptions;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
-public class XWingModule implements Module {
+public class SWLCGModule implements Module {
 
-	private static XWingModule module;
+	private static SWLCGModule module;
 
-	public static XWingModule getInstance() {
+	public static SWLCGModule getInstance() {
 		if (module == null) {
-			module = new XWingModule();
+			module = new SWLCGModule();
 		}
 
 		return module;
 	}
 
 	private JCheckBoxMenuItem viewMenuItem;
-	private XWingRegistrationPanel registrationPanel;
-	private XWingMenu menu;
-	private XWingOptions options;
+	private SWLCGRegistrationPanel registrationPanel;
+	private SWLCGMenu menu;
+	private SWLCGOptions options;
 
 	private boolean isEnabled = true;
 
-	private XWingModule() {
+	private SWLCGModule() {
 
 	}
 
 	@Override
 	public Menu getMenu() {
 		if (menu == null) {
-			menu = new XWingMenu();
+			menu = new SWLCGMenu();
 		}
 		return menu;
 	}
@@ -51,7 +50,7 @@ public class XWingModule implements Module {
 	@Override
 	public RegistrationPanel getRegistration() {
 		if (registrationPanel == null) {
-			registrationPanel = new XWingRegistrationPanel();
+			registrationPanel = new SWLCGRegistrationPanel();
 		}
 		return registrationPanel;
 	}
@@ -70,25 +69,18 @@ public class XWingModule implements Module {
 	}
 
 	public static void createTournament() {
-		JDialog wizard = XWingWizard.getInstance();
+		JDialog wizard = new SWLCGTournamentCreationWizard();
 		wizard.setVisible(true);
 
 	}
 
 	public static void makeTournament(WizardOptions wizardOptions) {
 
-		XWingTournament tournament = new XWingTournament(
-				wizardOptions.getName(), wizardOptions.getPlayerList(),
+		SWLCGTournament tournament = new SWLCGTournament(wizardOptions.getName(),
+				wizardOptions.getPlayerList(),
 				wizardOptions.getInitialSeedingEnum(),
-				wizardOptions.getPoints(),
-				wizardOptions.isSingleElimination(),
-                                wizardOptions.isRoundRobin());
+				wizardOptions.isSingleElimination());
 
-		// Add dependent events from a progressive cut
-		if(wizardOptions.isMerge() == false && wizardOptions.getSelectedTournaments() != null && wizardOptions.getSelectedTournaments().isEmpty() == false){
-		    tournament.addDependentTournaments(wizardOptions.getSelectedTournaments());
-		}
-		
 		CryodexController.registerTournament(tournament);
 
 		tournament.startTournament();
@@ -98,9 +90,9 @@ public class XWingModule implements Module {
 		CryodexController.saveData();
 	}
 
-	public XWingOptions getOptions() {
+	public SWLCGOptions getOptions() {
 		if (options == null) {
-			options = new XWingOptions();
+			options = new SWLCGOptions();
 		}
 		return options;
 	}
@@ -108,28 +100,28 @@ public class XWingModule implements Module {
 	@Override
 	public StringBuilder appendXML(StringBuilder sb) {
 		XMLUtils.appendXMLObject(sb, "OPTIONS", getOptions());
-		XMLUtils.appendObject(sb, "NAME", Modules.XWING.getName());
+		XMLUtils.appendObject(sb, "NAME", Modules.SWLCG.getName());
 		return sb;
 	}
 
 	@Override
 	public ModulePlayer loadPlayer(Player p, Element element) {
-		return new XWingPlayer(p, element);
+		return new SWLCGPlayer(p, element);
 	}
 
 	@Override
 	public Tournament loadTournament(Element element) {
-		return new XWingTournament(element);
+		return new SWLCGTournament(element);
 	}
 
 	@Override
 	public void loadModuleData(Element element) {
-		options = new XWingOptions(element.getChild("OPTIONS"));
+		options = new SWLCGOptions(element.getChild("OPTIONS"));
 	}
 
 	@Override
 	public ModulePlayer getNewModulePlayer(Player player) {
-		return new XWingPlayer(player);
+		return new SWLCGPlayer(player);
 	}
 
 	@Override
