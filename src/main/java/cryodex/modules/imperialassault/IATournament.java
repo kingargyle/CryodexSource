@@ -642,4 +642,10 @@ public class IATournament implements XMLObject, Tournament {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public void massDropPlayers(List<Player> playersToDrop) {
+        // TODO Auto-generated method stub
+        
+    }
 }

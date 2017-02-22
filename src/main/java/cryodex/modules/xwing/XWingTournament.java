@@ -408,13 +408,13 @@ public class XWingTournament implements XMLObject, Tournament {
             generateRoundRobinRound(roundNumber);
             return;
         }
-        
+
         List<XWingMatch> matches;
-        
+
         boolean hasDependentTournaments = dependentTournaments != null && dependentTournaments.isEmpty() == false;
-        
+
         if (roundNumber == 1 && hasDependentTournaments == false) {
-            
+
             matches = new ArrayList<XWingMatch>();
             List<XWingPlayer> tempList = new ArrayList<>();
             tempList.addAll(getXWingPlayers());
@@ -729,15 +729,14 @@ public class XWingTournament implements XMLObject, Tournament {
 
         resetRankingTable();
     }
-    
+
     @Override
     public void massDropPlayers(int minScore, int maxCount) {
-        
+
         List<XWingPlayer> playerList = new ArrayList<XWingPlayer>();
         playerList.addAll(getXWingPlayers());
 
-        Collections.sort(playerList, new XWingComparator(this,
-                XWingComparator.rankingCompare));
+        Collections.sort(playerList, new XWingComparator(this, XWingComparator.rankingCompare));
 
         int count = 0;
         for (XWingPlayer xp : playerList) {
@@ -746,6 +745,16 @@ public class XWingTournament implements XMLObject, Tournament {
             } else {
                 count++;
             }
+        }
+
+        resetRankingTable();
+    }
+
+    @Override
+    public void massDropPlayers(List<Player> playersToDrop) {
+
+        for (Player p : playersToDrop) {
+            dropPlayer(p);
         }
 
         resetRankingTable();
@@ -783,12 +792,12 @@ public class XWingTournament implements XMLObject, Tournament {
         return tournamentPoints;
     }
 
-    public void addDependentTournaments(List<XWingTournament> tournaments){
-        for(XWingTournament t : tournaments){
+    public void addDependentTournaments(List<XWingTournament> tournaments) {
+        for (XWingTournament t : tournaments) {
             dependentTournaments.add(t.getName());
         }
     }
-    
+
     public List<XWingTournament> getDependentTournaments() {
 
         if (dependentTournaments == null || dependentTournaments.isEmpty()) {
@@ -805,9 +814,10 @@ public class XWingTournament implements XMLObject, Tournament {
 
         return dependentList;
     }
-    
-    public void triggerChange(){
+
+    public void triggerChange() {
         getTournamentGUI().getRankingTable().resetPlayers();
         CryodexController.saveData();
     }
+
 }
