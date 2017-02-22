@@ -9,6 +9,7 @@ import cryodex.xml.XMLUtils.Element;
 public class XWingOptions implements XMLObject {
 	boolean showKillPoints = true;
 	boolean enterOnlyPoints = true;
+	boolean hideCompletedMatches = false;
 
 	public XWingOptions() {
 
@@ -19,7 +20,17 @@ public class XWingOptions implements XMLObject {
 		if (e != null) {
 			showKillPoints = e.getBooleanFromChild("SHOWKILLPOINTS", true);
 			enterOnlyPoints = e.getBooleanFromChild("ENTERONLYPOINTS", true);
+			hideCompletedMatches = e.getBooleanFromChild("HIDECOMPLETED", false);
 		}
+	}
+	
+	public boolean isHideCompleted() {
+	    return hideCompletedMatches;
+	}
+	
+	public void setHideCompleted(boolean hideCompletedMatches) {
+	    this.hideCompletedMatches = hideCompletedMatches;
+	    updateTournamentVisuals();
 	}
 
 	public boolean isShowKillPoints() {
@@ -55,6 +66,7 @@ public class XWingOptions implements XMLObject {
 
 	@Override
 	public StringBuilder appendXML(StringBuilder sb) {
+	    XMLUtils.appendObject(sb, "HIDECOMPLETED", hideCompletedMatches);
 		XMLUtils.appendObject(sb, "SHOWKILLPOINTS", showKillPoints);
 		XMLUtils.appendObject(sb, "ENTERONLYPOINTS", enterOnlyPoints);
 

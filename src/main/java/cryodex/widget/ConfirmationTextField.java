@@ -76,4 +76,9 @@ public class ConfirmationTextField extends JTextField {
 		return indicator;
 	}
 
+	@Override
+	public void setVisible(boolean aFlag) {
+	    getIndicator().setVisible(aFlag);
+	    super.setVisible(aFlag);
+	}
 }

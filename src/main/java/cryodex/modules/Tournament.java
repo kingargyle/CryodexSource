@@ -35,6 +35,8 @@ public interface Tournament extends XMLObject {
 	public void addPlayer(Player p);
 
 	public void dropPlayer(Player p);
+	
+	public void massDropPlayers(int minScore, int maxCount);
 
 	public void resetRankingTable();
 

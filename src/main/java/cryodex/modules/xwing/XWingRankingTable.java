@@ -28,6 +28,9 @@ public class XWingRankingTable extends JPanel {
 	private final XWingTournament tournament;
 	private JLabel title;
 	private JLabel statsLabel;
+	
+	private long lastResetTimestamp = 0;
+	private long minResetWait = 1000;
 
 	public XWingRankingTable(XWingTournament tournament) {
 		super(new BorderLayout());
@@ -128,9 +131,12 @@ public class XWingRankingTable extends JPanel {
 	}
 
 	public void resetPlayers() {
-		getTableModel().resetData();
-		CryodexController.saveData();
-		updateLabel();
+	    //This prevents multiple resets. Need a more permanent solution.
+	    if(System.currentTimeMillis() - lastResetTimestamp > minResetWait){
+    		getTableModel().resetData();
+    		updateLabel();
+    		lastResetTimestamp = System.currentTimeMillis();
+	    }
 	}
 	
 	public class RankingTableCellRenderer extends DefaultTableCellRenderer {

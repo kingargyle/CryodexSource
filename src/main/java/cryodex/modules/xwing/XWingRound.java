@@ -87,16 +87,16 @@ public class XWingRound implements XMLObject {
 		return true;
 	}
 
-	public boolean isValid(boolean isSingleElimination) {
+	public boolean isValid() {
 		boolean result = true;
 		for (XWingMatch m : getMatches()) {
-			if (m.isValidResult(isSingleElimination) == false) {
+			if (m.isValidResult() == false) {
 				result = false;
 				break;
 			}
 		}
 
-		panel.markInvalid(isSingleElimination);
+		panel.markInvalid();
 
 		return result;
 	}

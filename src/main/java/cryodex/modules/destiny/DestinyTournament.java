@@ -636,4 +636,10 @@ public class DestinyTournament implements XMLObject, Tournament {
 	public String getModuleName() {
 		return Modules.DESTINY.getName();
 	}
+
+    @Override
+    public void massDropPlayers(int minScore, int maxCount) {
+        // TODO Auto-generated method stub
+        
+    }
 }

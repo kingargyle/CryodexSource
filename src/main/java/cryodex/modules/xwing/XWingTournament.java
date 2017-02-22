@@ -290,7 +290,7 @@ public class XWingTournament implements XMLObject, Tournament {
                 return false;
             }
 
-            if (getLatestRound().isValid(true) == false) {
+            if (getLatestRound().isValid() == false) {
                 JOptionPane.showMessageDialog(Main.getInstance(),
                         "At least one tournamnt result is not correct.\n" + "-Check if points are backwards or a draw has been set.\n"
                                 + "-Draws are not allowed in single elimination rounds.\n" + "--If a draw occurs, the player with initiative wins.\n"
@@ -301,7 +301,7 @@ public class XWingTournament implements XMLObject, Tournament {
             generateSingleEliminationMatches(getLatestRound().getMatches().size());
         } else {
             // Regular swiss round checks
-            if (getLatestRound().isValid(false) == false) {
+            if (getLatestRound().isValid() == false) {
                 JOptionPane.showMessageDialog(Main.getInstance(),
                         "At least one tournamnt result is not correct. Check if points are backwards or a result should be a modified win or tie.");
                 return false;
@@ -729,6 +729,27 @@ public class XWingTournament implements XMLObject, Tournament {
 
         resetRankingTable();
     }
+    
+    @Override
+    public void massDropPlayers(int minScore, int maxCount) {
+        
+        List<XWingPlayer> playerList = new ArrayList<XWingPlayer>();
+        playerList.addAll(getXWingPlayers());
+
+        Collections.sort(playerList, new XWingComparator(this,
+                XWingComparator.rankingCompare));
+
+        int count = 0;
+        for (XWingPlayer xp : playerList) {
+            if (xp.getScore(this) < minScore || count >= maxCount) {
+                getXWingPlayers().remove(xp);
+            } else {
+                count++;
+            }
+        }
+
+        resetRankingTable();
+    }
 
     @Override
     public void resetRankingTable() {
@@ -783,5 +804,10 @@ public class XWingTournament implements XMLObject, Tournament {
         }
 
         return dependentList;
+    }
+    
+    public void triggerChange(){
+        getTournamentGUI().getRankingTable().resetPlayers();
+        CryodexController.saveData();
     }
 }

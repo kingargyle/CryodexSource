@@ -29,6 +29,7 @@ import cryodex.modules.Menu;
 import cryodex.modules.xwing.export.XWingExportController;
 import cryodex.modules.xwing.export.XWingJSONBuilder;
 import cryodex.widget.ComponentUtils;
+import cryodex.widget.MassDropPanel;
 
 @SuppressWarnings("serial")
 public class XWingMenu implements Menu {
@@ -42,6 +43,7 @@ public class XWingMenu implements Menu {
 
 	private JMenuItem deleteTournament;
 
+	private JCheckBoxMenuItem hideCompleted;
 	private JCheckBoxMenuItem showKillPoints;
 	private JCheckBoxMenuItem onlyEnterPoints;
 
@@ -90,6 +92,17 @@ public class XWingMenu implements Menu {
 		if (viewMenu == null) {
 			viewMenu = new JMenu("View");
 
+			hideCompleted = new JCheckBoxMenuItem("Hide Completed Matches");
+			hideCompleted.setSelected(XWingModule.getInstance().getOptions().isHideCompleted());
+			hideCompleted.addItemListener(new ItemListener() {
+                
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    XWingModule.getInstance().getOptions()
+                    .setHideCompleted(hideCompleted.isSelected());
+                }
+            });
+			
 			showKillPoints = new JCheckBoxMenuItem("Show Kill Points");
 			showKillPoints.setSelected(XWingModule.getInstance().getOptions()
 					.isShowKillPoints());
@@ -114,6 +127,7 @@ public class XWingMenu implements Menu {
 				}
 			});
 
+			viewMenu.add(hideCompleted);
 			viewMenu.add(showKillPoints);
 			viewMenu.add(onlyEnterPoints);
 		}
@@ -182,6 +196,16 @@ public class XWingMenu implements Menu {
 
 				}
 			});
+			
+			JMenuItem massDropPlayer = new JMenuItem("Mass Drop Players");
+			massDropPlayer.addActionListener(new ActionListener() {
+                
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JDialog d = new MassDropPanel();
+                    d.setVisible(true);
+                }
+            });
 
 			JMenuItem generateNextRound = new JMenuItem("Generate Next Round");
 			generateNextRound.addActionListener(new ActionListener() {
@@ -195,6 +219,7 @@ public class XWingMenu implements Menu {
 			tournamentMenu.add(generateNextRound);
 			tournamentMenu.add(addPlayer);
 			tournamentMenu.add(dropPlayer);
+			tournamentMenu.add(massDropPlayer);
 			tournamentMenu.add(getCutPlayers());
 		}
 
@@ -449,6 +474,7 @@ public class XWingMenu implements Menu {
 		boolean isXWingTournament = CryodexController.getActiveTournament() != null
 				&& CryodexController.getActiveTournament() instanceof XWingTournament;
 
+		hideCompleted.setSelected(XWingModule.getInstance().getOptions().isHideCompleted());
 		showKillPoints.setSelected(XWingModule.getInstance().getOptions()
 				.isShowKillPoints());
 		onlyEnterPoints.setSelected(XWingModule.getInstance().getOptions()

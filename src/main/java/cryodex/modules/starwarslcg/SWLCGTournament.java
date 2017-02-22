@@ -587,4 +587,10 @@ public class SWLCGTournament implements XMLObject, Tournament {
 	public String getModuleName() {
 		return Modules.SWLCG.getName();
 	}
+
+    @Override
+    public void massDropPlayers(int minScore, int maxCount) {
+        // TODO Auto-generated method stub
+        
+    }
 }

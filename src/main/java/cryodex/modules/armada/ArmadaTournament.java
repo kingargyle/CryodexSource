@@ -675,4 +675,10 @@ public class ArmadaTournament implements XMLObject, Tournament {
 	public String getModuleName() {
 		return Modules.ARMADA.getName();
 	}
+
+    @Override
+    public void massDropPlayers(int minScore, int maxCount) {
+        // TODO Auto-generated method stub
+        
+    }
 }

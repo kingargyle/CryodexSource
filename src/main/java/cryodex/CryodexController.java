@@ -247,11 +247,10 @@ public class CryodexController {
     }
 
     public static void saveData() {
-
         if (isLoading) {
             return;
         }
-
+        
         int saveId = 0;
         for (Player p : getPlayers()) {
             p.setSaveId(String.valueOf(saveId));

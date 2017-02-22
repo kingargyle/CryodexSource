@@ -120,10 +120,14 @@ public class XWingMatch implements XMLObject {
 	}
 
 	public boolean isMatchComplete() {
-		return isBye || winner != null;
+	    
+	    boolean pointsComplete = player1PointsDestroyed != null && player2PointsDestroyed != null;
+	    boolean winnerChosen = winner != null;
+	    
+		return isBye || (winnerChosen && pointsComplete);
 	}
 
-	public boolean isValidResult(boolean isSingleElimination) {
+	public boolean isValidResult() {
 		Integer player1Points = player1PointsDestroyed == null ? 0 : player1PointsDestroyed;
 		Integer player2Points = player2PointsDestroyed == null ? 0 : player2PointsDestroyed;
 

@@ -636,4 +636,10 @@ public class IATournament implements XMLObject, Tournament {
 	public String getModuleName() {
 		return Modules.IA.getName();
 	}
+
+    @Override
+    public void massDropPlayers(int minScore, int maxCount) {
+        // TODO Auto-generated method stub
+        
+    }
 }
