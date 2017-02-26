@@ -551,6 +551,12 @@ public class XWingRoundPanel extends JPanel {
                     getPlayer2KillPointsField().setText(String.valueOf(match.getPlayer2PointsDestroyed()));
                 }
             }
+            
+            // Special exception for bye matches
+            if(match.getPlayer2() == null && XWingModule.getInstance().getOptions().isEnterOnlyPoints()){
+                match.setBye(true);
+                getResultCombo().setSelectedIndex(1);
+            }
 
             updateGUI();
         }
