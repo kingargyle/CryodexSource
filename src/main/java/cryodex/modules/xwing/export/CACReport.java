@@ -75,7 +75,8 @@ public class CACReport {
 
 		for (XWingPlayer p : playerList) {
 			p.clearKillMap();
-			switch (p.getFaction()) {
+			Faction f = p.getFaction() == null ? Faction.IMPERIAL : p.getFaction();
+			switch (f) {
 			case IMPERIAL:
 				imperials.add(p);
 				break;
@@ -122,7 +123,7 @@ public class CACReport {
 					Collections.sort(playerList, new XWingComparator(
 							tournament, XWingComparator.rankingCompare));
 
-					String content = "<h3>Tournament Results</h3><table border=\"1\"><tr><td style=\"width: 20px;\">Rank</td><td style=\"width: 250px;\">Name</td><td style=\"width: 50px;\">Score</td><td style=\"width: 50px;\">MoV</td><td style=\"width: 50px;\">SoS</td><td style=\"width: 100px;\">Total Score</td><td style=\"width: 100px;\">Total MoV</td></tr>";
+					String content = "<h3>Tournament Results - " + tournament.getName() + "</h3><table border=\"1\"><tr><td style=\"width: 20px;\">Rank</td><td style=\"width: 250px;\">Name</td><td style=\"width: 50px;\">Score</td><td style=\"width: 50px;\">MoV</td><td style=\"width: 50px;\">SoS</td><td style=\"width: 100px;\">Total Score</td><td style=\"width: 100px;\">Total MoV</td></tr>";
 
 					for (XWingPlayer p : playerList) {
 
