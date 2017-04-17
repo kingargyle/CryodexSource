@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -11,12 +12,14 @@ import cryodex.CryodexController.Modules;
 import cryodex.Player;
 import cryodex.modules.ModulePlayer;
 import cryodex.modules.RegistrationPanel;
+import cryodex.modules.runewars.RunewarsPlayer.Faction;
 
 public class RunewarsRegistrationPanel implements RegistrationPanel {
 
 	// private JTextField squadField;
 	private JCheckBox firstRoundByeCheckbox;
 	private JPanel panel;
+        private JComboBox<Faction> rwFactionCombo;
 
 	@Override
 	public JPanel getPanel() {
@@ -33,25 +36,15 @@ public class RunewarsRegistrationPanel implements RegistrationPanel {
 			panel.add(new JLabel("<html><b>" + Modules.RUNEWARS.getName()
 					+ "</b></html>"), gbc);
 
-			// gbc.gridy++;
-			// panel.add(new JLabel("Squadron Builder ID"), gbc);
-			//
-			// gbc.gridy++;
-			// panel.add(getSquadField(), gbc);
-
 			gbc.gridy++;
 			panel.add(getFirstRoundByeCheckbox(), gbc);
+
+                        gbc.gridy++;
+                        panel.add(getFactionCombo(), gbc);
 		}
 
 		return panel;
 	}
-
-	// private JTextField getSquadField() {
-	// if (squadField == null) {
-	// squadField = new JTextField();
-	// }
-	// return squadField;
-	// }
 
 	private JCheckBox getFirstRoundByeCheckbox() {
 		if (firstRoundByeCheckbox == null) {
@@ -59,6 +52,16 @@ public class RunewarsRegistrationPanel implements RegistrationPanel {
 		}
 		return firstRoundByeCheckbox;
 	}
+
+        private JComboBox<Faction> getFactionCombo() {
+                if (rwFactionCombo == null) {
+                        rwFactionCombo = new JComboBox<RunewarsPlayer.Faction>();
+                        rwFactionCombo.addItem(Faction.DAQAN);
+                        rwFactionCombo.addItem(Faction.WAIQAR);
+                        rwFactionCombo.setSelectedIndex(-1);
+                }
+                return rwFactionCombo;
+        }
 
 	@Override
 	public void save(Player player) {
@@ -85,6 +88,7 @@ public class RunewarsRegistrationPanel implements RegistrationPanel {
 		// update module information
 		// xp.setSquadId(getSquadField().getText());
 		xp.setFirstRoundBye(getFirstRoundByeCheckbox().isSelected());
+                xp.setFaction((Faction) getFactionCombo().getSelectedItem());
 	}
 
 	@Override
@@ -106,6 +110,7 @@ public class RunewarsRegistrationPanel implements RegistrationPanel {
 		if (xp != null) {
 			// getSquadField().setText(xp.getSquadId());
 			getFirstRoundByeCheckbox().setSelected(xp.isFirstRoundBye());
+                        getFactionCombo().setSelectedItem(xp.getFaction());
 		} else {
 			clearFields();
 		}
@@ -113,8 +118,8 @@ public class RunewarsRegistrationPanel implements RegistrationPanel {
 
 	@Override
 	public void clearFields() {
-		// getSquadField().setText("");
 		getFirstRoundByeCheckbox().setSelected(false);
+                getFactionCombo().setSelectedIndex(-1);
 	}
 
 }

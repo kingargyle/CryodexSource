@@ -155,6 +155,10 @@ public class RunewarsPlayer implements Comparable<ModulePlayer>, XMLObject, Modu
 		return faction;
 	}
 
+        public void setFaction(Faction faction) {
+                this.faction = faction;
+        }
+
 	public List<RunewarsMatch> getMatches(RunewarsTournament t) {
 
 		List<RunewarsMatch> matches = new ArrayList<RunewarsMatch>();
@@ -185,7 +189,7 @@ public class RunewarsPlayer implements Comparable<ModulePlayer>, XMLObject, Modu
 		int score = 0;
 		for (RunewarsMatch match : getMatches(t)) {
 			if (match.isBye()) {
-				score += 8;
+				score += 1;
 			} else {
 
 				if (match.getWinner() == null) {
