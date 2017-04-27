@@ -24,7 +24,7 @@ import cryodex.widget.TournamentTabbedPane;
  */
 public class Main extends JFrame {
 
-    public static final String version = "4.6.5";
+    public static final String version = "4.6.6";
     
 	public static final long delay = 3000;
 
