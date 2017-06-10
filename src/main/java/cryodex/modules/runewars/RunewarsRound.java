@@ -1,4 +1,4 @@
-package cryodex.modules.xwing;
+package cryodex.modules.runewars;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,63 +7,53 @@ import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
-public class XWingRound implements XMLObject {
-	private List<XWingMatch> matches;
-	private XWingRoundPanel panel;
+public class RunewarsRound implements XMLObject {
+	private List<RunewarsMatch> matches;
+	private RunewarsRoundPanel panel;
 	private Boolean isSingleElimination = false;
-        private Boolean isRoundRobin = false;
 
-	public XWingRound(Element roundElement, XWingTournament t) {
+	public RunewarsRound(Element roundElement, RunewarsTournament t) {
 		this.isSingleElimination = roundElement
 				.getBooleanFromChild("ISSINGLEELIMINATION");
-                this.isRoundRobin=roundElement.getBooleanFromChild("ISROUNDROBIN");
 
 		Element matchElement = roundElement.getChild("MATCHES");
 
 		if (matchElement != null) {
-			matches = new ArrayList<XWingMatch>();
+			matches = new ArrayList<RunewarsMatch>();
 			for (Element e : matchElement.getChildren()) {
-				matches.add(new XWingMatch(e));
+				matches.add(new RunewarsMatch(e));
 			}
 		}
 
-		this.panel = new XWingRoundPanel(t, matches);
+		this.panel = new RunewarsRoundPanel(t, matches);
 	}
 
-	public XWingRound(List<XWingMatch> matches, XWingTournament t,
+	public RunewarsRound(List<RunewarsMatch> matches, RunewarsTournament t,
 			Integer roundNumber) {
 		this.matches = matches;
-		this.panel = new XWingRoundPanel(t, matches);
+		this.panel = new RunewarsRoundPanel(t, matches);
 	}
 
-	public List<XWingMatch> getMatches() {
+	public List<RunewarsMatch> getMatches() {
 		return matches;
 	}
 
-	public void setMatches(List<XWingMatch> matches) {
+	public void setMatches(List<RunewarsMatch> matches) {
 		this.matches = matches;
 	}
 
-	public XWingRoundPanel getPanel() {
+	public RunewarsRoundPanel getPanel() {
 		return panel;
 	}
 
-	public void setPanel(XWingRoundPanel panel) {
+	public void setPanel(RunewarsRoundPanel panel) {
 		this.panel = panel;
 	}
 
 	public void setSingleElimination(boolean isSingleElimination) {
 		this.isSingleElimination = isSingleElimination;
 	}
-        
-        public void setRoundRobin(boolean isRoundRobin) {
-		this.isRoundRobin = isRoundRobin;
-	}
 
-        public boolean isRoundRobin() {
-		return isRoundRobin== null ? false : isRoundRobin;
-	}
-        
 	public boolean isSingleElimination() {
 		return isSingleElimination == null ? false : isSingleElimination;
 	}
@@ -72,14 +62,13 @@ public class XWingRound implements XMLObject {
 	public StringBuilder appendXML(StringBuilder sb) {
 
 		XMLUtils.appendObject(sb, "ISSINGLEELIMINATION", isSingleElimination());
-                XMLUtils.appendObject(sb, "ISROUNDROBIN", isRoundRobin());
 		XMLUtils.appendList(sb, "MATCHES", "MATCH", getMatches());
 
 		return sb;
 	}
 
 	public boolean isComplete() {
-		for (XWingMatch m : getMatches()) {
+		for (RunewarsMatch m : getMatches()) {
 			if (m.isMatchComplete() == false) {
 				return false;
 			}
@@ -89,7 +78,7 @@ public class XWingRound implements XMLObject {
 
 	public boolean isValid() {
 		boolean result = true;
-		for (XWingMatch m : getMatches()) {
+		for (RunewarsMatch m : getMatches()) {
 			if (m.isValidResult() == false) {
 				result = false;
 				break;

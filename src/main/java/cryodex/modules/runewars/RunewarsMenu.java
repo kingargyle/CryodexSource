@@ -1,4 +1,4 @@
-package cryodex.modules.xwing;
+package cryodex.modules.runewars;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,13 +26,11 @@ import cryodex.CryodexController.Modules;
 import cryodex.Main;
 import cryodex.Player;
 import cryodex.modules.Menu;
-import cryodex.modules.xwing.export.XWingExportController;
-import cryodex.modules.xwing.export.XWingJSONBuilder;
+import cryodex.modules.runewars.export.RunewarsExportController;
 import cryodex.widget.ComponentUtils;
-import cryodex.widget.MassDropPanel;
 
 @SuppressWarnings("serial")
-public class XWingMenu implements Menu {
+public class RunewarsMenu implements Menu {
 
 	private JMenu mainMenu;
 
@@ -43,9 +41,8 @@ public class XWingMenu implements Menu {
 
 	private JMenuItem deleteTournament;
 
-	private JCheckBoxMenuItem hideCompleted;
-	private JCheckBoxMenuItem showKillPoints;
-	private JCheckBoxMenuItem onlyEnterPoints;
+	private JCheckBoxMenuItem showScore;
+	// private JCheckBoxMenuItem onlyEnterPoints;
 
 	private JMenuItem cutPlayers;
 
@@ -54,8 +51,8 @@ public class XWingMenu implements Menu {
 
 		if (mainMenu == null) {
 
-			mainMenu = new JMenu(Modules.XWING.getName());
-			mainMenu.setMnemonic('X');
+			mainMenu = new JMenu(Modules.RUNEWARS.getName());
+			mainMenu.setMnemonic('R');
 
 			JMenuItem createNewTournament = new JMenuItem(
 					"Create New Tournament");
@@ -64,7 +61,7 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Main.getInstance().setExtendedState(Frame.MAXIMIZED_BOTH);
-					XWingModule.createTournament();
+					RunewarsModule.createTournament();
 				}
 			});
 
@@ -92,44 +89,30 @@ public class XWingMenu implements Menu {
 		if (viewMenu == null) {
 			viewMenu = new JMenu("View");
 
-			hideCompleted = new JCheckBoxMenuItem("Hide Completed Matches");
-			hideCompleted.setSelected(XWingModule.getInstance().getOptions().isHideCompleted());
-			hideCompleted.addItemListener(new ItemListener() {
-                
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    XWingModule.getInstance().getOptions()
-                    .setHideCompleted(hideCompleted.isSelected());
-                }
-            });
-			
-			showKillPoints = new JCheckBoxMenuItem("Show Kill Points");
-			showKillPoints.setSelected(XWingModule.getInstance().getOptions()
-					.isShowKillPoints());
-			showKillPoints.addItemListener(new ItemListener() {
+			showScore = new JCheckBoxMenuItem("Show Score Input");
+			showScore.setSelected(true);
+			showScore.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					XWingModule.getInstance().getOptions()
-							.setShowKillPoints(showKillPoints.isSelected());
+					RunewarsModule.getInstance().getOptions()
+							.setShowScore(showScore.isSelected());
 				}
 			});
 
-			onlyEnterPoints = new JCheckBoxMenuItem("Only Enter Points");
-			onlyEnterPoints.setSelected(XWingModule.getInstance().getOptions()
-					.isEnterOnlyPoints());
-			onlyEnterPoints.addItemListener(new ItemListener() {
+			// onlyEnterPoints = new JCheckBoxMenuItem("Only Enter Points");
+			// onlyEnterPoints.setSelected(false);
+			// onlyEnterPoints.addItemListener(new ItemListener() {
+			//
+			// @Override
+			// public void itemStateChanged(ItemEvent e) {
+			// RunewarsModule.getInstance().getOptions()
+			// .setEnterOnlyPoints(onlyEnterPoints.isSelected());
+			// }
+			// });
 
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					XWingModule.getInstance().getOptions()
-							.setEnterOnlyPoints(onlyEnterPoints.isSelected());
-				}
-			});
-
-			viewMenu.add(hideCompleted);
-			viewMenu.add(showKillPoints);
-			viewMenu.add(onlyEnterPoints);
+			viewMenu.add(showScore);
+			// viewMenu.add(onlyEnterPoints);
 		}
 
 		return viewMenu;
@@ -196,16 +179,6 @@ public class XWingMenu implements Menu {
 
 				}
 			});
-			
-			JMenuItem massDropPlayer = new JMenuItem("Mass Drop Players");
-			massDropPlayer.addActionListener(new ActionListener() {
-                
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    JDialog d = new MassDropPanel();
-                    d.setVisible(true);
-                }
-            });
 
 			JMenuItem generateNextRound = new JMenuItem("Generate Next Round");
 			generateNextRound.addActionListener(new ActionListener() {
@@ -219,7 +192,6 @@ public class XWingMenu implements Menu {
 			tournamentMenu.add(generateNextRound);
 			tournamentMenu.add(addPlayer);
 			tournamentMenu.add(dropPlayer);
-			tournamentMenu.add(massDropPlayer);
 			tournamentMenu.add(getCutPlayers());
 		}
 
@@ -236,7 +208,7 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					XWingTournament tournament = (XWingTournament) CryodexController
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
 							.getActiveTournament();
 
 					int index = tournament.getTournamentGUI()
@@ -247,7 +219,7 @@ public class XWingMenu implements Menu {
 							"Regenerating a round will cancel all results and destroy any subsequent rounds. Are you sure you want to do this?");
 
 					if (result == JOptionPane.OK_OPTION) {
-						XWingRound r = tournament.getRound(index);
+						RunewarsRound r = tournament.getRound(index);
 						if (r.isSingleElimination()) {
 							int playerCount = r.getMatches().size() * 2;
 							tournament.cancelRound(tournament.getRoundNumber(r));
@@ -272,7 +244,7 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					XWingTournament tournament = (XWingTournament) CryodexController
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
 							.getActiveTournament();
 
 					int index = tournament.getTournamentGUI()
@@ -306,7 +278,7 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					XWingTournament tournament = (XWingTournament) CryodexController
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
 							.getActiveTournament();
 
 					if (tournament.getSelectedRound().isComplete()) {
@@ -315,7 +287,7 @@ public class XWingMenu implements Menu {
 						return;
 					}
 
-					XWingSwapPanel.showSwapPanel();
+					RunewarsSwapPanel.showSwapPanel();
 				}
 			});
 
@@ -334,7 +306,7 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 
-					XWingTournament tournament = (XWingTournament) CryodexController
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
 							.getActiveTournament();
 
 					if (tournament.getLatestRound().isComplete() == false) {
@@ -361,7 +333,7 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 
-					XWingExportController.playerList(CryodexController
+					RunewarsExportController.playerList(CryodexController
 							.getActiveTournament().getPlayers());
 				}
 			});
@@ -372,7 +344,16 @@ public class XWingMenu implements Menu {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 
-					XWingExportController.exportMatches();
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
+							.getActiveTournament();
+
+					RunewarsRound round = tournament.getLatestRound();
+
+					int roundNumber = round.isSingleElimination() ? 0
+							: tournament.getRoundNumber(round);
+
+					RunewarsExportController.exportMatches(tournament,
+							round.getMatches(), roundNumber);
 				}
 			});
 
@@ -381,14 +362,14 @@ public class XWingMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					XWingTournament tournament = (XWingTournament) CryodexController
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
 							.getActiveTournament();
-					XWingRound round = tournament.getLatestRound();
+					RunewarsRound round = tournament.getLatestRound();
 
 					int roundNumber = round.isSingleElimination() ? 0
 							: tournament.getRoundNumber(round);
 
-					XWingExportController.exportTournamentSlips(tournament,
+					RunewarsExportController.exportTournamentSlips(tournament,
 							round.getMatches(), roundNumber);
 				}
 			});
@@ -399,14 +380,14 @@ public class XWingMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					XWingTournament tournament = (XWingTournament) CryodexController
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
 							.getActiveTournament();
-					XWingRound round = tournament.getLatestRound();
+					RunewarsRound round = tournament.getLatestRound();
 
 					int roundNumber = round.isSingleElimination() ? 0
 							: tournament.getRoundNumber(round);
 
-					XWingExportController.exportTournamentSlipsWithStats(
+					RunewarsExportController.exportTournamentSlipsWithStats(
 							tournament, round.getMatches(), roundNumber);
 				}
 			});
@@ -416,8 +397,8 @@ public class XWingMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					XWingExportController
-							.exportRankings((XWingTournament) CryodexController
+					RunewarsExportController
+							.exportRankings((RunewarsTournament) CryodexController
 									.getActiveTournament());
 				}
 			});
@@ -428,31 +409,9 @@ public class XWingMenu implements Menu {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					XWingExportController
-							.exportTournamentReport((XWingTournament) CryodexController
+					RunewarsExportController
+							.exportTournamentReport((RunewarsTournament) CryodexController
 									.getActiveTournament());
-				}
-			});
-
-			JMenuItem saveJSON = new JMenuItem("X-Wing List Jugger Data");
-			saveJSON.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					XWingJSONBuilder
-							.buildTournament((XWingTournament) CryodexController
-									.getActiveTournament());
-				}
-			});
-			
-			JMenuItem cacReport = new JMenuItem(
-					"Campaign Against Cancer Report");
-			cacReport.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					XWingExportController
-							.cacReport();
 				}
 			});
 
@@ -462,8 +421,6 @@ public class XWingMenu implements Menu {
 			exportMenu.add(exportMatchSlipsWithStats);
 			exportMenu.add(exportRankings);
 			exportMenu.add(exportTournamentReport);
-			exportMenu.add(saveJSON);
-			exportMenu.add(cacReport);
 		}
 		return exportMenu;
 	}
@@ -471,22 +428,16 @@ public class XWingMenu implements Menu {
 	@Override
 	public void resetMenuBar() {
 
-		boolean isXWingTournament = CryodexController.getActiveTournament() != null
-				&& CryodexController.getActiveTournament() instanceof XWingTournament;
+		boolean isRunewarsTournament = CryodexController.getActiveTournament() != null
+				&& CryodexController.getActiveTournament() instanceof RunewarsTournament;
 
-		hideCompleted.setSelected(XWingModule.getInstance().getOptions().isHideCompleted());
-		showKillPoints.setSelected(XWingModule.getInstance().getOptions()
-				.isShowKillPoints());
-		onlyEnterPoints.setSelected(XWingModule.getInstance().getOptions()
-				.isEnterOnlyPoints());
+		deleteTournament.setEnabled(isRunewarsTournament);
+		getTournamentMenu().setEnabled(isRunewarsTournament);
+		getRoundMenu().setEnabled(isRunewarsTournament);
+		getExportMenu().setEnabled(isRunewarsTournament);
 
-		deleteTournament.setEnabled(isXWingTournament);
-		getTournamentMenu().setEnabled(isXWingTournament);
-		getRoundMenu().setEnabled(isXWingTournament);
-		getExportMenu().setEnabled(isXWingTournament);
-
-		if (isXWingTournament) {
-			boolean isSingleElimination = ((XWingTournament) CryodexController
+		if (isRunewarsTournament) {
+			boolean isSingleElimination = ((RunewarsTournament) CryodexController
 					.getActiveTournament()).getLatestRound()
 					.isSingleElimination();
 			getCutPlayers().setEnabled(!isSingleElimination);

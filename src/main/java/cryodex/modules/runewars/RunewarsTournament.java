@@ -1,4 +1,4 @@
-package cryodex.modules.imperialassault;
+package cryodex.modules.runewars;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,26 +23,28 @@ import cryodex.xml.XMLObject;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
-public class IATournament implements XMLObject, Tournament {
+public class RunewarsTournament implements XMLObject, Tournament {
 
 	public enum InitialSeedingEnum {
 		RANDOM, BY_GROUP, IN_ORDER;
 	}
 
-	private final List<IARound> rounds;
-	private List<IAPlayer> players;
+	private final List<RunewarsRound> rounds;
+	private List<RunewarsPlayer> players;
 	private final InitialSeedingEnum seedingEnum;
-	private final IATournamentGUI tournamentGUI;
+	private final RunewarsTournamentGUI tournamentGUI;
 	private String name;
+	private final Integer points;
+	private List<Integer> escalationPoints;
 	private boolean startAsSingleElimination = false;
 
-	public IATournament(Element tournamentElement) {
+	public RunewarsTournament(Element tournamentElement) {
 
 		this.players = new ArrayList<>();
 		this.rounds = new ArrayList<>();
 		seedingEnum = InitialSeedingEnum.RANDOM;
 
-		tournamentGUI = new IATournamentGUI(this);
+		tournamentGUI = new RunewarsTournamentGUI(this);
 
 		String playerIDs = tournamentElement.getStringFromChild("PLAYERS");
 
@@ -52,7 +54,7 @@ public class IATournament implements XMLObject, Tournament {
 			Player p = CryodexController.getPlayerByID(s);
 
 			if (p != null) {
-				IAPlayer xp = (IAPlayer) p.getModuleInfoByModule(m);
+				RunewarsPlayer xp = (RunewarsPlayer) p.getModuleInfoByModule(m);
 				if (xp != null) {
 					players.add(xp);
 				}
@@ -62,13 +64,25 @@ public class IATournament implements XMLObject, Tournament {
 		Element roundElement = tournamentElement.getChild("ROUNDS");
 
 		for (Element e : roundElement.getChildren()) {
-			rounds.add(new IARound(e, this));
+			rounds.add(new RunewarsRound(e, this));
 		}
 
 		name = tournamentElement.getStringFromChild("NAME");
+		points = tournamentElement.getIntegerFromChild("POINTS");
+
+		String escalationPointsString = tournamentElement
+				.getStringFromChild("ESCALATIONPOINTS");
+
+		if (escalationPointsString != null
+				&& escalationPointsString.isEmpty() == false) {
+			escalationPoints = new ArrayList<Integer>();
+			for (String s : escalationPointsString.split(",")) {
+				escalationPoints.add(new Integer(s));
+			}
+		}
 
 		int counter = 1;
-		for (IARound r : rounds) {
+		for (RunewarsRound r : rounds) {
 			if (r.isSingleElimination()) {
 				getTournamentGUI().getRoundTabbedPane()
 						.addSingleEliminationTab(r.getMatches().size() * 2,
@@ -81,21 +95,24 @@ public class IATournament implements XMLObject, Tournament {
 
 		}
 
-		getTournamentGUI().getRankingTable().setPlayers(getAllIAPlayers());
+		getTournamentGUI().getRankingTable().setPlayers(getAllRunewarsPlayers());
 	}
 
-	public IATournament(String name, List<IAPlayer> players,
-			InitialSeedingEnum seedingEnum, boolean isSingleElimination) {
+	public RunewarsTournament(String name, List<RunewarsPlayer> players,
+			InitialSeedingEnum seedingEnum, Integer points,
+			List<Integer> escalationPoints, boolean isSingleElimination) {
 		this.name = name;
 		this.players = new ArrayList<>(players);
 		this.rounds = new ArrayList<>();
 		this.seedingEnum = seedingEnum;
+		this.points = points;
+		this.escalationPoints = escalationPoints;
 		this.startAsSingleElimination = isSingleElimination;
 
-		tournamentGUI = new IATournamentGUI(this);
+		tournamentGUI = new RunewarsTournamentGUI(this);
 	}
 
-	public IARound getLatestRound() {
+	public RunewarsRound getLatestRound() {
 		if (rounds == null || rounds.isEmpty()) {
 			return null;
 		} else {
@@ -103,9 +120,9 @@ public class IATournament implements XMLObject, Tournament {
 		}
 	}
 
-	public int getRoundNumber(IARound round) {
+	public int getRoundNumber(RunewarsRound round) {
 		int count = 0;
-		for (IARound r : rounds) {
+		for (RunewarsRound r : rounds) {
 			count++;
 			if (r == round) {
 				return count;
@@ -115,7 +132,7 @@ public class IATournament implements XMLObject, Tournament {
 		return 0;
 	}
 
-	public IARound getRound(int i) {
+	public RunewarsRound getRound(int i) {
 		if (rounds == null) {
 			return null;
 		} else {
@@ -123,7 +140,7 @@ public class IATournament implements XMLObject, Tournament {
 		}
 	}
 
-	public IARound getSelectedRound() {
+	public RunewarsRound getSelectedRound() {
 		if (rounds == null) {
 			return null;
 		} else {
@@ -132,7 +149,7 @@ public class IATournament implements XMLObject, Tournament {
 		}
 	}
 
-	public List<IARound> getAllRounds() {
+	public List<RunewarsRound> getAllRounds() {
 		return rounds;
 	}
 
@@ -147,41 +164,41 @@ public class IATournament implements XMLObject, Tournament {
 
 	@Override
 	public void setPlayers(List<Player> players) {
-		List<IAPlayer> xwPlayers = new ArrayList<>();
+		List<RunewarsPlayer> xwPlayers = new ArrayList<>();
 
 		for (Player p : players) {
-			IAPlayer xp = new IAPlayer(p);
+			RunewarsPlayer xp = new RunewarsPlayer(p);
 			xwPlayers.add(xp);
 		}
 
-		setIAPlayer(xwPlayers);
+		setRunewarsPlayer(xwPlayers);
 	}
 
 	@Override
 	public List<Player> getPlayers() {
 		List<Player> players = new ArrayList<Player>();
 
-		for (IAPlayer xp : getIAPlayers()) {
+		for (RunewarsPlayer xp : getRunewarsPlayers()) {
 			players.add(xp.getPlayer());
 		}
 
 		return players;
 	}
 
-	public List<IAPlayer> getIAPlayers() {
+	public List<RunewarsPlayer> getRunewarsPlayers() {
 		return players;
 	}
 
-	public void setIAPlayer(List<IAPlayer> players) {
+	public void setRunewarsPlayer(List<RunewarsPlayer> players) {
 		this.players = players;
 	}
 
-	public Set<IAPlayer> getAllIAPlayers() {
-		Set<IAPlayer> allPlayers = new TreeSet<IAPlayer>(new IAComparator(this,
-				IAComparator.rankingCompare));
+	public Set<RunewarsPlayer> getAllRunewarsPlayers() {
+		Set<RunewarsPlayer> allPlayers = new TreeSet<RunewarsPlayer>(
+				new RunewarsComparator(this, RunewarsComparator.rankingCompare));
 
-		for (IARound r : getAllRounds()) {
-			for (IAMatch m : r.getMatches()) {
+		for (RunewarsRound r : getAllRounds()) {
+			for (RunewarsMatch m : r.getMatches()) {
 				if (m.isBye()) {
 					allPlayers.add(m.getPlayer1());
 				} else {
@@ -202,7 +219,7 @@ public class IATournament implements XMLObject, Tournament {
 	public Set<Player> getAllPlayers() {
 		Set<Player> players = new TreeSet<Player>();
 
-		for (IAPlayer xp : getAllIAPlayers()) {
+		for (RunewarsPlayer xp : getAllRunewarsPlayers()) {
 			players.add(xp.getPlayer());
 		}
 
@@ -210,13 +227,21 @@ public class IATournament implements XMLObject, Tournament {
 	}
 
 	@Override
-	public IATournamentGUI getTournamentGUI() {
+	public RunewarsTournamentGUI getTournamentGUI() {
 		return tournamentGUI;
 	}
 
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	public Integer getPoints() {
+		return points;
+	}
+
+	public List<Integer> getEscalationPoints() {
+		return escalationPoints;
 	}
 
 	@Override
@@ -227,7 +252,7 @@ public class IATournament implements XMLObject, Tournament {
 	@Override
 	public void updateVisualOptions() {
 		if (CryodexController.isLoading == false) {
-			for (IARound r : getAllRounds()) {
+			for (RunewarsRound r : getAllRounds()) {
 				r.getPanel().resetGamePanels(true);
 			}
 		}
@@ -272,12 +297,14 @@ public class IATournament implements XMLObject, Tournament {
 			// will be erased.
 			while (rounds.size() >= roundNumber) {
 				int index = rounds.size() - 1;
-				IARound roundToRemove = rounds.get(index);
-				for (IAMatch m : roundToRemove.getMatches()) {
+				RunewarsRound roundToRemove = rounds.get(index);
+				for (RunewarsMatch m : roundToRemove.getMatches()) {
 					m.setWinner(null);
 					m.setBye(false);
 					m.setPlayer1(null);
 					m.setPlayer2(null);
+					m.setPlayer1Score(null);
+					m.setPlayer2Score(null);
 				}
 				rounds.remove(roundToRemove);
 
@@ -296,15 +323,15 @@ public class IATournament implements XMLObject, Tournament {
 
 		cancelRound(roundNumber);
 
-		List<IAMatch> matches;
+		List<RunewarsMatch> matches;
 		if (roundNumber == 1) {
 
-			matches = new ArrayList<IAMatch>();
-			List<IAPlayer> tempList = new ArrayList<>();
-			tempList.addAll(getIAPlayers());
+			matches = new ArrayList<RunewarsMatch>();
+			List<RunewarsPlayer> tempList = new ArrayList<>();
+			tempList.addAll(getRunewarsPlayers());
 
-			List<IAPlayer> firstRoundByePlayers = new ArrayList<>();
-			for (IAPlayer p : tempList) {
+			List<RunewarsPlayer> firstRoundByePlayers = new ArrayList<>();
+			for (RunewarsPlayer p : tempList) {
 				if (p.isFirstRoundBye()) {
 					firstRoundByePlayers.add(p);
 				}
@@ -314,15 +341,15 @@ public class IATournament implements XMLObject, Tournament {
 			if (seedingEnum == InitialSeedingEnum.IN_ORDER) {
 
 				while (tempList.isEmpty() == false) {
-					IAPlayer player1 = tempList.get(0);
-					IAPlayer player2 = null;
+					RunewarsPlayer player1 = tempList.get(0);
+					RunewarsPlayer player2 = null;
 					tempList.remove(0);
 					if (tempList.isEmpty() == false) {
 						player2 = tempList.get(0);
 						tempList.remove(0);
 					}
 
-					IAMatch match = new IAMatch(player1, player2);
+					RunewarsMatch match = new RunewarsMatch(player1, player2);
 					matches.add(match);
 				}
 
@@ -330,8 +357,8 @@ public class IATournament implements XMLObject, Tournament {
 				Collections.shuffle(tempList);
 
 				while (tempList.isEmpty() == false) {
-					IAPlayer player1 = tempList.get(0);
-					IAPlayer player2 = tempList.get(tempList.size() - 1);
+					RunewarsPlayer player1 = tempList.get(0);
+					RunewarsPlayer player2 = tempList.get(tempList.size() - 1);
 					tempList.remove(player1);
 					if (player1 == player2) {
 						player2 = null;
@@ -339,15 +366,15 @@ public class IATournament implements XMLObject, Tournament {
 						tempList.remove(player2);
 					}
 
-					IAMatch match = new IAMatch(player1, player2);
+					RunewarsMatch match = new RunewarsMatch(player1, player2);
 					matches.add(match);
 				}
 			} else if (seedingEnum == InitialSeedingEnum.BY_GROUP) {
-				Map<String, List<IAPlayer>> playerMap = new HashMap<String, List<IAPlayer>>();
+				Map<String, List<RunewarsPlayer>> playerMap = new HashMap<String, List<RunewarsPlayer>>();
 
 				// Add players to map
-				for (IAPlayer p : tempList) {
-					List<IAPlayer> playerList = playerMap.get(p.getPlayer()
+				for (RunewarsPlayer p : tempList) {
+					List<RunewarsPlayer> playerList = playerMap.get(p.getPlayer()
 							.getGroupName());
 
 					if (playerList == null) {
@@ -365,7 +392,7 @@ public class IATournament implements XMLObject, Tournament {
 				Collections.shuffle(seedValues);
 
 				// Shuffle each group list
-				for (List<IAPlayer> list : playerMap.values()) {
+				for (List<RunewarsPlayer> list : playerMap.values()) {
 					Collections.shuffle(list);
 				}
 
@@ -373,8 +400,8 @@ public class IATournament implements XMLObject, Tournament {
 				// Add new algorythm here
 				// /////////////
 
-				IAPlayer p1 = null;
-				IAPlayer p2 = null;
+				RunewarsPlayer p1 = null;
+				RunewarsPlayer p2 = null;
 				while (seedValues.isEmpty() == false) {
 					int i = 0;
 					while (i < seedValues.size()) {
@@ -382,7 +409,7 @@ public class IATournament implements XMLObject, Tournament {
 							p1 = playerMap.get(seedValues.get(i)).get(0);
 						} else {
 							p2 = playerMap.get(seedValues.get(i)).get(0);
-							matches.add(new IAMatch(p1, p2));
+							matches.add(new RunewarsMatch(p1, p2));
 							p1 = null;
 							p2 = null;
 						}
@@ -399,19 +426,19 @@ public class IATournament implements XMLObject, Tournament {
 					Collections.shuffle(seedValues);
 				}
 				if (p1 != null) {
-					matches.add(new IAMatch(p1, null));
+					matches.add(new RunewarsMatch(p1, null));
 				}
 			}
 
-			for (IAPlayer p : firstRoundByePlayers) {
-				matches.add(new IAMatch(p, null));
+			for (RunewarsPlayer p : firstRoundByePlayers) {
+				matches.add(new RunewarsMatch(p, null));
 			}
 
 		} else {
 
-			matches = getMatches(getIAPlayers());
+			matches = getMatches(getRunewarsPlayers());
 		}
-		IARound r = new IARound(matches, this, roundNumber);
+		RunewarsRound r = new RunewarsRound(matches, this, roundNumber);
 		rounds.add(r);
 		if (roundNumber == 1
 				&& startAsSingleElimination
@@ -426,23 +453,23 @@ public class IATournament implements XMLObject, Tournament {
 					r.getPanel());
 		}
 
-		getTournamentGUI().getRankingTable().setPlayers(getAllIAPlayers());
+		getTournamentGUI().getRankingTable().setPlayers(getAllRunewarsPlayers());
 	}
 
-	private List<IAMatch> getMatches(List<IAPlayer> userList) {
-		List<IAMatch> matches = new ArrayList<IAMatch>();
+	private List<RunewarsMatch> getMatches(List<RunewarsPlayer> userList) {
+		List<RunewarsMatch> matches = new ArrayList<RunewarsMatch>();
 
-		List<IAPlayer> tempList = new ArrayList<IAPlayer>();
+		List<RunewarsPlayer> tempList = new ArrayList<RunewarsPlayer>();
 		tempList.addAll(userList);
-		Collections.sort(tempList, new IAComparator(this,
-				IAComparator.pairingCompare));
+		Collections.sort(tempList, new RunewarsComparator(this,
+				RunewarsComparator.pairingCompare));
 
-		IAMatch byeMatch = null;
+		RunewarsMatch byeMatch = null;
 		// Setup the bye match if necessary
 		// The player to get the bye is the lowest ranked player who has not had
 		// a bye yet or who has the fewest byes
 		if (tempList.size() % 2 == 1) {
-			IAPlayer byeUser = null;
+			RunewarsPlayer byeUser = null;
 			int byUserCounter = 1;
 			int minByes = 0;
 			try {
@@ -464,13 +491,14 @@ public class IATournament implements XMLObject, Tournament {
 			} catch (ArrayIndexOutOfBoundsException e) {
 				byeUser = tempList.get(tempList.size() - 1);
 			}
-			byeMatch = new IAMatch(byeUser, null);
+			byeMatch = new RunewarsMatch(byeUser, null);
 			tempList.remove(byeUser);
 		}
 
-		matches = new IARandomMatchGeneration(this, tempList).generateMatches();
+		matches = new RunewarsRandomMatchGeneration(this, tempList)
+				.generateMatches();
 
-		if (IAMatch.hasDuplicate(matches)) {
+		if (RunewarsMatch.hasDuplicate(matches)) {
 			JOptionPane
 					.showMessageDialog(Main.getInstance(),
 							"Unable to resolve duplicate matches. Please review for best course of action.");
@@ -487,31 +515,31 @@ public class IATournament implements XMLObject, Tournament {
 	@Override
 	public void generateSingleEliminationMatches(int cutSize) {
 
-		List<IAMatch> matches = new ArrayList<>();
+		List<RunewarsMatch> matches = new ArrayList<>();
 
-		List<IAMatch> matchesCorrected = new ArrayList<IAMatch>();
+		List<RunewarsMatch> matchesCorrected = new ArrayList<RunewarsMatch>();
 
 		if (getLatestRound().isSingleElimination()) {
-			List<IAMatch> lastRoundMatches = getLatestRound().getMatches();
+			List<RunewarsMatch> lastRoundMatches = getLatestRound().getMatches();
 
 			for (int index = 0; index < lastRoundMatches.size(); index = index + 2) {
-				IAMatch newMatch = new IAMatch(lastRoundMatches.get(index)
-						.getWinner(), lastRoundMatches.get(index + 1)
+				RunewarsMatch newMatch = new RunewarsMatch(lastRoundMatches.get(
+						index).getWinner(), lastRoundMatches.get(index + 1)
 						.getWinner());
 				matches.add(newMatch);
 			}
 
 			matchesCorrected = matches;
 		} else {
-			List<IAPlayer> tempList = new ArrayList<>();
-			tempList.addAll(getIAPlayers());
-			Collections.sort(tempList, new IAComparator(this,
-					IAComparator.rankingCompare));
+			List<RunewarsPlayer> tempList = new ArrayList<>();
+			tempList.addAll(getRunewarsPlayers());
+			Collections.sort(tempList, new RunewarsComparator(this,
+					RunewarsComparator.rankingCompare));
 			tempList = tempList.subList(0, cutSize);
 
 			while (tempList.isEmpty() == false) {
-				IAPlayer player1 = tempList.get(0);
-				IAPlayer player2 = tempList.get(tempList.size() - 1);
+				RunewarsPlayer player1 = tempList.get(0);
+				RunewarsPlayer player2 = tempList.get(tempList.size() - 1);
 				tempList.remove(player1);
 				if (player1 == player2) {
 					player2 = null;
@@ -519,7 +547,7 @@ public class IATournament implements XMLObject, Tournament {
 					tempList.remove(player2);
 				}
 
-				IAMatch match = new IAMatch(player1, player2);
+				RunewarsMatch match = new RunewarsMatch(player1, player2);
 				matches.add(match);
 			}
 
@@ -545,7 +573,7 @@ public class IATournament implements XMLObject, Tournament {
 			}
 		}
 
-		IARound r = new IARound(matchesCorrected, this, null);
+		RunewarsRound r = new RunewarsRound(matchesCorrected, this, null);
 		r.setSingleElimination(true);
 		rounds.add(r);
 		getTournamentGUI().getRoundTabbedPane().addSingleEliminationTab(
@@ -559,7 +587,7 @@ public class IATournament implements XMLObject, Tournament {
 
 		String playerString = "";
 		String seperator = "";
-		for (IAPlayer p : players) {
+		for (RunewarsPlayer p : players) {
 			playerString += seperator + p.getPlayer().getSaveId();
 			seperator = ",";
 		}
@@ -568,8 +596,19 @@ public class IATournament implements XMLObject, Tournament {
 
 		XMLUtils.appendList(sb, "ROUNDS", "ROUND", getAllRounds());
 
+		String escalationString = "";
+		seperator = "";
+		if (escalationPoints != null) {
+			for (Integer p : escalationPoints) {
+				escalationString += seperator + p;
+				seperator = ",";
+			}
+		}
+
+		XMLUtils.appendObject(sb, "ESCALATIONPOINTS", escalationString);
+		XMLUtils.appendObject(sb, "POINTS", points);
 		XMLUtils.appendObject(sb, "NAME", name);
-		XMLUtils.appendObject(sb, "MODULE", Modules.IA.getName());
+		XMLUtils.appendObject(sb, "MODULE", Modules.RUNEWARS.getName());
 
 		return sb;
 	}
@@ -582,28 +621,28 @@ public class IATournament implements XMLObject, Tournament {
 	@Override
 	public void addPlayer(Player p) {
 		
-		for(IARound r : getAllRounds()){
-			for(IAMatch m : r.getMatches()){
+		for(RunewarsRound r : getAllRounds()){
+			for(RunewarsMatch m : r.getMatches()){
 				if(m.getPlayer1().getPlayer().equals(p)){
-					getIAPlayers().add(m.getPlayer1());
+					getRunewarsPlayers().add(m.getPlayer1());
 					return;
 				} else if(m.getPlayer2() != null && m.getPlayer2().getPlayer().equals(p)) {
-					getIAPlayers().add(m.getPlayer2());
+					getRunewarsPlayers().add(m.getPlayer2());
 					return;
 				}
 			}
 		}
 		
-		IAPlayer xPlayer = new IAPlayer(p);
-		getIAPlayers().add(xPlayer);
+		RunewarsPlayer xPlayer = new RunewarsPlayer(p);
+		getRunewarsPlayers().add(xPlayer);
 	}
 
 	@Override
 	public void dropPlayer(Player p) {
 
-		IAPlayer xPlayer = null;
+		RunewarsPlayer xPlayer = null;
 
-		for (IAPlayer xp : getIAPlayers()) {
+		for (RunewarsPlayer xp : getRunewarsPlayers()) {
 			if (xp.getPlayer() == p) {
 				xPlayer = xp;
 				break;
@@ -611,7 +650,7 @@ public class IATournament implements XMLObject, Tournament {
 		}
 
 		if (xPlayer != null) {
-			getIAPlayers().remove(xPlayer);
+			getRunewarsPlayers().remove(xPlayer);
 		}
 
 		resetRankingTable();
@@ -619,12 +658,12 @@ public class IATournament implements XMLObject, Tournament {
 
 	@Override
 	public void resetRankingTable() {
-		getTournamentGUI().getRankingTable().setPlayers(getAllIAPlayers());
+		getTournamentGUI().getRankingTable().setPlayers(getAllRunewarsPlayers());
 	}
 
 	@Override
 	public Icon getIcon() {
-		URL imgURL = IATournament.class.getResource("ia.png");
+		URL imgURL = RunewarsTournament.class.getResource("rw.png");
 		if (imgURL == null) {
 			System.out.println("fail!!!!!!!!!!");
 		}
@@ -634,7 +673,7 @@ public class IATournament implements XMLObject, Tournament {
 
 	@Override
 	public String getModuleName() {
-		return Modules.IA.getName();
+		return Modules.RUNEWARS.getName();
 	}
 
     @Override

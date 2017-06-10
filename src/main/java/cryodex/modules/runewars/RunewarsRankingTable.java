@@ -1,4 +1,4 @@
-package cryodex.modules.xwing;
+package cryodex.modules.runewars;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -19,20 +19,17 @@ import cryodex.CryodexController;
 import cryodex.widget.ComponentUtils;
 import cryodex.widget.TimerPanel;
 
-public class XWingRankingTable extends JPanel {
+public class RunewarsRankingTable extends JPanel {
 
 	private static final long serialVersionUID = 5587297504827909147L;
 
 	private JTable table;
 	private RankingTableModel model;
-	private final XWingTournament tournament;
+	private final RunewarsTournament tournament;
 	private JLabel title;
 	private JLabel statsLabel;
-	
-	private long lastResetTimestamp = 0;
-	private long minResetWait = 1000;
 
-	public XWingRankingTable(XWingTournament tournament) {
+	public RunewarsRankingTable(RunewarsTournament tournament) {
 		super(new BorderLayout());
 		JScrollPane scrollPane = new JScrollPane(getTable());
 		ComponentUtils.forceSize(this, 400, 300);
@@ -68,8 +65,8 @@ public class XWingRankingTable extends JPanel {
 	}
 
 	public void updateLabel() {
-		int total = tournament.getAllXWingPlayers().size();
-		int active = tournament.getXWingPlayers().size();
+		int total = tournament.getAllRunewarsPlayers().size();
+		int active = tournament.getRunewarsPlayers().size();
 
 		if (total == 0) {
 			total = active;
@@ -90,12 +87,12 @@ public class XWingRankingTable extends JPanel {
 		if (table == null) {
 			table = new JTable(getTableModel());
 			table.setDefaultRenderer(Object.class,
-					new RankingTableCellRenderer());
+					new NoCellSelectionRenderer());
 			table.setDefaultRenderer(Integer.class,
-					new RankingTableCellRenderer());
+					new NoCellSelectionRenderer());
 			table.getColumnModel().getColumn(0).setPreferredWidth(200);
 
-			RankingTableCellRenderer centerRenderer = new RankingTableCellRenderer();
+			NoCellSelectionRenderer centerRenderer = new NoCellSelectionRenderer();
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
 			table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
@@ -109,18 +106,18 @@ public class XWingRankingTable extends JPanel {
 
 	private RankingTableModel getTableModel() {
 		if (model == null) {
-			model = new RankingTableModel(new ArrayList<XWingPlayer>());
+			model = new RankingTableModel(new ArrayList<RunewarsPlayer>());
 		}
 		return model;
 	}
 
-	public void setPlayers(Set<XWingPlayer> players) {
+	public void setPlayers(Set<RunewarsPlayer> players) {
 
-		List<XWingPlayer> playerList = new ArrayList<XWingPlayer>();
+		List<RunewarsPlayer> playerList = new ArrayList<RunewarsPlayer>();
 		playerList.addAll(players);
 
-		Collections.sort(playerList, new XWingComparator(tournament,
-				XWingComparator.rankingCompare));
+		Collections.sort(playerList, new RunewarsComparator(tournament,
+				RunewarsComparator.rankingCompare));
 
 		if (this.isVisible() == false) {
 			this.setVisible(true);
@@ -131,71 +128,34 @@ public class XWingRankingTable extends JPanel {
 	}
 
 	public void resetPlayers() {
-	    //This prevents multiple resets. Need a more permanent solution.
-	    if(System.currentTimeMillis() - lastResetTimestamp > minResetWait){
-    		getTableModel().resetData();
-    		updateLabel();
-    		lastResetTimestamp = System.currentTimeMillis();
-	    }
-	}
-	
-	public class RankingTableCellRenderer extends DefaultTableCellRenderer {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
-	        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-	        
-	        // Working on adding color to the top 4/8/16 for easy visualization
-//	        if(row < 4){
-//	        	c.setBackground(Color.cyan);	
-//	        } else if(row < 8){
-//	        	c.setBackground(Color.green);
-//	        } else if(row < 16){
-//	        	c.setBackground(Color.yellow);
-//	        } else if(row < 32){
-//	        	c.setBackground(Color.red.brighter());
-//	        }
-	        
-//	        if(row % 2 == 1){
-//	        	c.setBackground(c.getBackground().darker());
-//	        }
-	        
-//	        c.setForeground(Color.black);
-	        
-	        setBorder(noFocusBorder);
-	        
-	        return c;
-	    }
+		getTableModel().resetData();
+		CryodexController.saveData();
+		updateLabel();
 	}
 
 	private class RankingTableModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = -1591431777250055477L;
 
-		private List<XWingPlayer> data;
+		private List<RunewarsPlayer> data;
 
-		public RankingTableModel(List<XWingPlayer> data) {
+		public RankingTableModel(List<RunewarsPlayer> data) {
 			setData(data);
 		}
 
 		public void resetData() {
-			Collections.sort(data, new XWingComparator(tournament,
-					XWingComparator.rankingCompare));
+			Collections.sort(data, new RunewarsComparator(tournament,
+					RunewarsComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
 
-		public void setData(List<XWingPlayer> data) {
+		public void setData(List<RunewarsPlayer> data) {
 			this.data = data;
 
-			Collections.sort(data, new XWingComparator(tournament,
-					XWingComparator.rankingCompare));
+			Collections.sort(data, new RunewarsComparator(tournament,
+					RunewarsComparator.rankingCompare));
 			this.fireTableDataChanged();
 		}
-		
-		
 
 		@Override
 		public String getColumnName(int column) {
@@ -235,16 +195,15 @@ public class XWingRankingTable extends JPanel {
 
 		@Override
 		public Object getValueAt(int arg0, int arg1) {
-			XWingPlayer user = data.get(arg0);
+			RunewarsPlayer user = data.get(arg0);
 			Object value = null;
 			switch (arg1) {
 			case 0:
-				value = ". " + user.getPlayer().getName();
-				if (tournament.getXWingPlayers().contains(user) == false) {
-					value = ". (D#" + user.getRoundDropped(tournament) + ")"
+				value = user.getPlayer().getName();
+				if (tournament.getRunewarsPlayers().contains(user) == false) {
+					value = "(D#" + user.getRoundDropped(tournament) + ")"
 							+ value;
 				}
-				value = "" + (arg0+1) + value;
 				break;
 			case 1:
 				value = user.getScore(tournament);
@@ -266,6 +225,7 @@ public class XWingRankingTable extends JPanel {
 			}
 			return value;
 		}
+
 	}
 
 	public class NoCellSelectionRenderer extends DefaultTableCellRenderer {

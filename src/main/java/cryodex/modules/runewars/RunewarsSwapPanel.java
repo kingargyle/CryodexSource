@@ -1,7 +1,6 @@
-package cryodex.modules.xwing;
+package cryodex.modules.runewars;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -17,7 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -31,16 +29,16 @@ import cryodex.Player;
 import cryodex.widget.ComponentUtils;
 
 @SuppressWarnings("serial")
-public class XWingSwapPanel extends JPanel {
+public class RunewarsSwapPanel extends JPanel {
 
 	public static void showSwapPanel() {
 		JDialog manualModificationPanel = new JDialog(Main.getInstance(),
 				"Swap Players", true);
 		JPanel panel = new JPanel(new BorderLayout());
 		manualModificationPanel.getContentPane().add(panel);
-		panel.add(new XWingSwapPanel(manualModificationPanel),
+		panel.add(new RunewarsSwapPanel(manualModificationPanel),
 				BorderLayout.CENTER);
-		manualModificationPanel.setPreferredSize(new Dimension(450, 600));
+		manualModificationPanel.setPreferredSize(new Dimension(400, 600));
 		manualModificationPanel.pack();
 
 		manualModificationPanel.setVisible(true);
@@ -49,11 +47,10 @@ public class XWingSwapPanel extends JPanel {
 	private JButton swapButton;
 	private JButton addButton;
 	private JButton closeButton;
-	private JButton clearAllButton;
 
-	private final XWingPlayer blankPlayer = new XWingPlayer(new Player());
+	private final RunewarsPlayer blankPlayer = new RunewarsPlayer(new Player());
 
-	private final List<XWingMatch> matches;
+	private final List<RunewarsMatch> matches;
 
 	private final List<MatchPanel> matchPanels;
 	private MatchPanel quickEntryMatch = null;
@@ -62,18 +59,18 @@ public class XWingSwapPanel extends JPanel {
 	private JPanel quickEntryPanel;
 	private JPanel quickEntrySubPanel;
 	private JTextField roundNumber;
-	private JComboBox<XWingPlayer> playerCombo;
+	private JComboBox<RunewarsPlayer> playerCombo;
 
 	private boolean updating = false;
 	private final JDialog parent;
 
-	public XWingSwapPanel(JDialog parent) {
+	public RunewarsSwapPanel(JDialog parent) {
 		super(new BorderLayout());
 
 		this.parent = parent;
 
 		matches = new ArrayList<>();
-		matches.addAll(((XWingTournament) CryodexController
+		matches.addAll(((RunewarsTournament) CryodexController
 				.getActiveTournament()).getSelectedRound().getMatches());
 
 		matchPanels = new ArrayList<>();
@@ -85,7 +82,7 @@ public class XWingSwapPanel extends JPanel {
 
 		final JScrollPane checkboxScrollPanel = new JScrollPane(
 				ComponentUtils.addToFlowLayout(getMainMatchPanel(),
-						FlowLayout.CENTER));
+						FlowLayout.LEFT));
 		checkboxScrollPanel
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		checkboxScrollPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -100,7 +97,6 @@ public class XWingSwapPanel extends JPanel {
 
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		buttonPanel.add(getAddButton());
-		buttonPanel.add(getClearAllButton());
 		buttonPanel.add(getSwapButton());
 		buttonPanel.add(getCloseButton());
 
@@ -111,15 +107,15 @@ public class XWingSwapPanel extends JPanel {
 		updatePanels();
 	}
 
-    public JPanel getQuickEntryPanel() {
+	public JPanel getQuickEntryPanel() {
 		if (quickEntryPanel == null) {
 			quickEntryPanel = new JPanel(new BorderLayout());
 			quickEntryPanel.setVisible(CryodexController.getOptions()
 					.isShowQuickFind());
-			ComponentUtils.forceSize(quickEntryPanel, 405, 105);
+			ComponentUtils.forceSize(quickEntryPanel, 405, 135);
 
 			quickEntrySubPanel = new JPanel(new BorderLayout());
-			ComponentUtils.forceSize(quickEntrySubPanel, 400, 100);
+			ComponentUtils.forceSize(quickEntrySubPanel, 400, 130);
 
 			roundNumber = new JTextField(5);
 
@@ -141,16 +137,16 @@ public class XWingSwapPanel extends JPanel {
 						}
 					});
 
-			List<XWingPlayer> playerList = new ArrayList<XWingPlayer>();
+			List<RunewarsPlayer> playerList = new ArrayList<RunewarsPlayer>();
 
-			playerList.add(new XWingPlayer(new Player()));
-			playerList.addAll(((XWingTournament) CryodexController
-					.getActiveTournament()).getXWingPlayers());
+			playerList.add(new RunewarsPlayer(new Player()));
+			playerList.addAll(((RunewarsTournament) CryodexController
+					.getActiveTournament()).getRunewarsPlayers());
 
 			Collections.sort(playerList);
 
-			playerCombo = new JComboBox<XWingPlayer>(
-					playerList.toArray(new XWingPlayer[playerList.size()]));
+			playerCombo = new JComboBox<RunewarsPlayer>(
+					playerList.toArray(new RunewarsPlayer[playerList.size()]));
 
 			playerCombo.addActionListener(new ActionListener() {
 
@@ -182,8 +178,8 @@ public class XWingSwapPanel extends JPanel {
 
 		}
 
-		XWingPlayer player = playerCombo.getSelectedIndex() == 0 ? null
-				: (XWingPlayer) playerCombo.getSelectedItem();
+		RunewarsPlayer player = playerCombo.getSelectedIndex() == 0 ? null
+				: (RunewarsPlayer) playerCombo.getSelectedItem();
 
 		if (player != null) {
 			roundNumber.setEnabled(false);
@@ -236,10 +232,10 @@ public class XWingSwapPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					XWingTournament tournament = (XWingTournament) CryodexController
+					RunewarsTournament tournament = (RunewarsTournament) CryodexController
 							.getActiveTournament();
 
-					List<XWingMatch> matches = new ArrayList<XWingMatch>();
+					List<RunewarsMatch> matches = new ArrayList<RunewarsMatch>();
 
 					boolean isSingleElimination = tournament.getLatestRound()
 							.isSingleElimination();
@@ -249,7 +245,7 @@ public class XWingSwapPanel extends JPanel {
 					tournament.cancelRound(roundNumber);
 
 					for (MatchPanel mp : matchPanels) {
-						XWingMatch m = mp.getNewMatch();
+						RunewarsMatch m = mp.getNewMatch();
 
 						if (m != null) {
 							m.checkDuplicate(tournament.getAllRounds());
@@ -257,7 +253,7 @@ public class XWingSwapPanel extends JPanel {
 						}
 					}
 
-					XWingRound r = new XWingRound(matches, tournament,
+					RunewarsRound r = new RunewarsRound(matches, tournament,
 							roundNumber);
 					r.setSingleElimination(isSingleElimination);
 
@@ -280,30 +276,6 @@ public class XWingSwapPanel extends JPanel {
 		}
 		return swapButton;
 	}
-	
-	private Component getClearAllButton() {
-	    if (clearAllButton == null) {
-	        clearAllButton = new JButton("Clear All");
-	        clearAllButton.addActionListener(new ActionListener() {
-
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	                int result = JOptionPane.showConfirmDialog(
-	                        Main.getInstance(),
-	                        "This will clear the players from every match. Are you sure you want to do this?");
-
-	                if (result == JOptionPane.OK_OPTION) {
-	                    for (MatchPanel mp : matchPanels) {
-	                        mp.getPlayer1Combo().setSelectedIndex(0);
-	                        mp.getPlayer2Combo().setSelectedIndex(0);
-	                    }
-	                }
-	            }
-	        });
-
-	    }
-	    return clearAllButton;
-	}
 
 	private JButton getAddButton() {
 		if (addButton == null) {
@@ -313,7 +285,7 @@ public class XWingSwapPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					MatchPanel mp = new MatchPanel(new XWingMatch(),
+					MatchPanel mp = new MatchPanel(new RunewarsMatch(),
 							matchPanels.size());
 
 					matchPanels.add(mp);
@@ -377,9 +349,9 @@ public class XWingSwapPanel extends JPanel {
 
 		updating = true;
 
-		List<XWingPlayer> tempPlayers = new ArrayList<>();
-		tempPlayers.addAll(((XWingTournament) CryodexController
-				.getActiveTournament()).getXWingPlayers());
+		List<RunewarsPlayer> tempPlayers = new ArrayList<>();
+		tempPlayers.addAll(((RunewarsTournament) CryodexController
+				.getActiveTournament()).getRunewarsPlayers());
 
 		for (MatchPanel mp : matchPanels) {
 			tempPlayers.remove(mp.getPlayer1Combo().getSelectedItem());
@@ -395,12 +367,12 @@ public class XWingSwapPanel extends JPanel {
 
 	private class MatchPanel extends JPanel {
 
-		private JComboBox<XWingPlayer> player1Combo;
-		private JComboBox<XWingPlayer> player2Combo;
+		private JComboBox<RunewarsPlayer> player1Combo;
+		private JComboBox<RunewarsPlayer> player2Combo;
 
-		private final XWingMatch match;
+		private final RunewarsMatch match;
 
-		public MatchPanel(XWingMatch match, int tableNumber) {
+		public MatchPanel(RunewarsMatch match, int tableNumber) {
 
 			super(new FlowLayout(FlowLayout.CENTER));
 
@@ -416,9 +388,11 @@ public class XWingSwapPanel extends JPanel {
 
 		}
 
-		public XWingMatch getNewMatch() {
-			XWingPlayer p1 = (XWingPlayer) getPlayer1Combo().getSelectedItem();
-			XWingPlayer p2 = (XWingPlayer) getPlayer2Combo().getSelectedItem();
+		public RunewarsMatch getNewMatch() {
+			RunewarsPlayer p1 = (RunewarsPlayer) getPlayer1Combo()
+					.getSelectedItem();
+			RunewarsPlayer p2 = (RunewarsPlayer) getPlayer2Combo()
+					.getSelectedItem();
 
 			if (p1 == blankPlayer) {
 				p1 = null;
@@ -437,7 +411,7 @@ public class XWingSwapPanel extends JPanel {
 				return null;
 			}
 
-			XWingMatch m = new XWingMatch(p1, p2);
+			RunewarsMatch m = new RunewarsMatch(p1, p2);
 
 			if (p2 == null) {
 				m.setBye(true);
@@ -446,10 +420,10 @@ public class XWingSwapPanel extends JPanel {
 			return m;
 		}
 
-		public JComboBox<XWingPlayer> getPlayer1Combo() {
+		public JComboBox<RunewarsPlayer> getPlayer1Combo() {
 
 			if (player1Combo == null) {
-				player1Combo = new JComboBox<XWingPlayer>();
+				player1Combo = new JComboBox<RunewarsPlayer>();
 				ComponentUtils.forceSize(player1Combo, 100, 25);
 				getPlayer1Combo().addItem(blankPlayer);
 				if (match.getPlayer1() != null) {
@@ -468,10 +442,10 @@ public class XWingSwapPanel extends JPanel {
 			return player1Combo;
 		}
 
-		public JComboBox<XWingPlayer> getPlayer2Combo() {
+		public JComboBox<RunewarsPlayer> getPlayer2Combo() {
 
 			if (player2Combo == null) {
-				player2Combo = new JComboBox<XWingPlayer>();
+				player2Combo = new JComboBox<RunewarsPlayer>();
 				ComponentUtils.forceSize(player2Combo, 100, 25);
 
 				getPlayer2Combo().addItem(blankPlayer);
@@ -491,16 +465,18 @@ public class XWingSwapPanel extends JPanel {
 			return player2Combo;
 		}
 
-		public void updateCombos(List<XWingPlayer> players) {
+		public void updateCombos(List<RunewarsPlayer> players) {
 
-			XWingPlayer p1 = (XWingPlayer) getPlayer1Combo().getSelectedItem();
-			XWingPlayer p2 = (XWingPlayer) getPlayer2Combo().getSelectedItem();
+			RunewarsPlayer p1 = (RunewarsPlayer) getPlayer1Combo()
+					.getSelectedItem();
+			RunewarsPlayer p2 = (RunewarsPlayer) getPlayer2Combo()
+					.getSelectedItem();
 
 			getPlayer1Combo().removeAllItems();
 			getPlayer2Combo().removeAllItems();
 
-			List<XWingPlayer> list1 = new ArrayList<>();
-			List<XWingPlayer> list2 = new ArrayList<>();
+			List<RunewarsPlayer> list1 = new ArrayList<>();
+			List<RunewarsPlayer> list2 = new ArrayList<>();
 
 			if (p1 != blankPlayer) {
 				list1.add(p1);
@@ -510,7 +486,7 @@ public class XWingSwapPanel extends JPanel {
 				list2.add(p2);
 			}
 
-			for (XWingPlayer xp : players) {
+			for (RunewarsPlayer xp : players) {
 				list1.add(xp);
 				list2.add(xp);
 			}
@@ -519,7 +495,7 @@ public class XWingSwapPanel extends JPanel {
 			Collections.sort(list2);
 
 			getPlayer1Combo().addItem(blankPlayer);
-			for (XWingPlayer xp : list1) {
+			for (RunewarsPlayer xp : list1) {
 				getPlayer1Combo().addItem(xp);
 			}
 			if (p1 != blankPlayer) {
@@ -529,7 +505,7 @@ public class XWingSwapPanel extends JPanel {
 			}
 
 			getPlayer2Combo().addItem(blankPlayer);
-			for (XWingPlayer xp : list2) {
+			for (RunewarsPlayer xp : list2) {
 				getPlayer2Combo().addItem(xp);
 			}
 			if (p2 != blankPlayer) {

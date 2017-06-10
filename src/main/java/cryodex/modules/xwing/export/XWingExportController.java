@@ -30,12 +30,13 @@ public class XWingExportController {
         for (XWingPlayer p : playerList) {
 
             String name = p.getName();
+            String faction = p.getFaction() == null ? "" : p.getFaction().toString();
 
             if (activePlayers.contains(p) == false) {
                 name = "(D#" + p.getRoundDropped(tournament) + ")" + name;
             }
 
-            content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name + "</td><td>" + p.getFaction() + "</td><td>" + p.getScore(tournament)
+            content += "<tr><td>" + p.getRank(tournament) + "</td><td>" + name + "</td><td>" + faction + "</td><td>" + p.getScore(tournament)
                     + "</td><td>" + p.getMarginOfVictory(tournament) + "</td><td>" + p.getAverageSoS(tournament) + "</td></tr>";
         }
 
