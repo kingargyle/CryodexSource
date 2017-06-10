@@ -74,12 +74,6 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject, ModuleP
         this.firstRoundBye = firstRoundBye;
     }
 
-    public int getFirstRoundByeScore(XWingTournament t) {
-        int matchCount = getMatches(t).size();
-
-        return (matchCount - 1) * XWingMatch.WIN_POINTS;
-    }
-
     public int getFirstRoundByeMOV(XWingTournament t) {
         return t.getRoundPoints(0) + (t.getRoundPoints(0) / 2);
     }
@@ -195,21 +189,21 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject, ModuleP
         double sos = 0.0;
         List<XWingMatch> matches = getMatches(t);
 
+        int numOpponents = 0;
         for (XWingMatch m : matches) {
             if (m.isBye() == false && m.getWinner() != null) {
                 if (m.getPlayer1() == this) {
                     sos += m.getPlayer2().getAverageScore(t);
+                    numOpponents++;
                 } else {
                     sos += m.getPlayer1().getAverageScore(t);
+                    numOpponents++;
                 }
-            }
-
-            if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-                sos += getFirstRoundByeScore(t);
             }
         }
 
-        double averageSos = sos / matches.size();
+		// if they don't have any opponents recorded yet, don't divide by 0
+        double averageSos = numOpponents>0 ? sos / numOpponents : 0;
         if (Double.isNaN(averageSos) != true) {
             BigDecimal bd = new BigDecimal(averageSos);
             bd = bd.setScale(2, RoundingMode.HALF_UP);
@@ -247,27 +241,6 @@ public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject, ModuleP
         }
         return byes;
     }
-
-    // public int getStrengthOfSchedule(XWingTournament t) {
-    // Integer sos = 0;
-    // List<XWingMatch> matches = getMatches(t);
-    //
-    // for (XWingMatch m : matches) {
-    // if (m.isBye() == false & (m.getWinner() != null || m.isDraw())) {
-    // if (m.getPlayer1() == this) {
-    // sos += m.getPlayer2().getScore(t);
-    // } else {
-    // sos += m.getPlayer1().getScore(t);
-    // }
-    // }
-    //
-    // if (isFirstRoundBye() && m.isBye() && m == matches.get(0)) {
-    // sos += (getMatches(t).size() - 1) * 5;
-    // }
-    // }
-    //
-    // return sos;
-    // }
 
     public int getRank(XWingTournament t) {
         List<XWingPlayer> players = new ArrayList<XWingPlayer>();

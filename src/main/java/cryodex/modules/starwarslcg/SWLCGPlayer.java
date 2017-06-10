@@ -1,5 +1,7 @@
 package cryodex.modules.starwarslcg;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,17 +105,27 @@ public class SWLCGPlayer implements Comparable<ModulePlayer>, XMLObject,
 		double sos = 0.0;
 		List<SWLCGMatch> matches = getMatches(t);
 
+		int numOpponents = 0;
 		for (SWLCGMatch m : matches) {
 			if (m.isBye() == false && (m.isMatchComplete(m.getMatchLabel() != null))) {
 				if (m.getPlayer1() == this) {
 					sos += m.getPlayer2().getAverageScore(t);
+					numOpponents++;
 				} else {
 					sos += m.getPlayer1().getAverageScore(t);
+					numOpponents++;
 				}
 			}
 		}
 
-		return sos / matches.size();
+		// if they don't have any opponents recorded yet, don't divide by 0
+		double averageSos = numOpponents>0 ? sos / numOpponents : 0;
+        if (Double.isNaN(averageSos) != true) {
+            BigDecimal bd = new BigDecimal(averageSos);
+            bd = bd.setScale(3, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        }
+        return averageSos;
 	}
 
 	public int getByes(SWLCGTournament t) {
@@ -130,17 +142,27 @@ public class SWLCGPlayer implements Comparable<ModulePlayer>, XMLObject,
 		double sos = 0;
 		List<SWLCGMatch> matches = getMatches(t);
 
+		int numOpponents = 0;
 		for (SWLCGMatch m : matches) {
 			if (m.isBye() == false && m.isMatchComplete(m.getMatchLabel() != null)) {
 				if (m.getPlayer1() == this) {
 					sos += m.getPlayer2().getAverageSoS(t);
+					numOpponents++;
 				} else {
 					sos += m.getPlayer1().getAverageSoS(t);
+					numOpponents++;
 				}
 			}
 		}
 
-		return sos / matches.size();
+		// if they don't have any opponents recorded yet, don't divide by 0
+		double averageSos = numOpponents>0 ? sos / numOpponents : 0;
+        if (Double.isNaN(averageSos) != true) {
+            BigDecimal bd = new BigDecimal(averageSos);
+            bd = bd.setScale(3, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        }
+        return averageSos;
 	}
 
 	public int getRank(SWLCGTournament t) {
