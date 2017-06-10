@@ -1,6 +1,7 @@
 package cryodex.modules.xwing;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -16,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -47,6 +49,7 @@ public class XWingSwapPanel extends JPanel {
 	private JButton swapButton;
 	private JButton addButton;
 	private JButton closeButton;
+	private JButton clearAllButton;
 
 	private final XWingPlayer blankPlayer = new XWingPlayer(new Player());
 
@@ -97,6 +100,7 @@ public class XWingSwapPanel extends JPanel {
 
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		buttonPanel.add(getAddButton());
+		buttonPanel.add(getClearAllButton());
 		buttonPanel.add(getSwapButton());
 		buttonPanel.add(getCloseButton());
 
@@ -107,7 +111,7 @@ public class XWingSwapPanel extends JPanel {
 		updatePanels();
 	}
 
-	public JPanel getQuickEntryPanel() {
+    public JPanel getQuickEntryPanel() {
 		if (quickEntryPanel == null) {
 			quickEntryPanel = new JPanel(new BorderLayout());
 			quickEntryPanel.setVisible(CryodexController.getOptions()
@@ -275,6 +279,30 @@ public class XWingSwapPanel extends JPanel {
 
 		}
 		return swapButton;
+	}
+	
+	private Component getClearAllButton() {
+	    if (clearAllButton == null) {
+	        clearAllButton = new JButton("Clear All");
+	        clearAllButton.addActionListener(new ActionListener() {
+
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                int result = JOptionPane.showConfirmDialog(
+	                        Main.getInstance(),
+	                        "This will clear the players from every match. Are you sure you want to do this?");
+
+	                if (result == JOptionPane.OK_OPTION) {
+	                    for (MatchPanel mp : matchPanels) {
+	                        mp.getPlayer1Combo().setSelectedIndex(0);
+	                        mp.getPlayer2Combo().setSelectedIndex(0);
+	                    }
+	                }
+	            }
+	        });
+
+	    }
+	    return clearAllButton;
 	}
 
 	private JButton getAddButton() {
