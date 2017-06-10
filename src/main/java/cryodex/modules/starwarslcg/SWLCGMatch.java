@@ -164,13 +164,13 @@ public class SWLCGMatch implements XMLObject {
     public int getPlayer1Points(){
         int points = 0;
         
-        if(getGame1Result() == GameResult.PLAYER_1_WINS){
+        if(isBye || getGame1Result() == GameResult.PLAYER_1_WINS){
             points += WIN_POINTS;
         } else if(getGame1Result() == GameResult.DRAW){
             points += DRAW_POINTS;
         }
         
-        if(getGame2Result() == GameResult.PLAYER_1_WINS){
+        if(isBye || getGame2Result() == GameResult.PLAYER_1_WINS){
             points += WIN_POINTS;
         } else if(getGame2Result() == GameResult.DRAW){
             points += DRAW_POINTS;
