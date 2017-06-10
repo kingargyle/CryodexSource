@@ -663,7 +663,7 @@ public class RunewarsTournament implements XMLObject, Tournament {
 
 	@Override
 	public Icon getIcon() {
-		URL imgURL = RunewarsTournament.class.getResource("a.png");
+		URL imgURL = RunewarsTournament.class.getResource("rw.png");
 		if (imgURL == null) {
 			System.out.println("fail!!!!!!!!!!");
 		}
