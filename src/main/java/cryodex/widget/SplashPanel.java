@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import cryodex.Main;
+import cryodex.server.WebServer;
 
 public class SplashPanel extends JWindow {
 
@@ -68,9 +69,12 @@ public class SplashPanel extends JWindow {
 		// Display it
 		setVisible(true);
 		toFront();
+		
 
 		new ResourceLoader().execute();
 	}
+	
+	
 
 	public class ResourceLoader extends SwingWorker<Object, Object> {
 

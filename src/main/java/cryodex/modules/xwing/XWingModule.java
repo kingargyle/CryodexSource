@@ -1,7 +1,11 @@
 package cryodex.modules.xwing;
 
+import javax.naming.InitialContext;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
+
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.HandlerCollection;
 
 import cryodex.CryodexController;
 import cryodex.CryodexController.Modules;
@@ -12,8 +16,10 @@ import cryodex.modules.Module;
 import cryodex.modules.ModulePlayer;
 import cryodex.modules.RegistrationPanel;
 import cryodex.modules.Tournament;
+import cryodex.modules.xwing.server.XWingExportRankingsHandler;
 import cryodex.modules.xwing.wizard.WizardOptions;
 import cryodex.modules.xwing.wizard.XWingWizard;
+import cryodex.server.WebServer;
 import cryodex.xml.XMLUtils;
 import cryodex.xml.XMLUtils.Element;
 
@@ -37,7 +43,19 @@ public class XWingModule implements Module {
 	private boolean isEnabled = true;
 
 	private XWingModule() {
-
+	   init();
+	}
+	
+	private void init() {
+	   
+	   ContextHandler xwingContextHandler = new ContextHandler();
+	   xwingContextHandler.setContextPath("/xwing");
+	   HandlerCollection handlerCollection = new HandlerCollection();
+	   XWingExportRankingsHandler exportRankingsHandler = new XWingExportRankingsHandler();
+	   handlerCollection.addHandler(exportRankingsHandler);
+	   xwingContextHandler.setHandler(handlerCollection);
+	   
+	   WebServer.getInstance().addContextHandler(xwingContextHandler); 
 	}
 
 	@Override

@@ -31,6 +31,18 @@ public class ExportUtils {
 
     }
     
+    public static String displayHTMLToString(String content) {
+       String preventTableBreak = "table.print-friendly {page-break-inside: avoid;}";
+       String mediaCss = "@media print {.pagebreak {page-break-after: always;}}";
+       String fancyCss = "table{border-collapse: collapse;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(odd){    background-color:lightgray;}";
+       String internationalCharacters = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+       String html = "<html><head><style type=\"text/css\">.smallFont{font-size:10px}"
+               + fancyCss + mediaCss + preventTableBreak + "</style>" + internationalCharacters + "</head><body>" + content + "</body></html>";
+
+       return html;
+   }
+
+    
     
     public static void addTableStart(StringBuilder sb){
         sb.append("<table border=\"1\">");
