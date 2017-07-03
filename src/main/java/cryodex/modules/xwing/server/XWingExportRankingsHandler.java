@@ -35,7 +35,7 @@ public class XWingExportRankingsHandler extends AbstractHandler {
 
       } else {
          response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-         response.getWriter().println("<H1>Tournanment has not been started</H1>");
+         response.getWriter().println("<H1>Tournanment has been started</H1>");
       }
       
       baseRequest.setHandled(true);

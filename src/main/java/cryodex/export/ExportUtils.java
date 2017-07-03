@@ -36,8 +36,9 @@ public class ExportUtils {
        String mediaCss = "@media print {.pagebreak {page-break-after: always;}}";
        String fancyCss = "table{border-collapse: collapse;}th{color:white; background-color:DarkSlateGray; font-size:120%;} tr:nth-child(odd){    background-color:lightgray;}";
        String internationalCharacters = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+       String refresh = "<META HTTP-EQUIV=\"refresh\" CONTENT=\"15\">";
        String html = "<html><head><style type=\"text/css\">.smallFont{font-size:10px}"
-               + fancyCss + mediaCss + preventTableBreak + "</style>" + internationalCharacters + "</head><body>" + content + "</body></html>";
+               + fancyCss + mediaCss + preventTableBreak + "</style>" + internationalCharacters +  refresh + "</head><body>" + content + "</body></html>";
 
        return html;
    }
