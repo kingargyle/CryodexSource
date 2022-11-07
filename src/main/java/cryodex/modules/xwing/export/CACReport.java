@@ -21,8 +21,8 @@ public class CACReport {
 	// Rogue Squadron Award (Reb killing most Imp and S&V points)
 	// Rebel Secret Agent Award (Imp killing most Imp points) (TBD)
 	// Imperial Backstabber Award (Reb killing most Reb points)
-	// “Most Feared” Award (S&V killing most Rebel and S&V points)
-	// “Lawlessness” Award (S&V killing most Imperial and Rebel points)
+	// Most Feared Award (S&V killing most Rebel and S&V points)
+	// Lawlessness Award (S&V killing most Imperial and Rebel points)
 
 	public enum KillLabel {
 		impVSimp("Rebel Secret Agent - Imperial VS Imperial", Faction.IMPERIAL, null),

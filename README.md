@@ -6,16 +6,16 @@ each of these games.
 
 ## Installation
 
-To install and run Cryodex, you need the following software:
+~~To install and run Cryodex, you need the following software:~~
 
-1. A Java Runtime, Java 7 or higher.
-2. The Cyrodex.jar file, as of this writing Cryodex 4.0.5 is available.
+~~1. A Java Runtime, Java 7 or higher.~~
+2. ~~The Cyrodex.jar file,~~ as of this writing Cryodex 4.0.5 is available.
 
 To run Cyrodex.
 
-1. Copy the Jar to a Directory on your hard drive.
-2. If using a file browser, Double Click the JAR file and it should launch.
-3. Alternatively from the command prompt:  java -jar Cyrodex.jar
+1. Copy the ~~Jar~~ Installer to a Directory on your hard drive.
+2. If using a file browser, Double Click the ~~JAR~~ executable file and it should ~~launch~~ install.
+~~3. Alternatively from the command prompt:  java -jar Cyrodex.jar~~
 
 
 ## Contributing
@@ -30,15 +30,19 @@ To run Cyrodex.
 
 Maven can be used to build cryodex.  The Maven Wrapper has been provided for convience.
 
-    ./mvnw clean install
+    ./mvn clean install
     
 This will build the Cryodex jar from the latest source, you will find the output in the target directory.
+
+With Jpackage you can create a distribution that doesn't require JRE.
+
+    ./sh build.sh
 
 ### Running Cryodex
 
 Maven can be used to run Cryodex as well. The Maven Wrapper has been provided for convenience.
 
-    ./mvnw package -Prun
+    ./mvn package -Prun
     
 This will build Cryodex and then run it.
 

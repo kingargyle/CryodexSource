@@ -20,8 +20,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cryodex.BigClock;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
+// import sun.audio.AudioPlayer;
+// import sun.audio.AudioStream;
 
 public class TimerPanel extends JPanel {
 
@@ -242,13 +242,13 @@ public class TimerPanel extends JPanel {
 		try {
 			// ** add this into your application code as appropriate
 			// Open an input stream to the audio file.
-			InputStream in = new FileInputStream("Cryodex.wav");
+			// InputStream in = new FileInputStream("Cryodex.wav");
 			// Create an AudioStream object from the input stream.
-			AudioStream as = new AudioStream(in);
+			// AudioStream as = new AudioStream(in);
 			// Use the static class member "player" from class AudioPlayer to
 			// play
 			// clip.
-			AudioPlayer.player.start(as);
+			// AudioPlayer.player.start(as);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

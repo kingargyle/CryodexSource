@@ -19,7 +19,7 @@ import cryodex.xml.XMLUtils.Element;
 public class XWingPlayer implements Comparable<ModulePlayer>, XMLObject,
 		ModulePlayer {
 
-	public static enum Faction{
+	public enum Faction{
 		IMPERIAL,
 		REBEL,
 		SCUM;	
